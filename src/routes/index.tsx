@@ -196,10 +196,14 @@ function LandingLogin() {
           <Field
             icon={<Mail className="h-4 w-4" />}
             placeholder={t("login_email_placeholder")}
-            type="text"
+            type="email"
+            inputMode="email"
+            autoCapitalize="none"
+            autoCorrect="off"
+            spellCheck={false}
             value={email}
             onChange={(v) => {
-              setEmail(v);
+              setEmail(v.toLowerCase());
               if (emailError) setEmailError("");
             }}
           />
@@ -250,6 +254,10 @@ function Field({
   onChange,
   type = "text",
   required,
+  autoCapitalize,
+  autoCorrect,
+  spellCheck,
+  inputMode,
 }: {
   icon: React.ReactNode;
   placeholder: string;
@@ -257,6 +265,10 @@ function Field({
   onChange: (v: string) => void;
   type?: string;
   required?: boolean;
+  autoCapitalize?: "off" | "none" | "on" | "sentences" | "words" | "characters";
+  autoCorrect?: "on" | "off";
+  spellCheck?: boolean;
+  inputMode?: "text" | "email" | "tel" | "url" | "numeric" | "decimal" | "search" | "none";
 }) {
   return (
     <label className="flex items-center gap-3 rounded-2xl border border-border bg-card px-4 py-3 shadow-card transition-all focus-within:border-olive/50 focus-within:ring-2 focus-within:ring-olive/15">
@@ -267,7 +279,12 @@ function Field({
         placeholder={placeholder}
         value={value}
         onChange={(e) => onChange(e.target.value)}
-        className="w-full bg-transparent text-sm outline-none placeholder:text-muted-foreground/70"
+        autoCapitalize={autoCapitalize}
+        autoCorrect={autoCorrect}
+        spellCheck={spellCheck}
+        inputMode={inputMode}
+        style={{ fontSize: "16px" }}
+        className="w-full bg-transparent outline-none placeholder:text-muted-foreground/70"
       />
     </label>
   );
