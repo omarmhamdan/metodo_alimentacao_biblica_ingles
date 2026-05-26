@@ -23,8 +23,27 @@ export function waitImagesReady(): Promise<void> {
 function openDB(): Promise<IDBDatabase> {
   return new Promise((res, rej) => {
     const req = indexedDB.open(DB_NAME, 1);
-    req.onupgradeneeded = () => req.result.createObjectStore(STORE);
-    req.onsuccess = () => res(req.result);
+    req.onupgradeneeded = () => {
+      const db = req.result;
+      if (!db.objectStoreNames.contains(STORE)) db.createObjectStore(STORE);
+    };
+    req.onsuccess = async () => {
+      const db = req.result;
+      if (db.objectStoreNames.contains(STORE)) {
+        res(db);
+        return;
+      }
+      // Recover from corrupted DB (exists but missing store): delete and recreate
+      db.close();
+      const delReq = indexedDB.deleteDatabase(DB_NAME);
+      delReq.onsuccess = () => {
+        const retry = indexedDB.open(DB_NAME, 1);
+        retry.onupgradeneeded = () => retry.result.createObjectStore(STORE);
+        retry.onsuccess = () => res(retry.result);
+        retry.onerror = () => rej(retry.error);
+      };
+      delReq.onerror = () => rej(delReq.error);
+    };
     req.onerror = () => rej(req.error);
   });
 }

@@ -140,15 +140,21 @@ const BOOTSTRAP_PWA_META = `
   // don't briefly flash stock photos before swapping to user uploads.
   try {
     var req = indexedDB.open('mab_imgs', 1);
+    req.onupgradeneeded = function () {
+      try { req.result.createObjectStore('photos'); } catch (e) {}
+    };
     req.onsuccess = function () {
       var db = req.result;
-      var cache = {};
-      var cur = db.transaction('photos', 'readonly').objectStore('photos').openCursor();
-      cur.onsuccess = function (e) {
-        var c = e.target.result;
-        if (c) { cache[c.key] = c.value; c.continue(); }
-        else { window.__MAB_IMG_PREWARM__ = cache; }
-      };
+      if (!db.objectStoreNames.contains('photos')) return;
+      try {
+        var cache = {};
+        var cur = db.transaction('photos', 'readonly').objectStore('photos').openCursor();
+        cur.onsuccess = function (e) {
+          var c = e.target.result;
+          if (c) { cache[c.key] = c.value; c.continue(); }
+          else { window.__MAB_IMG_PREWARM__ = cache; }
+        };
+      } catch (e3) {}
     };
   } catch (e2) {}
 })();
