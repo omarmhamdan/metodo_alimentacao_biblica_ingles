@@ -18,7 +18,8 @@ export interface TextOverride {
 }
 
 const LS_KEY = "mab:text_overrides";
-const EDIT_KEY = "mab:edit_mode"; // sessionStorage flag
+// Edit mode is in-memory only → resets to OFF on every page reload (safety).
+let _editMode = false;
 
 let _map: Record<string, TextOverride> = {};
 let _loaded = false;
@@ -103,13 +104,12 @@ export async function clearTextOverride(key: string): Promise<void> {
 // ── Edit mode flag ───────────────────────────────────────────────────────────
 export function isEditMode(): boolean {
   if (typeof window === "undefined") return false;
-  return sessionStorage.getItem(EDIT_KEY) === "1" && isAdminLoggedIn();
+  return _editMode && isAdminLoggedIn();
 }
 
 export function setEditMode(on: boolean): void {
   if (typeof window === "undefined") return;
-  if (on) sessionStorage.setItem(EDIT_KEY, "1");
-  else sessionStorage.removeItem(EDIT_KEY);
+  _editMode = on;
   window.dispatchEvent(new CustomEvent("mab:editmode"));
 }
 
