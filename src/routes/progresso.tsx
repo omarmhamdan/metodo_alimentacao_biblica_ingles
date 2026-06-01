@@ -3,6 +3,7 @@ import { useState } from "react";
 import { LineChart, Line, ResponsiveContainer, XAxis, YAxis, Tooltip } from "recharts";
 import { motion } from "framer-motion";
 import { AppShell } from "@/components/AppShell";
+import { Ed } from "@/components/Editable";
 import { useDaily, useUser, useLang } from "@/lib/store";
 
 export const Route = createFileRoute("/progresso")({
@@ -49,6 +50,9 @@ const content = {
   },
 };
 
+const PPT = content.pt;
+const PES = content.es;
+
 function ProgressoPage() {
   const { user } = useUser();
   const { daily, update } = useDaily();
@@ -81,9 +85,9 @@ function ProgressoPage() {
   return (
     <AppShell>
       <header className="px-6 pt-10 pb-4">
-        <p className="text-[11px] uppercase tracking-[0.22em] text-muted-foreground">{c.badge}</p>
-        <h1 className="mt-1 font-serif text-3xl text-foreground">{c.title}</h1>
-        <p className="mt-1 text-sm text-muted-foreground text-balance">{c.subtitle}</p>
+        <Ed as="p" k="prog.badge" pt={PPT.badge} es={PES.badge} className="block text-[11px] uppercase tracking-[0.22em] text-muted-foreground" />
+        <Ed as="h1" k="prog.title" pt={PPT.title} es={PES.title} className="mt-1 block font-serif text-3xl text-foreground" />
+        <Ed as="p" k="prog.subtitle" pt={PPT.subtitle} es={PES.subtitle} className="mt-1 block text-sm text-muted-foreground text-balance" />
       </header>
 
       <section className="mx-6 mb-4 grid grid-cols-3 gap-3">
@@ -98,7 +102,7 @@ function ProgressoPage() {
         className="mx-6 mb-4 rounded-3xl bg-card p-5 shadow-card"
       >
         <div className="mb-2 flex items-center justify-between">
-          <h2 className="font-serif text-lg text-foreground">{c.weightTitle}</h2>
+          <Ed as="h2" k="prog.weightTitle" pt={PPT.weightTitle} es={PES.weightTitle} className="block font-serif text-lg text-foreground" />
           <span className="text-xs text-muted-foreground">
             {pesoData.length} {pesoData.length === 1 ? c.registro : c.registros}
           </span>
@@ -155,8 +159,8 @@ function ProgressoPage() {
       </motion.section>
 
       <section className="mx-6 mb-4 rounded-3xl bg-card p-5 shadow-card">
-        <h2 className="mb-3 font-serif text-lg text-foreground">{c.energyTitle}</h2>
-        <p className="mb-3 text-xs text-muted-foreground">{c.energySubtitle}</p>
+        <Ed as="h2" k="prog.energyTitle" pt={PPT.energyTitle} es={PES.energyTitle} className="mb-3 block font-serif text-lg text-foreground" />
+        <Ed as="p" k="prog.energySubtitle" pt={PPT.energySubtitle} es={PES.energySubtitle} className="mb-3 block text-xs text-muted-foreground" />
         <div className="flex items-center justify-between gap-1">
           {Array.from({ length: 10 }).map((_, i) => (
             <button
@@ -181,9 +185,7 @@ function ProgressoPage() {
       </section>
 
       <section className="mx-6 mb-6 rounded-3xl bg-gradient-devotional p-6 text-center shadow-card">
-        <p className="font-serif italic text-sm text-foreground text-balance">
-          &quot;{c.verse}&quot;
-        </p>
+        <Ed as="p" k="prog.verse" pt={`"${PPT.verse}"`} es={`"${PES.verse}"`} className="block font-serif italic text-sm text-foreground text-balance" />
         <p className="mt-2 text-[11px] uppercase tracking-wider text-muted-foreground">
           {c.verseRef}
         </p>

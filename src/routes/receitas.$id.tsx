@@ -3,7 +3,7 @@ import { useEffect } from "react";
 import { motion } from "framer-motion";
 import { ArrowLeft, Heart, Clock, ChefHat, Sparkles } from "lucide-react";
 import { AppShell } from "@/components/AppShell";
-import { RecipePhoto } from "@/components/RecipePhoto";
+import { EditImage, EdI18n } from "@/components/Editable";
 import { getRecipeLang, categoriaES, dificuldadeES } from "@/lib/recipes";
 import { useDaily, useLang } from "@/lib/store";
 
@@ -56,8 +56,8 @@ function ReceitaDetalhe() {
     <AppShell>
       <div className="relative">
         <div className="relative h-[44vh] min-h-[280px] w-full overflow-hidden">
-          <RecipePhoto src={r.imagem} alt={r.titulo} className="h-full w-full object-cover" />
-          <div className="absolute inset-0 bg-gradient-to-b from-black/30 via-transparent to-cream" />
+          <EditImage id={r.id} src={r.imagem} alt={r.titulo} className="h-full w-full object-cover" />
+          <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-black/30 via-transparent to-cream" />
           <button
             onClick={() => navigate({ to: "/receitas" })}
             className="absolute left-4 top-10 flex h-10 w-10 items-center justify-center rounded-full bg-cream/85 text-foreground backdrop-blur shadow-card"
@@ -108,7 +108,7 @@ function ReceitaDetalhe() {
             </p>
           </blockquote>
 
-          <Section title={t("rd_ingredients")}>
+          <Section title={<EdI18n k="rd_ingredients" />}>
             <ul className="space-y-2">
               {r.ingredientes.map((i) => (
                 <li key={i} className="flex items-start gap-3 text-sm text-foreground">
@@ -119,7 +119,7 @@ function ReceitaDetalhe() {
             </ul>
           </Section>
 
-          <Section title={t("rd_steps")}>
+          <Section title={<EdI18n k="rd_steps" />}>
             <ol className="space-y-3">
               {r.preparo.map((p, i) => (
                 <li key={i} className="flex gap-3 text-sm text-foreground">
@@ -132,13 +132,13 @@ function ReceitaDetalhe() {
             </ol>
           </Section>
 
-          <Section title={t("rd_tip")} icon={<Sparkles className="h-3.5 w-3.5" />}>
+          <Section title={<EdI18n k="rd_tip" />} icon={<Sparkles className="h-3.5 w-3.5" />}>
             <p className="rounded-2xl bg-devotional p-4 text-sm italic leading-relaxed text-foreground">
               {r.dicaBeatriz}
             </p>
           </Section>
 
-          <Section title={t("rd_benefits")}>
+          <Section title={<EdI18n k="rd_benefits" />}>
             <div className="flex flex-wrap gap-2">
               {r.beneficios.map((b) => (
                 <span key={b} className="rounded-full bg-highlight px-3 py-1.5 text-xs text-earth">
@@ -158,7 +158,7 @@ function Section({
   icon,
   children,
 }: {
-  title: string;
+  title: React.ReactNode;
   icon?: React.ReactNode;
   children: React.ReactNode;
 }) {

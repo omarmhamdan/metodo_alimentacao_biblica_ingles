@@ -2,6 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { ArrowLeft, Check } from "lucide-react";
 import { motion } from "framer-motion";
 import { AppShell } from "@/components/AppShell";
+import { Ed, EditImage } from "@/components/Editable";
 import { useDaily, useLang } from "@/lib/store";
 import sucoImg from "@/assets/suco-sagrado.jpg";
 
@@ -77,6 +78,9 @@ const content = {
   },
 };
 
+const SPT = content.pt;
+const SES = content.es;
+
 function SucoSagrado() {
   const { daily, update } = useDaily();
   const { lang } = useLang();
@@ -85,8 +89,8 @@ function SucoSagrado() {
   return (
     <AppShell>
       <div className="relative h-[44vh] min-h-[300px] w-full overflow-hidden">
-        <img src={sucoImg} alt={c.title} className="h-full w-full object-cover" />
-        <div className="absolute inset-0 bg-gradient-to-b from-black/20 via-transparent to-cream" />
+        <EditImage id="suco-sagrado" src={sucoImg} alt={c.title} className="h-full w-full object-cover" />
+        <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-black/20 via-transparent to-cream" />
         <Link
           to="/dashboard"
           className="absolute left-4 top-10 flex h-10 w-10 items-center justify-center rounded-full bg-cream/85 text-foreground shadow-card backdrop-blur"
@@ -101,14 +105,12 @@ function SucoSagrado() {
         transition={{ duration: 0.6 }}
         className="-mt-6 rounded-t-3xl bg-background px-6 pt-6 pb-2"
       >
-        <p className="text-[10.5px] uppercase tracking-[0.22em] text-muted-foreground">{c.badge}</p>
-        <h1 className="mt-1 font-serif text-3xl leading-tight text-foreground text-balance">
-          {c.title}
-        </h1>
-        <p className="mt-2 text-sm text-muted-foreground text-balance">{c.subtitle}</p>
+        <Ed as="p" k="suco.badge" pt={SPT.badge} es={SES.badge} className="block text-[10.5px] uppercase tracking-[0.22em] text-muted-foreground" />
+        <Ed as="h1" k="suco.title" pt={SPT.title} es={SES.title} className="mt-1 block font-serif text-3xl leading-tight text-foreground text-balance" />
+        <Ed as="p" k="suco.subtitle" pt={SPT.subtitle} es={SES.subtitle} className="mt-2 block text-sm text-muted-foreground text-balance" />
 
         <blockquote className="mt-5 rounded-2xl bg-gradient-devotional p-4">
-          <p className="font-serif italic text-sm text-foreground">&quot;{c.verse}&quot;</p>
+          <Ed as="p" k="suco.verse" pt={`"${SPT.verse}"`} es={`"${SES.verse}"`} className="block font-serif italic text-sm text-foreground" />
           <p className="mt-2 text-[11px] uppercase tracking-wider text-muted-foreground">
             {c.verseRef}
           </p>

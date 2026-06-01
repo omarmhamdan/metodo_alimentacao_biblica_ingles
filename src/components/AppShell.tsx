@@ -2,7 +2,9 @@ import { ReactNode, useState, useEffect } from "react";
 import { BottomNav } from "./BottomNav";
 import { SideNav } from "./SideNav";
 import { InstallPrompt, InstallBanner } from "./InstallPrompt";
+import { EditModeBar } from "./Editable";
 import { useLang } from "@/lib/store";
+import { initTextOverrides } from "@/lib/edit-store";
 
 /**
  * Responsive strategy:
@@ -24,6 +26,11 @@ export function AppShell({ children, hideNav }: { children: ReactNode; hideNav?:
     update();
     mq.addEventListener("change", update);
     return () => mq.removeEventListener("change", update);
+  }, []);
+
+  // Load inline-edit text overrides (cloud + local) once on mount
+  useEffect(() => {
+    initTextOverrides();
   }, []);
 
   // PWA: serve the per-language manifest + update the iOS "Add to Home Screen" name
@@ -93,6 +100,9 @@ export function AppShell({ children, hideNav }: { children: ReactNode; hideNav?:
       {/* Install banner (top) + popup modal */}
       <InstallBanner onOpenPrompt={() => setForceInstall(true)} />
       <InstallPrompt forceOpen={forceInstall} onClose={() => setForceInstall(false)} />
+
+      {/* Admin inline-edit mode bar */}
+      <EditModeBar />
     </div>
   );
 }

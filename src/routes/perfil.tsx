@@ -3,6 +3,7 @@ import { Heart, LogOut, Pencil, Plus, Settings, Target, Trash2, X } from "lucide
 import { useState } from "react";
 import { motion, AnimatePresence, type PanInfo } from "framer-motion";
 import { AppShell } from "@/components/AppShell";
+import { EdI18n } from "@/components/Editable";
 import { useDaily, useUser, useLang, useRecipes } from "@/lib/store";
 import { categoriaES } from "@/lib/recipes";
 import { RecipePhoto } from "@/components/RecipePhoto";
@@ -33,9 +34,7 @@ function PerfilPage() {
             {nome.charAt(0).toUpperCase()}
           </div>
           <div>
-            <p className="text-[11px] uppercase tracking-[0.22em] text-muted-foreground">
-              {t("prof_subtitle")}
-            </p>
+            <EdI18n as="p" k="prof_subtitle" className="block text-[11px] uppercase tracking-[0.22em] text-muted-foreground" />
             <h1 className="font-serif text-2xl leading-tight text-foreground">{nome}</h1>
             {user?.email && <p className="text-xs text-muted-foreground">{user.email}</p>}
           </div>
@@ -81,7 +80,7 @@ function PerfilPage() {
       <section className="mx-6 mb-4 rounded-3xl bg-card p-5 shadow-card">
         <div className="mb-3 flex items-center justify-between">
           <h2 className="inline-flex items-center gap-2 font-serif text-lg text-foreground">
-            <Heart className="h-4 w-4 text-terracotta" /> {t("prof_favorites")}
+            <Heart className="h-4 w-4 text-terracotta" /> <EdI18n k="prof_favorites" />
           </h2>
           {favRecipes.length > 0 && (
             <span className="text-[10px] italic text-muted-foreground">{t("prof_fav_hint")}</span>
@@ -124,9 +123,7 @@ function PerfilPage() {
         <LogOut className="h-4 w-4" /> {t("prof_signout")}
       </button>
 
-      <p className="mb-2 px-6 text-center font-serif italic text-xs text-muted-foreground text-balance">
-        {t("prof_verse")}
-      </p>
+      <EdI18n as="p" k="prof_verse" className="mb-2 block px-6 text-center font-serif italic text-xs text-muted-foreground text-balance" />
 
       {/* ── Modals ── */}
       <AnimatePresence>

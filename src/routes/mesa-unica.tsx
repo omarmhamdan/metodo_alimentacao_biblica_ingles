@@ -20,6 +20,10 @@ import { AppShell } from "@/components/AppShell";
 import { useLang, useStoredImageMap } from "@/lib/store";
 import { mesaContent, type Categoria, type MesaContent } from "@/lib/mesa-unica";
 import { bonusFallbacks } from "@/lib/bonus-images";
+import { Ed, EditImage } from "@/components/Editable";
+
+const PT = mesaContent.pt;
+const ES = mesaContent.es;
 
 export const Route = createFileRoute("/mesa-unica")({
   component: MesaUnica,
@@ -59,8 +63,8 @@ function Landing({
     <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
       {/* Hero */}
       <div className="relative h-[44vh] min-h-[300px] w-full overflow-hidden">
-        <img src={img["mesa-hero"]} alt={c.title} className="h-full w-full object-cover" />
-        <div className="absolute inset-0 bg-gradient-to-b from-black/55 via-black/25 to-background" />
+        <EditImage id="mesa-hero" src={img["mesa-hero"]} alt={c.title} className="h-full w-full object-cover" />
+        <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-black/55 via-black/25 to-background" />
         <Link
           to="/dashboard"
           className="absolute left-4 top-10 flex h-10 w-10 items-center justify-center rounded-full bg-cream/85 text-foreground shadow-card backdrop-blur"
@@ -70,25 +74,23 @@ function Landing({
         </Link>
         <div className="absolute inset-x-0 bottom-0 p-6">
           <span className="inline-flex items-center gap-1.5 rounded-full bg-earth px-3 py-1 text-[10px] font-medium uppercase tracking-[0.18em] text-cream shadow-soft">
-            <Sparkles className="h-3 w-3" /> {c.badge}
+            <Sparkles className="h-3 w-3" /> <Ed k="mesa.badge" pt={PT.badge} es={ES.badge} />
           </span>
-          <h1 className="mt-2 font-serif text-[32px] leading-tight text-cream drop-shadow text-balance">
-            {c.title}
-          </h1>
-          <p className="mt-1 text-sm text-cream/90 drop-shadow text-balance">{c.subtitle}</p>
+          <Ed as="h1" k="mesa.title" pt={PT.title} es={ES.title} className="mt-2 block font-serif text-[32px] leading-tight text-cream drop-shadow text-balance" />
+          <Ed as="p" k="mesa.subtitle" pt={PT.subtitle} es={ES.subtitle} className="mt-1 block text-sm text-cream/90 drop-shadow text-balance" />
         </div>
       </div>
 
       <div className="px-5 pt-4">
         <p className="inline-flex items-center gap-1.5 rounded-full bg-sage/30 px-3 py-1 text-[11px] font-medium text-earth">
-          {c.unlocked}
+          <Ed k="mesa.unlocked" pt={PT.unlocked} es={ES.unlocked} />
         </p>
-        <p className="mt-2 text-[11px] uppercase tracking-wider text-muted-foreground">{c.author}</p>
+        <Ed as="p" k="mesa.author" pt={PT.author} es={ES.author} className="mt-2 block text-[11px] uppercase tracking-wider text-muted-foreground" />
 
         {/* As 5 adaptações — grid de cards com foto */}
         <div className="mt-5 mb-2">
-          <h2 className="font-serif text-xl text-foreground">{c.secCategorias}</h2>
-          <p className="text-xs text-muted-foreground">{c.categoriasSub}</p>
+          <Ed as="h2" k="mesa.secCategorias" pt={PT.secCategorias} es={ES.secCategorias} className="block font-serif text-xl text-foreground" />
+          <Ed as="p" k="mesa.categoriasSub" pt={PT.categoriasSub} es={ES.categoriasSub} className="block text-xs text-muted-foreground" />
         </div>
         <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
           {c.categorias.map((cat, i) => (
@@ -101,15 +103,22 @@ function Landing({
               className="group relative overflow-hidden rounded-2xl bg-card text-left shadow-card transition-all active:scale-[0.97]"
             >
               <div className="relative aspect-[4/3]">
-                <img
+                <EditImage
+                  id={`mesa-cat-${cat.id}`}
                   src={img[`mesa-cat-${cat.id}`]}
                   alt={cat.titulo}
                   className="h-full w-full object-cover transition-transform group-hover:scale-105"
                   loading="lazy"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/10 to-transparent" />
+                <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/75 via-black/10 to-transparent" />
                 <div className="absolute inset-x-0 bottom-0 p-2.5 text-cream">
-                  <p className="font-serif text-[15px] leading-tight">{cat.titulo}</p>
+                  <Ed
+                    as="p"
+                    k={`mesa.cat.${cat.id}.titulo`}
+                    pt={PT.categorias[i].titulo}
+                    es={ES.categorias[i].titulo}
+                    className="block font-serif text-[15px] leading-tight"
+                  />
                 </div>
               </div>
             </motion.button>
@@ -118,30 +127,37 @@ function Landing({
 
         {/* Mesa de Domingo — cards premium */}
         <div className="mt-7 mb-2">
-          <h2 className="font-serif text-xl text-foreground">{c.secDomingo}</h2>
-          <p className="text-xs text-muted-foreground">{c.domingoIntro}</p>
+          <Ed as="h2" k="mesa.secDomingo" pt={PT.secDomingo} es={ES.secDomingo} className="block font-serif text-xl text-foreground" />
+          <Ed as="p" k="mesa.domingoIntro" pt={PT.domingoIntro} es={ES.domingoIntro} className="block text-xs text-muted-foreground" />
         </div>
         <div className="space-y-3">
           {c.pratos.map((p, i) => (
             <ExpandCard
               key={i}
+              imageId={`mesa-domingo-${i + 1}`}
               image={img[`mesa-domingo-${i + 1}`]}
               title={p.titulo}
               kicker={`${lang === "es" ? "Plato" : "Prato"} ${i + 1}`}
             >
-              <p className="text-sm leading-relaxed text-muted-foreground">{p.texto}</p>
+              <Ed
+                as="p"
+                k={`mesa.domingo.${i + 1}.texto`}
+                pt={PT.pratos[i].texto}
+                es={ES.pratos[i].texto}
+                className="block text-sm leading-relaxed text-muted-foreground"
+              />
             </ExpandCard>
           ))}
         </div>
         <div className="mt-3 flex items-start gap-3 rounded-2xl bg-gradient-devotional p-4">
           <Sun className="mt-0.5 h-4 w-4 shrink-0 text-earth" />
-          <p className="text-xs leading-relaxed text-foreground">{c.domingoOrientacao}</p>
+          <Ed as="p" k="mesa.domingoOrientacao" pt={PT.domingoOrientacao} es={ES.domingoOrientacao} className="block text-xs leading-relaxed text-foreground" />
         </div>
 
         {/* Guia completo */}
         <div className="mt-7 mb-2">
-          <h2 className="font-serif text-xl text-foreground">{c.guiaTitulo}</h2>
-          <p className="text-xs text-muted-foreground">{c.guiaSub}</p>
+          <Ed as="h2" k="mesa.guiaTitulo" pt={PT.guiaTitulo} es={ES.guiaTitulo} className="block font-serif text-xl text-foreground" />
+          <Ed as="p" k="mesa.guiaSub" pt={PT.guiaSub} es={ES.guiaSub} className="block text-xs text-muted-foreground" />
         </div>
         <div className="space-y-2.5">
           <GuideCard icon={Sparkles} title={lang === "es" ? "Lee esto primero" : "Leia primeiro"}>
@@ -180,11 +196,15 @@ function CategoryDetail({
   onBack: () => void;
 }) {
   const img = useStoredImageMap(bonusFallbacks);
+  const ci = PT.categorias.findIndex((x) => x.id === cat.id);
+  const cp = PT.categorias[ci];
+  const ce = ES.categorias[ci];
+  const base = `mesa.cat.${cat.id}`;
   return (
     <motion.div initial={{ opacity: 0, x: 16 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0 }}>
       <div className="relative h-[32vh] min-h-[200px] w-full overflow-hidden">
-        <img src={img[`mesa-cat-${cat.id}`]} alt={cat.titulo} className="h-full w-full object-cover" />
-        <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-black/10 to-background" />
+        <EditImage id={`mesa-cat-${cat.id}`} src={img[`mesa-cat-${cat.id}`]} alt={cat.titulo} className="h-full w-full object-cover" />
+        <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-black/40 via-black/10 to-background" />
         <button
           onClick={onBack}
           className="absolute left-4 top-10 flex items-center gap-1.5 rounded-full bg-cream/85 px-3 py-2 text-xs font-medium text-foreground shadow-card backdrop-blur"
@@ -192,9 +212,7 @@ function CategoryDetail({
           <ArrowLeft className="h-3.5 w-3.5" /> {c.voltar}
         </button>
         <div className="absolute inset-x-0 bottom-0 p-6">
-          <h1 className="font-serif text-[28px] leading-tight text-cream drop-shadow">
-            {cat.titulo}
-          </h1>
+          <Ed as="h1" k={`${base}.titulo`} pt={cp.titulo} es={ce.titulo} className="block font-serif text-[28px] leading-tight text-cream drop-shadow" />
         </div>
       </div>
 
@@ -204,7 +222,7 @@ function CategoryDetail({
           <p className="mb-1 text-[11px] font-medium uppercase tracking-wider text-earth">
             {c.lblDesafio}
           </p>
-          <p className="text-sm leading-relaxed text-foreground">{cat.desafio}</p>
+          <Ed as="p" k={`${base}.desafio`} pt={cp.desafio} es={ce.desafio} className="block text-sm leading-relaxed text-foreground" />
         </div>
 
         {/* Comparação sua versão x família */}
@@ -216,7 +234,7 @@ function CategoryDetail({
                 {c.lblSuaVersao}
               </p>
             </div>
-            <p className="text-sm text-foreground">{cat.suaVersao}</p>
+            <Ed as="p" k={`${base}.suaVersao`} pt={cp.suaVersao} es={ce.suaVersao} className="block text-sm text-foreground" />
           </div>
 
           <div className="rounded-2xl bg-card p-4 shadow-card">
@@ -229,10 +247,8 @@ function CategoryDetail({
             <div className="space-y-2.5">
               {cat.versaoFamilia.map((v, i) => (
                 <div key={i} className="rounded-xl bg-secondary/40 p-3">
-                  <p className="text-sm font-medium text-earth">{v.nome}</p>
-                  <p className="mt-0.5 text-[13px] leading-relaxed text-muted-foreground">
-                    {v.texto}
-                  </p>
+                  <Ed as="p" k={`${base}.vf.${i}.nome`} pt={cp.versaoFamilia[i].nome} es={ce.versaoFamilia[i].nome} className="block text-sm font-medium text-earth" />
+                  <Ed as="p" k={`${base}.vf.${i}.texto`} pt={cp.versaoFamilia[i].texto} es={ce.versaoFamilia[i].texto} className="mt-0.5 block text-[13px] leading-relaxed text-muted-foreground" />
                 </div>
               ))}
             </div>
@@ -247,7 +263,7 @@ function CategoryDetail({
               {c.lblTecnica}
             </p>
           </div>
-          <p className="text-sm leading-relaxed text-foreground">{cat.tecnica}</p>
+          <Ed as="p" k={`${base}.tecnica`} pt={cp.tecnica} es={ce.tecnica} className="block text-sm leading-relaxed text-foreground" />
         </div>
         <div className="h-6" />
       </div>
@@ -259,11 +275,9 @@ function CategoryDetail({
 function Abertura({ c }: { c: MesaContent }) {
   return (
     <>
-      <h3 className="font-serif text-lg text-foreground">{c.aberturaTitulo}</h3>
+      <Ed as="h3" k="mesa.aberturaTitulo" pt={PT.aberturaTitulo} es={ES.aberturaTitulo} className="block font-serif text-lg text-foreground" />
       {c.aberturaTexto.map((p, i) => (
-        <p key={i} className="mt-2 text-sm leading-relaxed text-muted-foreground">
-          {p}
-        </p>
+        <Ed key={i} as="p" k={`mesa.aberturaTexto.${i}`} pt={PT.aberturaTexto[i]} es={ES.aberturaTexto[i]} className="mt-2 block text-sm leading-relaxed text-muted-foreground" />
       ))}
       <div className="mt-4 grid gap-2.5">
         {c.compromissos.map((comp, i) => (
@@ -272,13 +286,13 @@ function Abertura({ c }: { c: MesaContent }) {
               {i + 1}
             </span>
             <div>
-              <p className="text-sm font-medium text-foreground">{comp.nome}</p>
-              <p className="mt-0.5 text-xs leading-relaxed text-muted-foreground">{comp.texto}</p>
+              <Ed as="p" k={`mesa.compromisso.${i}.nome`} pt={PT.compromissos[i].nome} es={ES.compromissos[i].nome} className="block text-sm font-medium text-foreground" />
+              <Ed as="p" k={`mesa.compromisso.${i}.texto`} pt={PT.compromissos[i].texto} es={ES.compromissos[i].texto} className="mt-0.5 block text-xs leading-relaxed text-muted-foreground" />
             </div>
           </div>
         ))}
       </div>
-      <p className="mt-3 font-serif italic text-sm text-foreground">{c.aberturaAssinatura}</p>
+      <Ed as="p" k="mesa.aberturaAssinatura" pt={PT.aberturaAssinatura} es={ES.aberturaAssinatura} className="mt-3 block font-serif italic text-sm text-foreground" />
     </>
   );
 }
@@ -286,12 +300,12 @@ function Abertura({ c }: { c: MesaContent }) {
 function Logica({ c }: { c: MesaContent }) {
   return (
     <>
-      <p className="text-sm leading-relaxed text-muted-foreground">{c.logicaIntro}</p>
+      <Ed as="p" k="mesa.logicaIntro" pt={PT.logicaIntro} es={ES.logicaIntro} className="block text-sm leading-relaxed text-muted-foreground" />
       <div className="mt-3 grid gap-2.5">
         {c.pilares.map((p, i) => (
           <div key={i} className="rounded-2xl bg-secondary/40 p-4">
-            <p className="font-serif text-base text-foreground">{p.nome}</p>
-            <p className="mt-1 text-xs leading-relaxed text-muted-foreground">{p.texto}</p>
+            <Ed as="p" k={`mesa.pilar.${i}.nome`} pt={PT.pilares[i].nome} es={ES.pilares[i].nome} className="block font-serif text-base text-foreground" />
+            <Ed as="p" k={`mesa.pilar.${i}.texto`} pt={PT.pilares[i].texto} es={ES.pilares[i].texto} className="mt-1 block text-xs leading-relaxed text-muted-foreground" />
           </div>
         ))}
       </div>
@@ -302,13 +316,13 @@ function Logica({ c }: { c: MesaContent }) {
 function Paladar({ c }: { c: MesaContent }) {
   return (
     <>
-      <p className="text-sm leading-relaxed text-muted-foreground">{c.paladarIntro}</p>
+      <Ed as="p" k="mesa.paladarIntro" pt={PT.paladarIntro} es={ES.paladarIntro} className="block text-sm leading-relaxed text-muted-foreground" />
       <h4 className="mt-4 mb-2 text-xs font-medium uppercase tracking-wider text-olive">
         {c.saborTitulo}
       </h4>
       <div className="space-y-2">
         {c.truquesSabor.map((t, i) => (
-          <Trick key={i} n={i + 1} item={t} />
+          <Trick key={i} n={i + 1} k={`mesa.sabor.${i}`} pt={PT.truquesSabor[i]} es={ES.truquesSabor[i]} />
         ))}
       </div>
       <h4 className="mt-4 mb-2 text-xs font-medium uppercase tracking-wider text-olive">
@@ -316,28 +330,38 @@ function Paladar({ c }: { c: MesaContent }) {
       </h4>
       <div className="space-y-2">
         {c.truquesTextura.map((t, i) => (
-          <Trick key={i} n={c.truquesSabor.length + i + 1} item={t} />
+          <Trick key={i} n={c.truquesSabor.length + i + 1} k={`mesa.textura.${i}`} pt={PT.truquesTextura[i]} es={ES.truquesTextura[i]} />
         ))}
       </div>
       <div className="mt-4 rounded-2xl bg-gradient-devotional p-4">
         <p className="mb-1 text-[11px] font-medium uppercase tracking-wider text-earth">
           {c.regraOuroTitulo}
         </p>
-        <p className="text-sm leading-relaxed text-foreground">{c.regraOuro}</p>
+        <Ed as="p" k="mesa.regraOuro" pt={PT.regraOuro} es={ES.regraOuro} className="block text-sm leading-relaxed text-foreground" />
       </div>
     </>
   );
 }
 
-function Trick({ n, item }: { n: number; item: { nome: string; texto: string } }) {
+function Trick({
+  n,
+  k,
+  pt,
+  es,
+}: {
+  n: number;
+  k: string;
+  pt: { nome: string; texto: string };
+  es: { nome: string; texto: string };
+}) {
   return (
     <div className="flex gap-3 rounded-2xl bg-secondary/40 p-3.5">
       <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-highlight font-serif text-xs text-earth">
         {n}
       </span>
       <div>
-        <p className="text-sm font-medium text-foreground">{item.nome}</p>
-        <p className="mt-0.5 text-xs leading-relaxed text-muted-foreground">{item.texto}</p>
+        <Ed as="p" k={`${k}.nome`} pt={pt.nome} es={es.nome} className="block text-sm font-medium text-foreground" />
+        <Ed as="p" k={`${k}.texto`} pt={pt.texto} es={es.texto} className="mt-0.5 block text-xs leading-relaxed text-muted-foreground" />
       </div>
     </div>
   );
@@ -346,14 +370,14 @@ function Trick({ n, item }: { n: number; item: { nome: string; texto: string } }
 function Criancas({ c }: { c: MesaContent }) {
   return (
     <>
-      <p className="text-sm leading-relaxed text-muted-foreground">{c.criancasIntro}</p>
+      <Ed as="p" k="mesa.criancasIntro" pt={PT.criancasIntro} es={ES.criancasIntro} className="block text-sm leading-relaxed text-muted-foreground" />
 
       <h4 className="mt-4 mb-2 font-serif text-base text-foreground">{c.motivosTitulo}</h4>
       <div className="space-y-2">
         {c.motivos.map((m, i) => (
           <div key={i} className="rounded-2xl bg-secondary/40 p-3.5">
-            <p className="text-sm font-medium text-earth">{m.titulo}</p>
-            <p className="mt-0.5 text-xs leading-relaxed text-muted-foreground">{m.solucao}</p>
+            <Ed as="p" k={`mesa.motivo.${i}.titulo`} pt={PT.motivos[i].titulo} es={ES.motivos[i].titulo} className="block text-sm font-medium text-earth" />
+            <Ed as="p" k={`mesa.motivo.${i}.solucao`} pt={PT.motivos[i].solucao} es={ES.motivos[i].solucao} className="mt-0.5 block text-xs leading-relaxed text-muted-foreground" />
           </div>
         ))}
       </div>
@@ -361,26 +385,22 @@ function Criancas({ c }: { c: MesaContent }) {
       <h4 className="mt-4 mb-2 font-serif text-base text-foreground">{c.estrategiasTitulo}</h4>
       <div className="space-y-2">
         {c.estrategias.map((e, i) => (
-          <Trick key={i} n={i + 1} item={e} />
+          <Trick key={i} n={i + 1} k={`mesa.estrategia.${i}`} pt={PT.estrategias[i]} es={ES.estrategias[i]} />
         ))}
       </div>
 
       <h4 className="mt-4 mb-1 font-serif text-base text-foreground">{c.lancheTitulo}</h4>
-      <p className="mb-2 text-xs leading-relaxed text-muted-foreground">{c.lancheIntro}</p>
+      <Ed as="p" k="mesa.lancheIntro" pt={PT.lancheIntro} es={ES.lancheIntro} className="mb-2 block text-xs leading-relaxed text-muted-foreground" />
       <div className="space-y-2">
         {c.swaps.map((s, i) => (
           <div key={i} className="flex items-center gap-2 rounded-2xl bg-secondary/40 p-3">
-            <span className="flex-1 text-[12px] text-muted-foreground line-through decoration-earth/40">
-              {s.de}
-            </span>
+            <Ed k={`mesa.swap.${i}.de`} pt={PT.swaps[i].de} es={ES.swaps[i].de} className="flex-1 text-[12px] text-muted-foreground line-through decoration-earth/40" />
             <ArrowRight className="h-3.5 w-3.5 shrink-0 text-olive" />
-            <span className="flex-1 text-[12px] font-medium text-foreground">{s.para}</span>
+            <Ed k={`mesa.swap.${i}.para`} pt={PT.swaps[i].para} es={ES.swaps[i].para} className="flex-1 text-[12px] font-medium text-foreground" />
           </div>
         ))}
       </div>
-      <p className="mt-3 rounded-2xl bg-highlight/50 p-3.5 text-xs leading-relaxed text-earth">
-        {c.lancheRegra}
-      </p>
+      <Ed as="p" k="mesa.lancheRegra" pt={PT.lancheRegra} es={ES.lancheRegra} className="mt-3 block rounded-2xl bg-highlight/50 p-3.5 text-xs leading-relaxed text-earth" />
     </>
   );
 }
@@ -388,8 +408,8 @@ function Criancas({ c }: { c: MesaContent }) {
 function Bonus({ c }: { c: MesaContent }) {
   return (
     <>
-      <p className="font-serif italic text-sm text-earth">{c.bonusVersiculo}</p>
-      <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{c.bonusIntro}</p>
+      <Ed as="p" k="mesa.bonusVersiculo" pt={PT.bonusVersiculo} es={ES.bonusVersiculo} className="block font-serif italic text-sm text-earth" />
+      <Ed as="p" k="mesa.bonusIntro" pt={PT.bonusIntro} es={ES.bonusIntro} className="mt-2 block text-sm leading-relaxed text-muted-foreground" />
 
       {/* Timeline das fases */}
       <div className="relative mt-4 pl-6">
@@ -400,18 +420,19 @@ function Bonus({ c }: { c: MesaContent }) {
               <span className="absolute -left-[23px] top-0.5 flex h-5 w-5 items-center justify-center rounded-full bg-gradient-primary text-[10px] font-medium text-primary-foreground">
                 {i + 1}
               </span>
-              <p className="text-[10px] font-medium uppercase tracking-wider text-earth">{f.fase}</p>
-              <p className="font-serif text-base leading-tight text-foreground">{f.titulo}</p>
+              <Ed as="p" k={`mesa.fase.${i}.fase`} pt={PT.fases[i].fase} es={ES.fases[i].fase} className="block text-[10px] font-medium uppercase tracking-wider text-earth" />
+              <Ed as="p" k={`mesa.fase.${i}.titulo`} pt={PT.fases[i].titulo} es={ES.fases[i].titulo} className="block font-serif text-base leading-tight text-foreground" />
               {f.itens.length > 0 && (
                 <ul className="mt-1.5 space-y-1">
-                  {f.itens.map((it) => (
-                    <li key={it} className="flex items-start gap-2 text-[13px] text-muted-foreground">
-                      <Check className="mt-0.5 h-3.5 w-3.5 shrink-0 text-olive" /> {it}
+                  {f.itens.map((it, j) => (
+                    <li key={j} className="flex items-start gap-2 text-[13px] text-muted-foreground">
+                      <Check className="mt-0.5 h-3.5 w-3.5 shrink-0 text-olive" />
+                      <Ed k={`mesa.fase.${i}.item.${j}`} pt={PT.fases[i].itens[j]} es={ES.fases[i].itens[j]} />
                     </li>
                   ))}
                 </ul>
               )}
-              <p className="mt-1.5 text-xs leading-relaxed text-muted-foreground">{f.texto}</p>
+              <Ed as="p" k={`mesa.fase.${i}.texto`} pt={PT.fases[i].texto} es={ES.fases[i].texto} className="mt-1.5 block text-xs leading-relaxed text-muted-foreground" />
             </div>
           ))}
         </div>
@@ -420,7 +441,7 @@ function Bonus({ c }: { c: MesaContent }) {
       <h4 className="mt-5 mb-2 font-serif text-base text-foreground">{c.regrasTitulo}</h4>
       <div className="space-y-2">
         {c.regras.map((r, i) => (
-          <Trick key={i} n={i + 1} item={r} />
+          <Trick key={i} n={i + 1} k={`mesa.regra.${i}`} pt={PT.regras[i]} es={ES.regras[i]} />
         ))}
       </div>
     </>
@@ -432,11 +453,9 @@ function Final({ c, lang }: { c: MesaContent; lang: "pt" | "es" }) {
     <>
       <div className="rounded-3xl bg-gradient-devotional p-5">
         {c.finalTexto.map((p, i) => (
-          <p key={i} className="mb-2.5 text-sm leading-relaxed text-foreground last:mb-0">
-            {p}
-          </p>
+          <Ed key={i} as="p" k={`mesa.final.${i}`} pt={PT.finalTexto[i]} es={ES.finalTexto[i]} className="mb-2.5 block text-sm leading-relaxed text-foreground last:mb-0" />
         ))}
-        <p className="mt-4 font-serif italic text-sm text-earth">{c.finalAssinatura}</p>
+        <Ed as="p" k="mesa.finalAssinatura" pt={PT.finalAssinatura} es={ES.finalAssinatura} className="mt-4 block font-serif italic text-sm text-earth" />
       </div>
       <Link
         to="/receitas"
@@ -500,11 +519,13 @@ function GuideCard({
 
 function ExpandCard({
   image,
+  imageId,
   title,
   kicker,
   children,
 }: {
   image: string;
+  imageId?: string;
   title: string;
   kicker: string;
   children: React.ReactNode;
@@ -514,7 +535,11 @@ function ExpandCard({
     <div className="overflow-hidden rounded-2xl bg-card shadow-card">
       <button onClick={() => setOpen((o) => !o)} className="flex w-full items-center gap-3 text-left">
         <div className="relative h-20 w-24 shrink-0 overflow-hidden">
-          <img src={image} alt={title} className="h-full w-full object-cover" loading="lazy" />
+          {imageId ? (
+            <EditImage id={imageId} src={image} alt={title} className="h-full w-full object-cover" loading="lazy" />
+          ) : (
+            <img src={image} alt={title} className="h-full w-full object-cover" loading="lazy" />
+          )}
         </div>
         <div className="flex-1 py-2 pr-2">
           <p className="text-[10px] font-medium uppercase tracking-[0.18em] text-earth">{kicker}</p>

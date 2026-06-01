@@ -53,6 +53,7 @@ import { useUser } from "@/lib/store";
 import { recipes } from "@/lib/recipes";
 import { recipeTranslationsES } from "@/lib/recipes-es";
 import { bonusSlots } from "@/lib/bonus-images";
+import { setEditMode } from "@/lib/edit-store";
 
 export const Route = createFileRoute("/admin")({
   component: AdminPage,
@@ -313,6 +314,15 @@ function AdminPage() {
                 <Check className="h-3 w-3" /> Salvo
               </motion.span>
             )}
+            <button
+              onClick={() => {
+                setEditMode(true);
+                navigate({ to: "/dashboard" });
+              }}
+              className="flex items-center gap-1.5 rounded-xl bg-olive px-3 py-1.5 text-xs font-medium text-cream hover:opacity-90"
+            >
+              <Image className="h-3.5 w-3.5" /> Editar no app
+            </button>
             <button
               onClick={() => navigate({ to: "/dashboard" })}
               className="rounded-xl border border-stone-700 px-3 py-1.5 text-xs text-stone-400 hover:text-white"

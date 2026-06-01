@@ -2,7 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
 import { Search, Heart, Clock } from "lucide-react";
 import { AppShell } from "@/components/AppShell";
-import { RecipePhoto } from "@/components/RecipePhoto";
+import { EditImage, EdI18n } from "@/components/Editable";
 import { categorias, categoriaES, dificuldadeES, type Categoria } from "@/lib/recipes";
 import { useDaily, useLang, useRecipes } from "@/lib/store";
 
@@ -50,11 +50,9 @@ function ReceitasPage() {
   return (
     <AppShell>
       <header className="px-6 pt-10 pb-3">
-        <p className="text-[11px] uppercase tracking-[0.22em] text-muted-foreground">
-          {t("rec_subtitle")}
-        </p>
-        <h1 className="mt-1 font-serif text-3xl text-foreground">{t("rec_title")}</h1>
-        <p className="mt-1 text-sm text-muted-foreground text-balance">{t("rec_desc")}</p>
+        <EdI18n as="p" k="rec_subtitle" className="block text-[11px] uppercase tracking-[0.22em] text-muted-foreground" />
+        <EdI18n as="h1" k="rec_title" className="mt-1 block font-serif text-3xl text-foreground" />
+        <EdI18n as="p" k="rec_desc" className="mt-1 block text-sm text-muted-foreground text-balance" />
 
         <label className="mt-5 flex items-center gap-3 rounded-2xl border border-border bg-card px-4 py-3 shadow-card focus-within:border-olive/50 focus-within:ring-2 focus-within:ring-olive/15">
           <Search className="h-4 w-4 text-muted-foreground" />
@@ -100,13 +98,14 @@ function ReceitasPage() {
             >
               <Link to="/receitas/$id" params={{ id: r.id }} className="block">
                 <div className="relative aspect-square overflow-hidden">
-                  <RecipePhoto
+                  <EditImage
+                    id={r.id}
                     src={r.imagem}
                     alt={r.titulo}
                     loading="lazy"
                     className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent" />
+                  <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/40 via-transparent" />
                 </div>
                 <div className="p-3">
                   <p className="text-[9.5px] uppercase tracking-[0.15em] text-muted-foreground">

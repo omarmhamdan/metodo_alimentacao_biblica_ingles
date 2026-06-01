@@ -12,7 +12,9 @@ import {
 } from "lucide-react";
 import { AppShell } from "@/components/AppShell";
 import { RecipePhoto } from "@/components/RecipePhoto";
+import { Ed, EditImage } from "@/components/Editable";
 import { useDaily, useUser, versiculoDoDia, useLang, useRecipes } from "@/lib/store";
+import { T } from "@/lib/i18n";
 import sucoImg from "@/assets/suco-sagrado.jpg";
 
 export const Route = createFileRoute("/dashboard")({
@@ -46,9 +48,16 @@ function Dashboard() {
               {weekday}
             </p>
             <h1 className="mt-1 font-serif text-[26px] leading-tight text-foreground text-balance">
-              {t("dash_greeting")} {nome} <span className="text-sage">🌿</span>
+              <Ed k="i18n.dash_greeting" pt={T.pt.dash_greeting} es={T.es.dash_greeting} /> {nome}{" "}
+              <span className="text-sage">🌿</span>
             </h1>
-            <p className="mt-1 text-sm text-muted-foreground text-balance">{t("dash_subtitle")}</p>
+            <Ed
+              as="p"
+              k="i18n.dash_subtitle"
+              pt={T.pt.dash_subtitle}
+              es={T.es.dash_subtitle}
+              className="mt-1 block text-sm text-muted-foreground text-balance"
+            />
           </div>
           <Link
             to="/perfil"
@@ -161,7 +170,8 @@ function Dashboard() {
               </div>
             </div>
             <div className="relative w-28 shrink-0">
-              <img
+              <EditImage
+                id="suco-sagrado"
                 src={sucoImg}
                 alt="Jugo Sagrado"
                 className="absolute inset-0 h-full w-full object-cover"

@@ -2,6 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { motion } from "framer-motion";
 import { Sparkles } from "lucide-react";
 import { AppShell } from "@/components/AppShell";
+import { EdI18n } from "@/components/Editable";
 import { versiculoDoDia, useLang } from "@/lib/store";
 
 export const Route = createFileRoute("/devocional")({
@@ -10,16 +11,14 @@ export const Route = createFileRoute("/devocional")({
 });
 
 function DevocionalPage() {
-  const { t, lang } = useLang();
+  const { lang } = useLang();
   const v = versiculoDoDia(lang);
 
   return (
     <AppShell>
       <header className="px-6 pt-10 pb-3">
-        <p className="text-[11px] uppercase tracking-[0.22em] text-muted-foreground">
-          {t("dev_subtitle")}
-        </p>
-        <h1 className="mt-1 font-serif text-3xl text-foreground">{t("dev_title")}</h1>
+        <EdI18n as="p" k="dev_subtitle" className="block text-[11px] uppercase tracking-[0.22em] text-muted-foreground" />
+        <EdI18n as="h1" k="dev_title" className="mt-1 block font-serif text-3xl text-foreground" />
       </header>
 
       <motion.section
@@ -38,16 +37,14 @@ function DevocionalPage() {
       </motion.section>
 
       <section className="mx-6 mt-6 rounded-3xl bg-card p-6 shadow-card">
-        <h2 className="font-serif text-xl text-foreground">{t("dev_reflection")}</h2>
+        <EdI18n as="h2" k="dev_reflection" className="block font-serif text-xl text-foreground" />
         <p className="mt-3 text-sm leading-relaxed text-muted-foreground whitespace-pre-line">
           {v.reflexao}
         </p>
       </section>
 
       <section className="mx-6 mt-4 mb-6 rounded-3xl bg-highlight p-6 shadow-card">
-        <p className="text-[11px] uppercase tracking-[0.22em] text-earth">
-          {t("dev_prayer_title")}
-        </p>
+        <EdI18n as="p" k="dev_prayer_title" className="block text-[11px] uppercase tracking-[0.22em] text-earth" />
         <p className="mt-3 font-serif italic text-base leading-relaxed text-foreground text-balance">
           {v.oracao}
         </p>

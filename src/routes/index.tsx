@@ -6,6 +6,8 @@ import heroMesa from "@/assets/hero-mesa.jpg";
 import { useUser, useLang, findUserByEmail } from "@/lib/store";
 import { fetchProfileByEmail, upsertProfile, fetchRecipePhotos } from "@/lib/sync";
 import { mergeCloudImages } from "@/lib/image-store";
+import { EdI18n } from "@/components/Editable";
+import { initTextOverrides } from "@/lib/edit-store";
 
 export const Route = createFileRoute("/")({
   component: LandingLogin,
@@ -37,6 +39,10 @@ function LandingLogin() {
 
   // PWA standalone mode? Show a friendly "restore your data" banner.
   const [isStandalone, setIsStandalone] = useState(false);
+  useEffect(() => {
+    initTextOverrides();
+  }, []);
+
   useEffect(() => {
     if (typeof window === "undefined") return;
     const standalone =
@@ -164,7 +170,7 @@ function LandingLogin() {
           transition={{ duration: 0.9 }}
           className="absolute inset-x-0 bottom-6 px-6 text-center"
         >
-          <p className="font-serif italic text-sm text-earth/80">{t("login_verse")}</p>
+          <EdI18n as="p" k="login_verse" className="block font-serif italic text-sm text-earth/80" />
         </motion.div>
       </div>
 
@@ -176,12 +182,10 @@ function LandingLogin() {
       >
         <div className="mb-7 text-center">
           <div className="mb-3 inline-flex items-center gap-1.5 rounded-full bg-highlight px-3 py-1 text-[11px] uppercase tracking-[0.18em] text-earth">
-            <Sparkles className="h-3 w-3" /> {t("login_badge")}
+            <Sparkles className="h-3 w-3" /> <EdI18n k="login_badge" />
           </div>
-          <h1 className="font-serif text-[28px] leading-tight text-foreground text-balance">
-            {t("login_title")}
-          </h1>
-          <p className="mt-2 text-sm text-muted-foreground text-balance">{t("login_subtitle")}</p>
+          <EdI18n as="h1" k="login_title" className="block font-serif text-[28px] leading-tight text-foreground text-balance" />
+          <EdI18n as="p" k="login_subtitle" className="mt-2 block text-sm text-muted-foreground text-balance" />
         </div>
 
         <form onSubmit={handleSubmit} noValidate className="space-y-3">

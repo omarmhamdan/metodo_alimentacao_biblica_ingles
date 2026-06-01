@@ -1,6 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { motion } from "framer-motion";
 import { AppShell } from "@/components/AppShell";
+import { Ed } from "@/components/Editable";
 import { useLang } from "@/lib/store";
 
 export const Route = createFileRoute("/fundamentos")({
@@ -103,6 +104,9 @@ const sessoesContent = {
   },
 };
 
+const FPT = sessoesContent.pt;
+const FES = sessoesContent.es;
+
 function FundamentosPage() {
   const { lang } = useLang();
   const c = sessoesContent[lang] ?? sessoesContent.es;
@@ -110,11 +114,9 @@ function FundamentosPage() {
   return (
     <AppShell>
       <header className="px-6 pt-10 pb-5">
-        <p className="text-[11px] uppercase tracking-[0.22em] text-muted-foreground">
-          {c.subtitle}
-        </p>
-        <h1 className="mt-1 font-serif text-3xl text-foreground">{c.title}</h1>
-        <p className="mt-1 text-sm text-muted-foreground text-balance">{c.desc}</p>
+        <Ed as="p" k="fund.subtitle" pt={FPT.subtitle} es={FES.subtitle} className="block text-[11px] uppercase tracking-[0.22em] text-muted-foreground" />
+        <Ed as="h1" k="fund.title" pt={FPT.title} es={FES.title} className="mt-1 block font-serif text-3xl text-foreground" />
+        <Ed as="p" k="fund.desc" pt={FPT.desc} es={FES.desc} className="mt-1 block text-sm text-muted-foreground text-balance" />
       </header>
 
       <div className="space-y-3 px-6 pb-4">
@@ -136,18 +138,26 @@ function FundamentosPage() {
                 {s.versiculo}
               </span>
             </div>
-            <h2 className="font-serif text-xl leading-tight text-foreground text-balance">
-              {s.titulo}
-            </h2>
-            <p className="mt-3 text-sm leading-relaxed text-muted-foreground text-balance">
-              {s.texto}
-            </p>
+            <Ed
+              as="h2"
+              k={`fund.item.${i}.titulo`}
+              pt={FPT.items[i].titulo}
+              es={FES.items[i].titulo}
+              className="block font-serif text-xl leading-tight text-foreground text-balance"
+            />
+            <Ed
+              as="p"
+              k={`fund.item.${i}.texto`}
+              pt={FPT.items[i].texto}
+              es={FES.items[i].texto}
+              className="mt-3 block text-sm leading-relaxed text-muted-foreground text-balance"
+            />
           </motion.article>
         ))}
       </div>
 
       <div className="mx-6 mb-6 rounded-3xl bg-gradient-devotional p-6 text-center shadow-card">
-        <p className="font-serif italic text-base text-foreground text-balance">{c.quote}</p>
+        <Ed as="p" k="fund.quote" pt={FPT.quote} es={FES.quote} className="block font-serif italic text-base text-foreground text-balance" />
         <p className="mt-2 text-[11px] uppercase tracking-wider text-muted-foreground">
           {c.quoteRef}
         </p>
