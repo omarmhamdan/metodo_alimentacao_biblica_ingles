@@ -89,7 +89,12 @@ function SucoSagrado() {
   return (
     <AppShell>
       <div className="relative h-[44vh] min-h-[300px] w-full overflow-hidden">
-        <EditImage id="suco-sagrado" src={sucoImg} alt={c.title} className="h-full w-full object-cover" />
+        <EditImage
+          id="suco-sagrado"
+          src={sucoImg}
+          alt={c.title}
+          className="h-full w-full object-cover"
+        />
         <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-black/20 via-transparent to-cream" />
         <Link
           to="/dashboard"
@@ -105,12 +110,36 @@ function SucoSagrado() {
         transition={{ duration: 0.6 }}
         className="-mt-6 rounded-t-3xl bg-background px-6 pt-6 pb-2"
       >
-        <Ed as="p" k="suco.badge" pt={SPT.badge} es={SES.badge} className="block text-[10.5px] uppercase tracking-[0.22em] text-muted-foreground" />
-        <Ed as="h1" k="suco.title" pt={SPT.title} es={SES.title} className="mt-1 block font-serif text-3xl leading-tight text-foreground text-balance" />
-        <Ed as="p" k="suco.subtitle" pt={SPT.subtitle} es={SES.subtitle} className="mt-2 block text-sm text-muted-foreground text-balance" />
+        <Ed
+          as="p"
+          k="suco.badge"
+          pt={SPT.badge}
+          es={SES.badge}
+          className="block text-[10.5px] uppercase tracking-[0.22em] text-muted-foreground"
+        />
+        <Ed
+          as="h1"
+          k="suco.title"
+          pt={SPT.title}
+          es={SES.title}
+          className="mt-1 block font-serif text-3xl leading-tight text-foreground text-balance"
+        />
+        <Ed
+          as="p"
+          k="suco.subtitle"
+          pt={SPT.subtitle}
+          es={SES.subtitle}
+          className="mt-2 block text-sm text-muted-foreground text-balance"
+        />
 
         <blockquote className="mt-5 rounded-2xl bg-gradient-devotional p-4">
-          <Ed as="p" k="suco.verse" pt={`"${SPT.verse}"`} es={`"${SES.verse}"`} className="block font-serif italic text-sm text-foreground" />
+          <Ed
+            as="p"
+            k="suco.verse"
+            pt={`"${SPT.verse}"`}
+            es={`"${SES.verse}"`}
+            className="block font-serif italic text-sm text-foreground"
+          />
           <p className="mt-2 text-[11px] uppercase tracking-wider text-muted-foreground">
             {c.verseRef}
           </p>

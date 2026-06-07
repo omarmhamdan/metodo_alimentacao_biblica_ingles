@@ -170,7 +170,11 @@ function LandingLogin() {
           transition={{ duration: 0.9 }}
           className="absolute inset-x-0 bottom-6 px-6 text-center"
         >
-          <EdI18n as="p" k="login_verse" className="block font-serif italic text-sm text-earth/80" />
+          <EdI18n
+            as="p"
+            k="login_verse"
+            className="block font-serif italic text-sm text-earth/80"
+          />
         </motion.div>
       </div>
 
@@ -184,8 +188,16 @@ function LandingLogin() {
           <div className="mb-3 inline-flex items-center gap-1.5 rounded-full bg-highlight px-3 py-1 text-[11px] uppercase tracking-[0.18em] text-earth">
             <Sparkles className="h-3 w-3" /> <EdI18n k="login_badge" />
           </div>
-          <EdI18n as="h1" k="login_title" className="block font-serif text-[28px] leading-tight text-foreground text-balance" />
-          <EdI18n as="p" k="login_subtitle" className="mt-2 block text-sm text-muted-foreground text-balance" />
+          <EdI18n
+            as="h1"
+            k="login_title"
+            className="block font-serif text-[28px] leading-tight text-foreground text-balance"
+          />
+          <EdI18n
+            as="p"
+            k="login_subtitle"
+            className="mt-2 block text-sm text-muted-foreground text-balance"
+          />
         </div>
 
         <form onSubmit={handleSubmit} noValidate className="space-y-3">

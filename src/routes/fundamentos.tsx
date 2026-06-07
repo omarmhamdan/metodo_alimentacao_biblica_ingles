@@ -114,9 +114,27 @@ function FundamentosPage() {
   return (
     <AppShell>
       <header className="px-6 pt-10 pb-5">
-        <Ed as="p" k="fund.subtitle" pt={FPT.subtitle} es={FES.subtitle} className="block text-[11px] uppercase tracking-[0.22em] text-muted-foreground" />
-        <Ed as="h1" k="fund.title" pt={FPT.title} es={FES.title} className="mt-1 block font-serif text-3xl text-foreground" />
-        <Ed as="p" k="fund.desc" pt={FPT.desc} es={FES.desc} className="mt-1 block text-sm text-muted-foreground text-balance" />
+        <Ed
+          as="p"
+          k="fund.subtitle"
+          pt={FPT.subtitle}
+          es={FES.subtitle}
+          className="block text-[11px] uppercase tracking-[0.22em] text-muted-foreground"
+        />
+        <Ed
+          as="h1"
+          k="fund.title"
+          pt={FPT.title}
+          es={FES.title}
+          className="mt-1 block font-serif text-3xl text-foreground"
+        />
+        <Ed
+          as="p"
+          k="fund.desc"
+          pt={FPT.desc}
+          es={FES.desc}
+          className="mt-1 block text-sm text-muted-foreground text-balance"
+        />
       </header>
 
       <div className="space-y-3 px-6 pb-4">
@@ -157,7 +175,13 @@ function FundamentosPage() {
       </div>
 
       <div className="mx-6 mb-6 rounded-3xl bg-gradient-devotional p-6 text-center shadow-card">
-        <Ed as="p" k="fund.quote" pt={FPT.quote} es={FES.quote} className="block font-serif italic text-base text-foreground text-balance" />
+        <Ed
+          as="p"
+          k="fund.quote"
+          pt={FPT.quote}
+          es={FES.quote}
+          className="block font-serif italic text-base text-foreground text-balance"
+        />
         <p className="mt-2 text-[11px] uppercase tracking-wider text-muted-foreground">
           {c.quoteRef}
         </p>

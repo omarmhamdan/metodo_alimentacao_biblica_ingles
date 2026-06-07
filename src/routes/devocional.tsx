@@ -17,7 +17,11 @@ function DevocionalPage() {
   return (
     <AppShell>
       <header className="px-6 pt-10 pb-3">
-        <EdI18n as="p" k="dev_subtitle" className="block text-[11px] uppercase tracking-[0.22em] text-muted-foreground" />
+        <EdI18n
+          as="p"
+          k="dev_subtitle"
+          className="block text-[11px] uppercase tracking-[0.22em] text-muted-foreground"
+        />
         <EdI18n as="h1" k="dev_title" className="mt-1 block font-serif text-3xl text-foreground" />
       </header>
 
@@ -48,7 +52,11 @@ function DevocionalPage() {
       </section>
 
       <section className="mx-6 mt-4 mb-6 rounded-3xl bg-highlight p-6 shadow-card">
-        <EdI18n as="p" k="dev_prayer_title" className="block text-[11px] uppercase tracking-[0.22em] text-earth" />
+        <EdI18n
+          as="p"
+          k="dev_prayer_title"
+          className="block text-[11px] uppercase tracking-[0.22em] text-earth"
+        />
         <p className="mt-3 font-serif italic text-base leading-relaxed text-foreground text-balance">
           {v.oracao}
         </p>

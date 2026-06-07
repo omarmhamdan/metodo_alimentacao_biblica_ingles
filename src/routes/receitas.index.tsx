@@ -50,9 +50,17 @@ function ReceitasPage() {
   return (
     <AppShell>
       <header className="px-6 pt-10 pb-3">
-        <EdI18n as="p" k="rec_subtitle" className="block text-[11px] uppercase tracking-[0.22em] text-muted-foreground" />
+        <EdI18n
+          as="p"
+          k="rec_subtitle"
+          className="block text-[11px] uppercase tracking-[0.22em] text-muted-foreground"
+        />
         <EdI18n as="h1" k="rec_title" className="mt-1 block font-serif text-3xl text-foreground" />
-        <EdI18n as="p" k="rec_desc" className="mt-1 block text-sm text-muted-foreground text-balance" />
+        <EdI18n
+          as="p"
+          k="rec_desc"
+          className="mt-1 block text-sm text-muted-foreground text-balance"
+        />
 
         <label className="mt-5 flex items-center gap-3 rounded-2xl border border-border bg-card px-4 py-3 shadow-card focus-within:border-olive/50 focus-within:ring-2 focus-within:ring-olive/15">
           <Search className="h-4 w-4 text-muted-foreground" />

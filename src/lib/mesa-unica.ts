@@ -150,7 +150,7 @@ const pt: MesaContent = {
     {
       nome: "Não anuncie a mudança",
       texto:
-        "Não chegue dizendo \"agora vamos comer saudável\". Isso liga o alarme de todo mundo. Cozinhe — e deixe o sabor falar.",
+        'Não chegue dizendo "agora vamos comer saudável". Isso liga o alarme de todo mundo. Cozinhe — e deixe o sabor falar.',
     },
     {
       nome: "Comece pelo que eles já amam",
@@ -166,7 +166,8 @@ const pt: MesaContent = {
   aberturaAssinatura: "Com fé e carinho, Beatriz",
 
   secLogica: "Por que isto funciona",
-  logicaIntro: "Toda a estratégia se apoia em quatro pilares. Entenda o princípio antes das técnicas.",
+  logicaIntro:
+    "Toda a estratégia se apoia em quatro pilares. Entenda o princípio antes das técnicas.",
   pilares: [
     {
       nome: "1 · Comece pela base que eles já aceitam",
@@ -205,11 +206,11 @@ const pt: MesaContent = {
       id: "lentilhas",
       titulo: "Lentilhas e grãos",
       desafio:
-        "Lentilha e grão-de-bico são dos alimentos mais nutritivos e bíblicos que existem — mas servidos como \"sopa marrom sem graça\" são rejeitados de cara.",
+        'Lentilha e grão-de-bico são dos alimentos mais nutritivos e bíblicos que existem — mas servidos como "sopa marrom sem graça" são rejeitados de cara.',
       suaVersao: "Lentilha cozida simples, com cebola e ervas, num prato fundo.",
       versaoFamilia: [
         {
-          nome: "Vire \"almôndega\" ou hambúrguer",
+          nome: 'Vire "almôndega" ou hambúrguer',
           texto:
             "Lentilha cozida e escorrida, amassada com temperos, um ovo e farinha de aveia, modelada em bolinhas ou discos e assada até dourar. Criança come com a mão, marido acha que é bolinho de carne.",
         },
@@ -225,7 +226,7 @@ const pt: MesaContent = {
         },
       ],
       tecnica:
-        "Sempre doure a cebola lentamente antes. A base de cebola caramelizada disfarça completamente o \"gosto de grão\" que algumas pessoas rejeitam.",
+        'Sempre doure a cebola lentamente antes. A base de cebola caramelizada disfarça completamente o "gosto de grão" que algumas pessoas rejeitam.',
       porque:
         "Lentilha e grão-de-bico são proteína vegetal completa quando combinados com um cereal (arroz, pão) — formam todos os aminoácidos que o corpo precisa, sem a gordura inflamatória da carne processada. São ricos em fibra solúvel, que alimenta as bactérias boas do intestino e mantém o açúcar do sangue estável (sem o pico-e-queda que dá fome e irritação nas crianças). O ferro vegetal deles é melhor absorvido junto com vitamina C — por isso um aperto de limão no final não é só sabor, é nutrição. Na Bíblia, foi com um prato de lentilhas que Jacó alimentou Esaú (Gênesis 25): comida simples, barata e farta, que sustenta a casa inteira.",
       receitas: [
@@ -250,7 +251,7 @@ const pt: MesaContent = {
             "Misture a cebola dourada, o alho, o ovo, a farinha, a salsa e os temperos. A massa deve ficar moldável — se estiver mole, junte mais 1 colher de farinha.",
             "Modele bolinhas do tamanho de uma noz, disponha na assadeira e pincele com azeite.",
             "Asse por 25 minutos, virando na metade, até dourarem por fora.",
-            "Sirva com molho de tomate caseiro por cima do macarrão, ou no pão como \"almôndega\".",
+            'Sirva com molho de tomate caseiro por cima do macarrão, ou no pão como "almôndega".',
           ],
         },
         {
@@ -281,23 +282,23 @@ const pt: MesaContent = {
       id: "peixes",
       titulo: "Peixes",
       desafio:
-        "Muita família torce o nariz: \"cheiro forte\", \"cheio de espinha\", \"gosto de peixe\". Mas o peixe é uma das proteínas mais anti-inflamatórias que existem.",
+        'Muita família torce o nariz: "cheiro forte", "cheio de espinha", "gosto de peixe". Mas o peixe é uma das proteínas mais anti-inflamatórias que existem.',
       suaVersao: "Filé de peixe assado com azeite, limão e ervas.",
       versaoFamilia: [
         {
           nome: "Empane no forno",
           texto:
-            "Peixe no ovo e depois em farinha de rosca integral com queijo ralado e ervas, assado até crocante. Vira \"peixe empanado\" — sem fritura e sem ultraprocessado.",
+            'Peixe no ovo e depois em farinha de rosca integral com queijo ralado e ervas, assado até crocante. Vira "peixe empanado" — sem fritura e sem ultraprocessado.',
         },
         {
           nome: "Transforme em isca",
           texto:
-            "Corte em tiras, tempere, empane e asse. Sirva com molho de iogurte e limão pra mergulhar. Vira petisco, não \"janta de peixe\".",
+            'Corte em tiras, tempere, empane e asse. Sirva com molho de iogurte e limão pra mergulhar. Vira petisco, não "janta de peixe".',
         },
         {
           nome: "Disfarce no molho",
           texto:
-            "Peixe desfiado em molho de tomate caseiro, sobre macarrão ou arroz, perde a cara de \"peixe puro\".",
+            'Peixe desfiado em molho de tomate caseiro, sobre macarrão ou arroz, perde a cara de "peixe puro".',
         },
       ],
       tecnica:
@@ -355,7 +356,7 @@ const pt: MesaContent = {
         {
           nome: "Asse, não cozinhe na água",
           texto:
-            "Legumes assados no forno com azeite ficam dourados, crocantes e doces. Cenoura, abobrinha, abóbora e brócolis assados são devorados até por quem \"não come legume\".",
+            'Legumes assados no forno com azeite ficam dourados, crocantes e doces. Cenoura, abobrinha, abóbora e brócolis assados são devorados até por quem "não come legume".',
         },
         {
           nome: "Rale e esconda",
@@ -368,9 +369,9 @@ const pt: MesaContent = {
             "Batidos em sopa-creme, finalizados com azeite, perdem a textura que assusta e ganham a cremosidade que conforta.",
         },
         {
-          nome: "Transforme em \"palitos\"",
+          nome: 'Transforme em "palitos"',
           texto:
-            "Abobrinha, cenoura e abóbora em palitos, temperadas e assadas até dourar, viram \"batata da casa\".",
+            'Abobrinha, cenoura e abóbora em palitos, temperadas e assadas até dourar, viram "batata da casa".',
         },
       ],
       tecnica:
@@ -506,13 +507,13 @@ const pt: MesaContent = {
             "Bolo de cenoura, bolo de beterraba com cacau, brownie de abóbora — adoçados com mel ou tâmara. A criança come vegetal achando que é sobremesa.",
         },
         {
-          nome: "Faça o \"brigadeiro\" da casa",
+          nome: 'Faça o "brigadeiro" da casa',
           texto:
             "Tâmara processada com cacau e pasta de oleaginosa vira docinho enrolado que substitui o brigadeiro industrializado, sem açúcar refinado.",
         },
       ],
       tecnica:
-        "Nunca anuncie \"é sem açúcar\". Sirva como sobremesa normal. O doce da fruta e da tâmara satisfaz — mas se avisar que é \"fit\" antes, o cérebro já decide que não vai gostar.",
+        'Nunca anuncie "é sem açúcar". Sirva como sobremesa normal. O doce da fruta e da tâmara satisfaz — mas se avisar que é "fit" antes, o cérebro já decide que não vai gostar.',
       porque:
         "O açúcar refinado entra puro e rápido no sangue, dá o pico de energia seguido da queda (que gera mais fome, irritação e o ciclo do vício). O doce natural da fruta e da tâmara vem 'embrulhado' em fibra, que faz o açúcar entrar devagar — satisfaz sem o efeito montanha-russa. A tâmara, além de adoçar, traz potássio, magnésio e ferro; a banana e a maçã assadas concentram a doçura no calor, sem precisar de uma grama de açúcar de fábrica. E há uma vantagem escondida: quando você adoça um bolo com vegetal (cenoura, beterraba, abóbora), a criança come uma porção de fibra e antioxidante achando que é guloseima. Deus celebrou o doce — 'come mel, meu filho, porque é bom' (Provérbios 24:13) — o ponto é trocar o doce morto pelo doce vivo.",
       receitas: [
@@ -566,12 +567,12 @@ const pt: MesaContent = {
     {
       nome: "Cebola e alho dourados lentamente",
       texto:
-        "Quase todo prato salgado começa melhor com cebola refogada devagar, em fogo baixo, até dourar e adoçar. Dá profundidade que disfarça qualquer ingrediente \"estranho\". Nunca tenha pressa nessa etapa.",
+        'Quase todo prato salgado começa melhor com cebola refogada devagar, em fogo baixo, até dourar e adoçar. Dá profundidade que disfarça qualquer ingrediente "estranho". Nunca tenha pressa nessa etapa.',
     },
     {
       nome: "O sal do final é o ácido",
       texto:
-        "Quando parece \"faltar algo\", quase nunca é mais sal — é acidez. Um aperto de limão ou fio de vinagre de maçã no final acorda o sabor inteiro.",
+        'Quando parece "faltar algo", quase nunca é mais sal — é acidez. Um aperto de limão ou fio de vinagre de maçã no final acorda o sabor inteiro.',
     },
     {
       nome: "A camada de umami natural",
@@ -591,7 +592,7 @@ const pt: MesaContent = {
     {
       nome: "O doce que equilibra",
       texto:
-        "Uma pitada de mel ou cebola caramelizada no molho de tomate corta a acidez e deixa o molho \"redondo\" como o de restaurante.",
+        'Uma pitada de mel ou cebola caramelizada no molho de tomate corta a acidez e deixa o molho "redondo" como o de restaurante.',
     },
   ],
   texturaTitulo: "Truques de TEXTURA",
@@ -624,7 +625,7 @@ const pt: MesaContent = {
   ],
   regraOuroTitulo: "A regra de ouro",
   regraOuro:
-    "Nunca anuncie que a comida é \"saudável\", \"fit\", \"diet\" ou \"sem açúcar\" antes de servir. O cérebro decide se vai gostar antes de provar, baseado no que você fala. Sirva como comida normal e deliciosa. Deixe eles amarem primeiro. O elogio vem antes da revelação.",
+    'Nunca anuncie que a comida é "saudável", "fit", "diet" ou "sem açúcar" antes de servir. O cérebro decide se vai gostar antes de provar, baseado no que você fala. Sirva como comida normal e deliciosa. Deixe eles amarem primeiro. O elogio vem antes da revelação.',
 
   secCriancas: "O Caderno das Crianças",
   criancasIntro:
@@ -639,7 +640,7 @@ const pt: MesaContent = {
     {
       titulo: "Rejeição por aparência",
       solucao:
-        "Cor estranha e pedaços visíveis disparam o \"não quero\". Esconda (ralado em molhos e massas) ou torne divertido (formatos, cores vivas, carinhas no prato).",
+        'Cor estranha e pedaços visíveis disparam o "não quero". Esconda (ralado em molhos e massas) ou torne divertido (formatos, cores vivas, carinhas no prato).',
     },
     {
       titulo: "Rejeição por pressão",
@@ -652,33 +653,42 @@ const pt: MesaContent = {
     {
       nome: "Esconda nos favoritos",
       texto:
-        "Cenoura e abobrinha no molho do macarrão, lentilha no hambúrguer, couve-flor no purê, espinafre na panqueca (vira \"panqueca do Hulk\").",
+        'Cenoura e abobrinha no molho do macarrão, lentilha no hambúrguer, couve-flor no purê, espinafre na panqueca (vira "panqueca do Hulk").',
     },
     {
       nome: "Deixe a criança participar",
-      texto: "Criança come o que ajuda a fazer. Deixe lavar, mexer, montar o prato. Envolvimento derruba a resistência.",
+      texto:
+        "Criança come o que ajuda a fazer. Deixe lavar, mexer, montar o prato. Envolvimento derruba a resistência.",
     },
     {
       nome: "Dê nomes divertidos",
-      texto: "\"Árvores\" (brócolis), \"palitos mágicos\" (cenoura assada), \"sorvete da fruta\" (banana congelada batida).",
+      texto:
+        '"Árvores" (brócolis), "palitos mágicos" (cenoura assada), "sorvete da fruta" (banana congelada batida).',
     },
     {
       nome: "Use o molho de mergulhar",
-      texto: "Iogurte caseiro, homus suave, molho de tomate — e os legumes em palito viram brincadeira, não obrigação.",
+      texto:
+        "Iogurte caseiro, homus suave, molho de tomate — e os legumes em palito viram brincadeira, não obrigação.",
     },
     {
       nome: "Sirva pequeno e sem pressão",
-      texto: "Porção pequena ao lado do que ela já come, sem obrigar. A criança experimenta por curiosidade; a aceitação cresce com o tempo.",
+      texto:
+        "Porção pequena ao lado do que ela já come, sem obrigar. A criança experimenta por curiosidade; a aceitação cresce com o tempo.",
     },
     {
       nome: "Seja o exemplo na mesa",
-      texto: "A criança copia o que vê. Se você come os vegetais com prazer, ela quer fazer igual. A mesa em família é a melhor sala de aula.",
+      texto:
+        "A criança copia o que vê. Se você come os vegetais com prazer, ela quer fazer igual. A mesa em família é a melhor sala de aula.",
     },
   ],
   lancheTitulo: "O lanche da escola e da tarde",
-  lancheIntro: "O ponto fraco costuma ser o lanche. Substitua aos poucos — nunca tire sem substituir:",
+  lancheIntro:
+    "O ponto fraco costuma ser o lanche. Substitua aos poucos — nunca tire sem substituir:",
   swaps: [
-    { de: "Biscoito recheado", para: "Pão de fermentação natural com pasta caseira, ou bolo de banana" },
+    {
+      de: "Biscoito recheado",
+      para: "Pão de fermentação natural com pasta caseira, ou bolo de banana",
+    },
     { de: "Suco de caixinha", para: "Fruta picada ou suco natural" },
     { de: "Salgadinho de pacote", para: "Grão-de-bico crocante assado, ou chips de legume assado" },
     { de: "Bala e doce", para: "Tâmara recheada, frutas secas, docinho de cacau com tâmara" },
@@ -801,10 +811,9 @@ const pt: MesaContent = {
     "Antes de servir, reúna a família, leia um versículo curto e faça uma oração de gratidão. Transforme o domingo em comunhão, não só comida. É assim que a mesa volta a ser o coração da casa.",
 
   secBonus: "Bônus Secreto · A Transição Invisível",
-  bonusVersiculo:
-    "\"Não desprezes os dias dos pequenos começos.\" — inspirado em Zacarias 4:10",
+  bonusVersiculo: '"Não desprezes os dias dos pequenos começos." — inspirado em Zacarias 4:10',
   bonusIntro:
-    "Minha estratégia pessoal para o caso mais difícil: o marido (ou filho) que \"não come nada diferente\". O erro de quase toda mulher é mudar tudo de uma vez e gerar revolta. A Transição Invisível faz o contrário: gradual, silenciosa, em 4 fases ao longo de 4 a 6 semanas. Ninguém percebe — até já estar feito.",
+    'Minha estratégia pessoal para o caso mais difícil: o marido (ou filho) que "não come nada diferente". O erro de quase toda mulher é mudar tudo de uma vez e gerar revolta. A Transição Invisível faz o contrário: gradual, silenciosa, em 4 fases ao longo de 4 a 6 semanas. Ninguém percebe — até já estar feito.',
   fases: [
     {
       fase: "Semana 1",
@@ -827,7 +836,8 @@ const pt: MesaContent = {
         "Meia porção de integral misturada à farinha branca",
         "Salada colorida ao lado do prato de sempre, sem obrigar",
       ],
-      texto: "A pessoa continua comendo o que gosta. Você enriquece por dentro e planta o novo ao lado, sem pressão.",
+      texto:
+        "A pessoa continua comendo o que gosta. Você enriquece por dentro e planta o novo ao lado, sem pressão.",
     },
     {
       fase: "Semanas 4 e 5",
@@ -838,25 +848,28 @@ const pt: MesaContent = {
         "Sobremesa de fruta no lugar do doce de pacote",
         "Pão de fermentação natural morno no lugar do pão de fábrica",
       ],
-      texto: "Cada substituição mantém o formato familiar (empanado, assado, doce, pão), então a resistência é mínima.",
+      texto:
+        "Cada substituição mantém o formato familiar (empanado, assado, doce, pão), então a resistência é mínima.",
     },
     {
       fase: "Semana 6 em diante",
       titulo: "A mesa única consolidada",
       itens: [],
       texto:
-        "Sem ninguém perceber o processo, a família já come a Mesa Única na maior parte das refeições. O paladar se reeducou. O marido que \"não comia nada diferente\" agora pede o seu peixe empanado e acha que sempre foi assim.",
+        'Sem ninguém perceber o processo, a família já come a Mesa Única na maior parte das refeições. O paladar se reeducou. O marido que "não comia nada diferente" agora pede o seu peixe empanado e acha que sempre foi assim.',
     },
   ],
   regrasTitulo: "As três regras de ouro",
   regras: [
     {
       nome: "Nunca anuncie",
-      texto: "No momento em que você diz \"estou te fazendo comer saudável\", o jogo acaba. Apenas cozinhe. Deixe o sabor convencer.",
+      texto:
+        'No momento em que você diz "estou te fazendo comer saudável", o jogo acaba. Apenas cozinhe. Deixe o sabor convencer.',
     },
     {
       nome: "Nunca volte atrás por uma reclamação isolada",
-      texto: "Vai ter um dia em que alguém reclama. Não desmonte tudo. Siga firme e gentil. Uma reclamação não é uma derrota.",
+      texto:
+        "Vai ter um dia em que alguém reclama. Não desmonte tudo. Siga firme e gentil. Uma reclamação não é uma derrota.",
     },
     {
       nome: "Colha o elogio antes de revelar",
@@ -867,9 +880,9 @@ const pt: MesaContent = {
 
   secFinal: "Palavra final",
   finalTexto: [
-    "Querida, você agora tem nas mãos o que faltava para o Método Alimentação Bíblica caber na sua vida real. Cuidar de si nunca deveria significar comer sozinha, cozinhar duas vezes ou virar a \"esquisita da família\".",
+    'Querida, você agora tem nas mãos o que faltava para o Método Alimentação Bíblica caber na sua vida real. Cuidar de si nunca deveria significar comer sozinha, cozinhar duas vezes ou virar a "esquisita da família".',
     "Você não precisa escolher entre a sua saúde e a sua família. Com a Mesa Única é tudo a mesma coisa: uma panela, uma mesa, todos comendo bem — e você no comando silencioso, cuidando de cada um através da comida.",
-    "A mulher virtuosa de Provérbios 31 \"dá mantimento à sua casa\". Ela nutria a casa inteira, com sabedoria, com as próprias mãos. É exatamente isso que você está fazendo agora.",
+    'A mulher virtuosa de Provérbios 31 "dá mantimento à sua casa". Ela nutria a casa inteira, com sabedoria, com as próprias mãos. É exatamente isso que você está fazendo agora.',
     "Comece devagar, pelo que eles já amam, e deixe o sabor fazer o trabalho. Que Deus abençoe a sua cozinha, a sua mesa e cada pessoa que se senta nela.",
   ],
   finalAssinatura: "Com fé e carinho, Beatriz Morales — Nutricionista Cristã",
@@ -898,7 +911,7 @@ const es: MesaContent = {
     {
       nome: "No anuncies el cambio",
       texto:
-        "No llegues diciendo \"ahora vamos a comer saludable\". Eso activa la alarma de todos. Cocina — y deja que el sabor hable.",
+        'No llegues diciendo "ahora vamos a comer saludable". Eso activa la alarma de todos. Cocina — y deja que el sabor hable.',
     },
     {
       nome: "Empieza por lo que ya aman",
@@ -914,7 +927,8 @@ const es: MesaContent = {
   aberturaAssinatura: "Con fe y cariño, Beatriz",
 
   secLogica: "Por qué esto funciona",
-  logicaIntro: "Toda la estrategia se apoya en cuatro pilares. Entiende el principio antes de las técnicas.",
+  logicaIntro:
+    "Toda la estrategia se apoya en cuatro pilares. Entiende el principio antes de las técnicas.",
   pilares: [
     {
       nome: "1 · Empieza por la base que ya aceptan",
@@ -939,7 +953,8 @@ const es: MesaContent = {
   ],
 
   secCategorias: "Las 5 adaptaciones para la familia",
-  categoriasSub: "Toca una categoría: la base saludable es la misma, solo cambia la forma de servir.",
+  categoriasSub:
+    "Toca una categoría: la base saludable es la misma, solo cambia la forma de servir.",
   lblDesafio: "El desafío",
   lblSuaVersao: "Tu versión",
   lblVersaoFamilia: "La versión de la familia",
@@ -953,11 +968,11 @@ const es: MesaContent = {
       id: "lentilhas",
       titulo: "Lentejas y granos",
       desafio:
-        "La lenteja y el garbanzo son de los alimentos más nutritivos y bíblicos que existen — pero servidos como \"sopa marrón sin gracia\" son rechazados de inmediato.",
+        'La lenteja y el garbanzo son de los alimentos más nutritivos y bíblicos que existen — pero servidos como "sopa marrón sin gracia" son rechazados de inmediato.',
       suaVersao: "Lenteja cocida simple, con cebolla y hierbas, en un plato hondo.",
       versaoFamilia: [
         {
-          nome: "Conviértela en \"albóndiga\" o hamburguesa",
+          nome: 'Conviértela en "albóndiga" o hamburguesa',
           texto:
             "Lenteja cocida y escurrida, aplastada con condimentos, un huevo y harina de avena, moldeada en bolitas o discos y horneada hasta dorar. El niño come con la mano, el esposo cree que es bolita de carne.",
         },
@@ -973,7 +988,7 @@ const es: MesaContent = {
         },
       ],
       tecnica:
-        "Siempre dorar la cebolla lentamente antes. La base de cebolla caramelizada disfraza por completo el \"gusto a grano\" que algunas personas rechazan.",
+        'Siempre dorar la cebolla lentamente antes. La base de cebolla caramelizada disfraza por completo el "gusto a grano" que algunas personas rechazan.',
       porque:
         "La lenteja y el garbanzo son proteína vegetal completa cuando se combinan con un cereal (arroz, pan) — forman todos los aminoácidos que el cuerpo necesita, sin la grasa inflamatoria de la carne procesada. Son ricos en fibra soluble, que alimenta las bacterias buenas del intestino y mantiene estable el azúcar en sangre (sin el pico-y-caída que da hambre e irritación en los niños). Su hierro vegetal se absorbe mejor junto con vitamina C — por eso un apretón de limón al final no es solo sabor, es nutrición. En la Biblia, fue con un plato de lentejas que Jacob alimentó a Esaú (Génesis 25): comida simple, barata y abundante, que sostiene a toda la casa.",
       receitas: [
@@ -1029,23 +1044,23 @@ const es: MesaContent = {
       id: "peixes",
       titulo: "Pescados",
       desafio:
-        "Muchas familias arrugan la nariz: \"olor fuerte\", \"lleno de espinas\", \"sabe a pescado\". Pero el pescado es una de las proteínas más antiinflamatorias que existen.",
+        'Muchas familias arrugan la nariz: "olor fuerte", "lleno de espinas", "sabe a pescado". Pero el pescado es una de las proteínas más antiinflamatorias que existen.',
       suaVersao: "Filete de pescado al horno con aceite, limón y hierbas.",
       versaoFamilia: [
         {
           nome: "Apánalo al horno",
           texto:
-            "Pescado pasado por huevo y luego por pan rallado integral con queso y hierbas, horneado hasta crocante. Se vuelve \"pescado apanado\" — sin fritura y sin ultraprocesados.",
+            'Pescado pasado por huevo y luego por pan rallado integral con queso y hierbas, horneado hasta crocante. Se vuelve "pescado apanado" — sin fritura y sin ultraprocesados.',
         },
         {
           nome: "Conviértelo en dedos",
           texto:
-            "Corta en tiras, sazona, apana y hornea. Sirve con salsa de yogur y limón para mojar. Se vuelve picada, no \"cena de pescado\".",
+            'Corta en tiras, sazona, apana y hornea. Sirve con salsa de yogur y limón para mojar. Se vuelve picada, no "cena de pescado".',
         },
         {
           nome: "Disfrázalo en la salsa",
           texto:
-            "Pescado desmechado en salsa de tomate casera, sobre pasta o arroz, pierde la cara de \"pescado puro\".",
+            'Pescado desmechado en salsa de tomate casera, sobre pasta o arroz, pierde la cara de "pescado puro".',
         },
       ],
       tecnica:
@@ -1103,7 +1118,7 @@ const es: MesaContent = {
         {
           nome: "Asa, no hiervas en agua",
           texto:
-            "Verduras asadas al horno con aceite quedan doradas, crocantes y dulces. Zanahoria, calabacín, ahuyama y brócoli asados se devoran hasta por quien \"no come verdura\".",
+            'Verduras asadas al horno con aceite quedan doradas, crocantes y dulces. Zanahoria, calabacín, ahuyama y brócoli asados se devoran hasta por quien "no come verdura".',
         },
         {
           nome: "Rállalas y escóndelas",
@@ -1116,9 +1131,9 @@ const es: MesaContent = {
             "Licuadas en sopa-crema, finalizadas con aceite, pierden la textura que asusta y ganan la cremosidad que reconforta.",
         },
         {
-          nome: "Transfórmalas en \"palitos\"",
+          nome: 'Transfórmalas en "palitos"',
           texto:
-            "Calabacín, zanahoria y ahuyama en palitos, sazonados y asados hasta dorar, se vuelven \"las papas de la casa\".",
+            'Calabacín, zanahoria y ahuyama en palitos, sazonados y asados hasta dorar, se vuelven "las papas de la casa".',
         },
       ],
       tecnica:
@@ -1240,7 +1255,8 @@ const es: MesaContent = {
     {
       id: "sobremesas",
       titulo: "Postres",
-      desafio: "La familia es adicta al azúcar refinada. Quitar el dulce de repente genera rebeldía.",
+      desafio:
+        "La familia es adicta al azúcar refinada. Quitar el dulce de repente genera rebeldía.",
       suaVersao: "Frutas con miel, postres endulzados con dátil.",
       versaoFamilia: [
         {
@@ -1254,13 +1270,13 @@ const es: MesaContent = {
             "Torta de zanahoria, torta de remolacha con cacao, brownie de ahuyama — endulzados con miel o dátil. El niño come vegetal creyendo que es postre.",
         },
         {
-          nome: "Haz el \"bombón\" de la casa",
+          nome: 'Haz el "bombón" de la casa',
           texto:
             "Dátil procesado con cacao y pasta de fruto seco se vuelve un dulcecito enrollado que reemplaza el bombón industrializado, sin azúcar refinada.",
         },
       ],
       tecnica:
-        "Nunca anuncies \"es sin azúcar\". Sírvelo como postre normal. El dulce de la fruta y del dátil satisface — pero si avisas que es \"fit\" antes, el cerebro ya decide que no le va a gustar.",
+        'Nunca anuncies "es sin azúcar". Sírvelo como postre normal. El dulce de la fruta y del dátil satisface — pero si avisas que es "fit" antes, el cerebro ya decide que no le va a gustar.',
       porque:
         "El azúcar refinada entra pura y rápida en la sangre, da el pico de energía seguido de la caída (que genera más hambre, irritación y el ciclo de la adicción). El dulce natural de la fruta y del dátil viene 'envuelto' en fibra, que hace que el azúcar entre despacio — satisface sin el efecto montaña rusa. El dátil, además de endulzar, trae potasio, magnesio y hierro; el banano y la manzana asados concentran la dulzura con el calor, sin necesitar un solo gramo de azúcar de fábrica. Y hay una ventaja escondida: cuando endulzas una torta con vegetal (zanahoria, remolacha, ahuyama), el niño come una porción de fibra y antioxidante creyendo que es golosina. Dios celebró lo dulce — 'come miel, hijo mío, porque es buena' (Proverbios 24:13) — el punto es cambiar el dulce muerto por el dulce vivo.",
       receitas: [
@@ -1314,12 +1330,12 @@ const es: MesaContent = {
     {
       nome: "Cebolla y ajo dorados lentamente",
       texto:
-        "Casi todo plato salado empieza mejor con cebolla sofrita despacio, a fuego bajo, hasta dorar y endulzar. Da profundidad que disfraza cualquier ingrediente \"extraño\". Nunca tengas prisa en esa etapa.",
+        'Casi todo plato salado empieza mejor con cebolla sofrita despacio, a fuego bajo, hasta dorar y endulzar. Da profundidad que disfraza cualquier ingrediente "extraño". Nunca tengas prisa en esa etapa.',
     },
     {
       nome: "La sal del final es el ácido",
       texto:
-        "Cuando parece que \"le falta algo\", casi nunca es más sal — es acidez. Un apretón de limón o hilo de vinagre de manzana al final despierta el sabor entero.",
+        'Cuando parece que "le falta algo", casi nunca es más sal — es acidez. Un apretón de limón o hilo de vinagre de manzana al final despierta el sabor entero.',
     },
     {
       nome: "La capa de umami natural",
@@ -1339,7 +1355,7 @@ const es: MesaContent = {
     {
       nome: "El dulce que equilibra",
       texto:
-        "Una pizca de miel o cebolla caramelizada en la salsa de tomate corta la acidez y deja la salsa \"redonda\" como la de restaurante.",
+        'Una pizca de miel o cebolla caramelizada en la salsa de tomate corta la acidez y deja la salsa "redonda" como la de restaurante.',
     },
   ],
   texturaTitulo: "Trucos de TEXTURA",
@@ -1372,7 +1388,7 @@ const es: MesaContent = {
   ],
   regraOuroTitulo: "La regla de oro",
   regraOuro:
-    "Nunca anuncies que la comida es \"saludable\", \"fit\", \"diet\" o \"sin azúcar\" antes de servir. El cerebro decide si le va a gustar antes de probar, según lo que le dices. Sírvela como comida normal y deliciosa. Deja que la amen primero. El elogio viene antes de la revelación.",
+    'Nunca anuncies que la comida es "saludable", "fit", "diet" o "sin azúcar" antes de servir. El cerebro decide si le va a gustar antes de probar, según lo que le dices. Sírvela como comida normal y deliciosa. Deja que la amen primero. El elogio viene antes de la revelación.',
 
   secCriancas: "El Cuaderno de los Niños",
   criancasIntro:
@@ -1387,7 +1403,7 @@ const es: MesaContent = {
     {
       titulo: "Rechazo por apariencia",
       solucao:
-        "Color extraño y pedazos visibles disparan el \"no quiero\". Esconde (rallado en salsas y masas) o hazlo divertido (formas, colores vivos, caritas en el plato).",
+        'Color extraño y pedazos visibles disparan el "no quiero". Esconde (rallado en salsas y masas) o hazlo divertido (formas, colores vivos, caritas en el plato).',
     },
     {
       titulo: "Rechazo por presión",
@@ -1400,31 +1416,37 @@ const es: MesaContent = {
     {
       nome: "Escóndelo en los favoritos",
       texto:
-        "Zanahoria y calabacín en la salsa de la pasta, lenteja en la hamburguesa, coliflor en el puré, espinaca en la panqueca (\"panqueca de Hulk\").",
+        'Zanahoria y calabacín en la salsa de la pasta, lenteja en la hamburguesa, coliflor en el puré, espinaca en la panqueca ("panqueca de Hulk").',
     },
     {
       nome: "Deja que el niño participe",
-      texto: "El niño come lo que ayuda a hacer. Déjalo lavar, mezclar, armar el plato. El involucramiento derriba la resistencia.",
+      texto:
+        "El niño come lo que ayuda a hacer. Déjalo lavar, mezclar, armar el plato. El involucramiento derriba la resistencia.",
     },
     {
       nome: "Dales nombres divertidos",
-      texto: "\"Arbolitos\" (brócoli), \"palitos mágicos\" (zanahoria asada), \"helado de fruta\" (banano congelado licuado).",
+      texto:
+        '"Arbolitos" (brócoli), "palitos mágicos" (zanahoria asada), "helado de fruta" (banano congelado licuado).',
     },
     {
       nome: "Usa la salsa para mojar",
-      texto: "Yogur casero, homus suave, salsa de tomate — y las verduras en palito se vuelven juego, no obligación.",
+      texto:
+        "Yogur casero, homus suave, salsa de tomate — y las verduras en palito se vuelven juego, no obligación.",
     },
     {
       nome: "Sirve poco y sin presión",
-      texto: "Porción pequeña al lado de lo que ya come, sin obligar. El niño prueba por curiosidad; la aceptación crece con el tiempo.",
+      texto:
+        "Porción pequeña al lado de lo que ya come, sin obligar. El niño prueba por curiosidad; la aceptación crece con el tiempo.",
     },
     {
       nome: "Sé el ejemplo en la mesa",
-      texto: "El niño copia lo que ve. Si comes las verduras con gusto, él quiere hacer igual. La mesa en familia es la mejor aula.",
+      texto:
+        "El niño copia lo que ve. Si comes las verduras con gusto, él quiere hacer igual. La mesa en familia es la mejor aula.",
     },
   ],
   lancheTitulo: "El algo de la tarde y la lonchera",
-  lancheIntro: "El punto débil suele ser la lonchera. Sustituye poco a poco — nunca quites sin sustituir:",
+  lancheIntro:
+    "El punto débil suele ser la lonchera. Sustituye poco a poco — nunca quites sin sustituir:",
   swaps: [
     { de: "Galleta rellena", para: "Pan de masa madre con pasta casera, o torta de banano" },
     { de: "Jugo de cajita", para: "Fruta picada o jugo natural" },
@@ -1550,9 +1572,9 @@ const es: MesaContent = {
 
   secBonus: "Bono Secreto · La Transición Invisible",
   bonusVersiculo:
-    "\"No menosprecies los días de los pequeños comienzos.\" — inspirado en Zacarías 4:10",
+    '"No menosprecies los días de los pequeños comienzos." — inspirado en Zacarías 4:10',
   bonusIntro:
-    "Mi estrategia personal para el caso más difícil: el esposo (o hijo) que \"no come nada diferente\". El error de casi toda mujer es cambiarlo todo de una vez y generar rebeldía. La Transición Invisible hace lo contrario: gradual, silenciosa, en 4 fases a lo largo de 4 a 6 semanas. Nadie nota que está pasando — hasta que ya está hecho.",
+    'Mi estrategia personal para el caso más difícil: el esposo (o hijo) que "no come nada diferente". El error de casi toda mujer es cambiarlo todo de una vez y generar rebeldía. La Transición Invisible hace lo contrario: gradual, silenciosa, en 4 fases a lo largo de 4 a 6 semanas. Nadie nota que está pasando — hasta que ya está hecho.',
   fases: [
     {
       fase: "Semana 1",
@@ -1575,7 +1597,8 @@ const es: MesaContent = {
         "Media porción de integral mezclada con la harina blanca",
         "Ensalada colorida al lado del plato de siempre, sin obligar",
       ],
-      texto: "La persona sigue comiendo lo que le gusta. Tú enriqueces por dentro y plantas lo nuevo al lado, sin presión.",
+      texto:
+        "La persona sigue comiendo lo que le gusta. Tú enriqueces por dentro y plantas lo nuevo al lado, sin presión.",
     },
     {
       fase: "Semanas 4 y 5",
@@ -1586,25 +1609,28 @@ const es: MesaContent = {
         "Postre de fruta en lugar del dulce de paquete",
         "Pan de masa madre tibio en lugar del pan de fábrica",
       ],
-      texto: "Cada sustitución mantiene el formato familiar (apanado, asado, dulce, pan), así la resistencia es mínima.",
+      texto:
+        "Cada sustitución mantiene el formato familiar (apanado, asado, dulce, pan), así la resistencia es mínima.",
     },
     {
       fase: "Semana 6 en adelante",
       titulo: "La mesa única consolidada",
       itens: [],
       texto:
-        "Sin que nadie note el proceso, la familia ya come la Mesa Única en la mayoría de las comidas. El paladar se reeducó. El esposo que \"no comía nada diferente\" ahora pide tu pescado apanado y cree que siempre fue así.",
+        'Sin que nadie note el proceso, la familia ya come la Mesa Única en la mayoría de las comidas. El paladar se reeducó. El esposo que "no comía nada diferente" ahora pide tu pescado apanado y cree que siempre fue así.',
     },
   ],
   regrasTitulo: "Las tres reglas de oro",
   regras: [
     {
       nome: "Nunca anuncies",
-      texto: "En el momento en que dices \"te estoy haciendo comer saludable\", el juego se acaba. Solo cocina. Deja que el sabor convenza.",
+      texto:
+        'En el momento en que dices "te estoy haciendo comer saludable", el juego se acaba. Solo cocina. Deja que el sabor convenza.',
     },
     {
       nome: "Nunca retrocedas por una queja aislada",
-      texto: "Habrá un día en que alguien se queje. No desarmes todo. Sigue firme y gentil. Una queja no es una derrota.",
+      texto:
+        "Habrá un día en que alguien se queje. No desarmes todo. Sigue firme y gentil. Una queja no es una derrota.",
     },
     {
       nome: "Cosecha el elogio antes de revelar",
@@ -1615,9 +1641,9 @@ const es: MesaContent = {
 
   secFinal: "Palabra final",
   finalTexto: [
-    "Querida, ahora tienes en las manos lo que faltaba para que el Método Alimentación Bíblica quepa en tu vida real. Cuidar de ti nunca debería significar comer sola, cocinar dos veces o volverte la \"rara de la familia\".",
+    'Querida, ahora tienes en las manos lo que faltaba para que el Método Alimentación Bíblica quepa en tu vida real. Cuidar de ti nunca debería significar comer sola, cocinar dos veces o volverte la "rara de la familia".',
     "No tienes que elegir entre tu salud y tu familia. Con la Mesa Única es todo lo mismo: una olla, una mesa, todos comiendo bien — y tú al mando silencioso, cuidando de cada uno a través de la comida.",
-    "La mujer virtuosa de Proverbios 31 \"da alimento a su casa\". Nutría la casa entera, con sabiduría, con sus propias manos. Es exactamente eso lo que estás haciendo ahora.",
+    'La mujer virtuosa de Proverbios 31 "da alimento a su casa". Nutría la casa entera, con sabiduría, con sus propias manos. Es exactamente eso lo que estás haciendo ahora.',
     "Empieza despacio, por lo que ellos ya aman, y deja que el sabor haga el trabajo. Que Dios bendiga tu cocina, tu mesa y a cada persona que se sienta en ella.",
   ],
   finalAssinatura: "Con fe y cariño, Beatriz Morales — Nutricionista Cristiana",

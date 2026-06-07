@@ -55,28 +55,13 @@ export function Ed({
         {display}
         <Pencil className="ml-1 inline-block h-3 w-3 align-baseline text-olive" />
       </As>
-      {open && (
-        <TextEditorModal
-          k={k}
-          defPt={pt}
-          defEs={es}
-          onClose={() => setOpen(false)}
-        />
-      )}
+      {open && <TextEditorModal k={k} defPt={pt} defEs={es} onClose={() => setOpen(false)} />}
     </>
   );
 }
 
 /** Shortcut for editing an i18n (UI chrome) string by its key. */
-export function EdI18n({
-  k,
-  as,
-  className,
-}: {
-  k: TKey;
-  as?: ElementType;
-  className?: string;
-}) {
+export function EdI18n({ k, as, className }: { k: TKey; as?: ElementType; className?: string }) {
   return <Ed k={`i18n.${k}`} pt={T.pt[k]} es={T.es[k]} as={as} className={className} />;
 }
 

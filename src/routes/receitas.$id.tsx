@@ -56,7 +56,12 @@ function ReceitaDetalhe() {
     <AppShell>
       <div className="relative">
         <div className="relative h-[44vh] min-h-[280px] w-full overflow-hidden">
-          <EditImage id={r.id} src={r.imagem} alt={r.titulo} className="h-full w-full object-cover" />
+          <EditImage
+            id={r.id}
+            src={r.imagem}
+            alt={r.titulo}
+            className="h-full w-full object-cover"
+          />
           <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-black/30 via-transparent to-cream" />
           <button
             onClick={() => navigate({ to: "/receitas" })}

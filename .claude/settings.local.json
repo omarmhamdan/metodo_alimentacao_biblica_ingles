@@ -68,7 +68,15 @@
       "Bash(grep -A1 \"tsx\\\\|ts$\")",
       "Bash(rtk git *)",
       "Bash(git init *)",
-      "Bash(git remote *)"
+      "Bash(git remote *)",
+      "Bash(node -e \"const m=require\\('./dist/cjs/index.cjs'\\); console.log\\(Object.keys\\(m\\)\\)\")",
+      "Bash(node --input-type=module -e ' *)",
+      "Bash(git ls-remote *)",
+      "Bash(rtk gh *)",
+      "Bash(git rev-list *)",
+      "Bash(command -v gh)",
+      "Bash(awk '/export const devocionaisPT/,/^\\\\];/' src/lib/store.ts)",
+      "Bash(awk '/export const devocionalES/,/^\\\\];/' src/lib/store.ts)"
     ]
   }
 }

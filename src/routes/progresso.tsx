@@ -85,9 +85,27 @@ function ProgressoPage() {
   return (
     <AppShell>
       <header className="px-6 pt-10 pb-4">
-        <Ed as="p" k="prog.badge" pt={PPT.badge} es={PES.badge} className="block text-[11px] uppercase tracking-[0.22em] text-muted-foreground" />
-        <Ed as="h1" k="prog.title" pt={PPT.title} es={PES.title} className="mt-1 block font-serif text-3xl text-foreground" />
-        <Ed as="p" k="prog.subtitle" pt={PPT.subtitle} es={PES.subtitle} className="mt-1 block text-sm text-muted-foreground text-balance" />
+        <Ed
+          as="p"
+          k="prog.badge"
+          pt={PPT.badge}
+          es={PES.badge}
+          className="block text-[11px] uppercase tracking-[0.22em] text-muted-foreground"
+        />
+        <Ed
+          as="h1"
+          k="prog.title"
+          pt={PPT.title}
+          es={PES.title}
+          className="mt-1 block font-serif text-3xl text-foreground"
+        />
+        <Ed
+          as="p"
+          k="prog.subtitle"
+          pt={PPT.subtitle}
+          es={PES.subtitle}
+          className="mt-1 block text-sm text-muted-foreground text-balance"
+        />
       </header>
 
       <section className="mx-6 mb-4 grid grid-cols-3 gap-3">
@@ -102,7 +120,13 @@ function ProgressoPage() {
         className="mx-6 mb-4 rounded-3xl bg-card p-5 shadow-card"
       >
         <div className="mb-2 flex items-center justify-between">
-          <Ed as="h2" k="prog.weightTitle" pt={PPT.weightTitle} es={PES.weightTitle} className="block font-serif text-lg text-foreground" />
+          <Ed
+            as="h2"
+            k="prog.weightTitle"
+            pt={PPT.weightTitle}
+            es={PES.weightTitle}
+            className="block font-serif text-lg text-foreground"
+          />
           <span className="text-xs text-muted-foreground">
             {pesoData.length} {pesoData.length === 1 ? c.registro : c.registros}
           </span>
@@ -159,8 +183,20 @@ function ProgressoPage() {
       </motion.section>
 
       <section className="mx-6 mb-4 rounded-3xl bg-card p-5 shadow-card">
-        <Ed as="h2" k="prog.energyTitle" pt={PPT.energyTitle} es={PES.energyTitle} className="mb-3 block font-serif text-lg text-foreground" />
-        <Ed as="p" k="prog.energySubtitle" pt={PPT.energySubtitle} es={PES.energySubtitle} className="mb-3 block text-xs text-muted-foreground" />
+        <Ed
+          as="h2"
+          k="prog.energyTitle"
+          pt={PPT.energyTitle}
+          es={PES.energyTitle}
+          className="mb-3 block font-serif text-lg text-foreground"
+        />
+        <Ed
+          as="p"
+          k="prog.energySubtitle"
+          pt={PPT.energySubtitle}
+          es={PES.energySubtitle}
+          className="mb-3 block text-xs text-muted-foreground"
+        />
         <div className="flex items-center justify-between gap-1">
           {Array.from({ length: 10 }).map((_, i) => (
             <button
@@ -185,7 +221,13 @@ function ProgressoPage() {
       </section>
 
       <section className="mx-6 mb-6 rounded-3xl bg-gradient-devotional p-6 text-center shadow-card">
-        <Ed as="p" k="prog.verse" pt={`"${PPT.verse}"`} es={`"${PES.verse}"`} className="block font-serif italic text-sm text-foreground text-balance" />
+        <Ed
+          as="p"
+          k="prog.verse"
+          pt={`"${PPT.verse}"`}
+          es={`"${PES.verse}"`}
+          className="block font-serif italic text-sm text-foreground text-balance"
+        />
         <p className="mt-2 text-[11px] uppercase tracking-wider text-muted-foreground">
           {c.verseRef}
         </p>

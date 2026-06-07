@@ -275,6 +275,5 @@ export function useRecipes(): Receita[] {
   return list;
 }
 
-
 // Devocional do dia (dataset único bilíngue) — ver src/lib/devocional.ts
 export { versiculoDoDia, devocionais, type Devocional } from "./devocional";

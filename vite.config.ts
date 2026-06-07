@@ -16,7 +16,10 @@ export default defineConfig({
     // Strip console.* (except error/warn) and debugger in production builds
     esbuild: {
       drop: process.env.NODE_ENV === "production" ? ["debugger"] : [],
-      pure: process.env.NODE_ENV === "production" ? ["console.log", "console.info", "console.debug"] : [],
+      pure:
+        process.env.NODE_ENV === "production"
+          ? ["console.log", "console.info", "console.debug"]
+          : [],
     },
   },
 });

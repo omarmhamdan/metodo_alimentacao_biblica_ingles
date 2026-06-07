@@ -34,7 +34,11 @@ function PerfilPage() {
             {nome.charAt(0).toUpperCase()}
           </div>
           <div>
-            <EdI18n as="p" k="prof_subtitle" className="block text-[11px] uppercase tracking-[0.22em] text-muted-foreground" />
+            <EdI18n
+              as="p"
+              k="prof_subtitle"
+              className="block text-[11px] uppercase tracking-[0.22em] text-muted-foreground"
+            />
             <h1 className="font-serif text-2xl leading-tight text-foreground">{nome}</h1>
             {user?.email && <p className="text-xs text-muted-foreground">{user.email}</p>}
           </div>
@@ -123,7 +127,11 @@ function PerfilPage() {
         <LogOut className="h-4 w-4" /> {t("prof_signout")}
       </button>
 
-      <EdI18n as="p" k="prof_verse" className="mb-2 block px-6 text-center font-serif italic text-xs text-muted-foreground text-balance" />
+      <EdI18n
+        as="p"
+        k="prof_verse"
+        className="mb-2 block px-6 text-center font-serif italic text-xs text-muted-foreground text-balance"
+      />
 
       {/* ── Modals ── */}
       <AnimatePresence>

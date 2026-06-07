@@ -49,7 +49,14 @@ function Protocolo() {
     <AppShell>
       <AnimatePresence mode="wait">
         {dia ? (
-          <DayDetail key={`d${dia.numero}`} dia={dia} c={c} onBack={() => setSel(null)} onNav={setSel} total={c.dias.length} />
+          <DayDetail
+            key={`d${dia.numero}`}
+            dia={dia}
+            c={c}
+            onBack={() => setSel(null)}
+            onNav={setSel}
+            total={c.dias.length}
+          />
         ) : (
           <Landing key="landing" c={c} onPick={setSel} lang={lang} />
         )}
@@ -73,7 +80,12 @@ function Landing({
     <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
       {/* Hero com imagem */}
       <div className="relative h-[42vh] min-h-[280px] w-full overflow-hidden">
-        <EditImage id="protocolo-hero" src={img["protocolo-hero"]} alt={c.title} className="h-full w-full object-cover" />
+        <EditImage
+          id="protocolo-hero"
+          src={img["protocolo-hero"]}
+          alt={c.title}
+          className="h-full w-full object-cover"
+        />
         <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-black/45 via-black/20 to-background" />
         <Link
           to="/dashboard"
@@ -118,8 +130,20 @@ function Landing({
         {/* Seus 7 dias — grade de cards com foto */}
         <div className="mt-5 mb-2 flex items-end justify-between">
           <div>
-            <Ed as="h2" k="protocolo.diasTitulo" pt={PT.diasTitulo} es={ES.diasTitulo} className="block font-serif text-xl text-foreground" />
-            <Ed as="p" k="protocolo.diasSub" pt={PT.diasSub} es={ES.diasSub} className="block text-xs text-muted-foreground" />
+            <Ed
+              as="h2"
+              k="protocolo.diasTitulo"
+              pt={PT.diasTitulo}
+              es={ES.diasTitulo}
+              className="block font-serif text-xl text-foreground"
+            />
+            <Ed
+              as="p"
+              k="protocolo.diasSub"
+              pt={PT.diasSub}
+              es={ES.diasSub}
+              className="block text-xs text-muted-foreground"
+            />
           </div>
         </div>
 
@@ -233,10 +257,19 @@ function DayDetail({
 }) {
   const img = useStoredImageMap(bonusFallbacks);
   return (
-    <motion.div initial={{ opacity: 0, x: 16 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0 }}>
+    <motion.div
+      initial={{ opacity: 0, x: 16 }}
+      animate={{ opacity: 1, x: 0 }}
+      exit={{ opacity: 0 }}
+    >
       {/* Hero do dia */}
       <div className="relative h-[34vh] min-h-[220px] w-full overflow-hidden">
-        <EditImage id={`protocolo-dia-${dia.numero}`} src={img[`protocolo-dia-${dia.numero}`]} alt={dia.nome} className="h-full w-full object-cover" />
+        <EditImage
+          id={`protocolo-dia-${dia.numero}`}
+          src={img[`protocolo-dia-${dia.numero}`]}
+          alt={dia.nome}
+          className="h-full w-full object-cover"
+        />
         <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-black/40 via-black/10 to-background" />
         <button
           onClick={onBack}
@@ -301,7 +334,15 @@ function DayDetail({
         <div className="mt-4 overflow-hidden rounded-2xl bg-card shadow-card">
           <Accordion type="single" collapsible defaultValue="meal-0">
             {dia.refeicoes.map((r, i) => (
-              <MealAccordion key={i} r={r} c={c} diaNum={dia.numero} idx={i} value={`meal-${i}`} last={i === dia.refeicoes.length - 1} />
+              <MealAccordion
+                key={i}
+                r={r}
+                c={c}
+                diaNum={dia.numero}
+                idx={i}
+                value={`meal-${i}`}
+                last={i === dia.refeicoes.length - 1}
+              />
             ))}
           </Accordion>
         </div>
@@ -411,8 +452,20 @@ function MealAccordion({
     <AccordionItem value={value} className={last ? "border-0" : "border-border/50"}>
       <AccordionTrigger className="px-4 no-underline hover:no-underline">
         <span className="flex flex-col gap-0.5 text-left">
-          <Ed as="span" k={`${base}.rotulo`} pt={mp.rotulo} es={me.rotulo} className="block text-[10px] font-medium uppercase tracking-[0.18em] text-earth" />
-          <Ed as="span" k={`${base}.titulo`} pt={mp.titulo} es={me.titulo} className="block font-serif text-base leading-tight text-foreground" />
+          <Ed
+            as="span"
+            k={`${base}.rotulo`}
+            pt={mp.rotulo}
+            es={me.rotulo}
+            className="block text-[10px] font-medium uppercase tracking-[0.18em] text-earth"
+          />
+          <Ed
+            as="span"
+            k={`${base}.titulo`}
+            pt={mp.titulo}
+            es={me.titulo}
+            className="block font-serif text-base leading-tight text-foreground"
+          />
           {r.rendimento && (
             <span className="mt-0.5 inline-flex items-center gap-1 text-[11px] text-muted-foreground">
               <Clock className="h-3 w-3" /> {r.rendimento}
@@ -428,7 +481,11 @@ function MealAccordion({
           {r.ingredientes.map((it, j) => (
             <li key={j} className="flex items-start gap-2 text-[13px] text-muted-foreground">
               <span className="mt-1.5 h-1 w-1 shrink-0 rounded-full bg-olive" />
-              <Ed k={`${base}.ing.${j}`} pt={mp.ingredientes[j] ?? it} es={me.ingredientes[j] ?? it} />
+              <Ed
+                k={`${base}.ing.${j}`}
+                pt={mp.ingredientes[j] ?? it}
+                es={me.ingredientes[j] ?? it}
+              />
             </li>
           ))}
         </ul>
@@ -439,7 +496,12 @@ function MealAccordion({
           {r.preparo.map((p, j) => (
             <li key={j} className="flex gap-2.5 text-[13px] text-muted-foreground">
               <span className="font-serif text-xs text-earth">{j + 1}.</span>
-              <Ed k={`${base}.prep.${j}`} pt={mp.preparo[j] ?? p} es={me.preparo[j] ?? p} className="leading-relaxed" />
+              <Ed
+                k={`${base}.prep.${j}`}
+                pt={mp.preparo[j] ?? p}
+                es={me.preparo[j] ?? p}
+                className="leading-relaxed"
+              />
             </li>
           ))}
         </ol>
@@ -511,9 +573,22 @@ function GuideCard({
 function Abertura({ c }: { c: ProtocoloContent }) {
   return (
     <>
-      <Ed as="h3" k="protocolo.aberturaTitulo" pt={PT.aberturaTitulo} es={ES.aberturaTitulo} className="block font-serif text-lg text-foreground" />
+      <Ed
+        as="h3"
+        k="protocolo.aberturaTitulo"
+        pt={PT.aberturaTitulo}
+        es={ES.aberturaTitulo}
+        className="block font-serif text-lg text-foreground"
+      />
       {c.aberturaTexto.map((p, i) => (
-        <Ed key={i} as="p" k={`protocolo.aberturaTexto.${i}`} pt={PT.aberturaTexto[i]} es={ES.aberturaTexto[i]} className="mt-2 block text-sm leading-relaxed text-muted-foreground" />
+        <Ed
+          key={i}
+          as="p"
+          k={`protocolo.aberturaTexto.${i}`}
+          pt={PT.aberturaTexto[i]}
+          es={ES.aberturaTexto[i]}
+          className="mt-2 block text-sm leading-relaxed text-muted-foreground"
+        />
       ))}
       <div className="mt-4 grid gap-2.5">
         {c.compromissos.map((comp, i) => (
@@ -522,14 +597,38 @@ function Abertura({ c }: { c: ProtocoloContent }) {
               {i + 1}
             </span>
             <div>
-              <Ed as="p" k={`protocolo.compromisso.${i}.titulo`} pt={PT.compromissos[i].titulo} es={ES.compromissos[i].titulo} className="block text-sm font-medium text-foreground" />
-              <Ed as="p" k={`protocolo.compromisso.${i}.texto`} pt={PT.compromissos[i].texto} es={ES.compromissos[i].texto} className="mt-0.5 block text-xs leading-relaxed text-muted-foreground" />
+              <Ed
+                as="p"
+                k={`protocolo.compromisso.${i}.titulo`}
+                pt={PT.compromissos[i].titulo}
+                es={ES.compromissos[i].titulo}
+                className="block text-sm font-medium text-foreground"
+              />
+              <Ed
+                as="p"
+                k={`protocolo.compromisso.${i}.texto`}
+                pt={PT.compromissos[i].texto}
+                es={ES.compromissos[i].texto}
+                className="mt-0.5 block text-xs leading-relaxed text-muted-foreground"
+              />
             </div>
           </div>
         ))}
       </div>
-      <Ed as="p" k="protocolo.aberturaAviso" pt={PT.aberturaAviso} es={ES.aberturaAviso} className="mt-4 block rounded-2xl bg-highlight/60 p-3.5 text-xs leading-relaxed text-earth" />
-      <Ed as="p" k="protocolo.aberturaAssinatura" pt={PT.aberturaAssinatura} es={ES.aberturaAssinatura} className="mt-3 block font-serif italic text-sm text-foreground" />
+      <Ed
+        as="p"
+        k="protocolo.aberturaAviso"
+        pt={PT.aberturaAviso}
+        es={ES.aberturaAviso}
+        className="mt-4 block rounded-2xl bg-highlight/60 p-3.5 text-xs leading-relaxed text-earth"
+      />
+      <Ed
+        as="p"
+        k="protocolo.aberturaAssinatura"
+        pt={PT.aberturaAssinatura}
+        es={ES.aberturaAssinatura}
+        className="mt-3 block font-serif italic text-sm text-foreground"
+      />
     </>
   );
 }
@@ -538,13 +637,32 @@ function ComoFunciona({ c }: { c: ProtocoloContent }) {
   return (
     <>
       {c.comoFuncionaTexto.map((p, i) => (
-        <Ed key={i} as="p" k={`protocolo.comoFunciona.${i}`} pt={PT.comoFuncionaTexto[i]} es={ES.comoFuncionaTexto[i]} className="mb-2 block text-sm leading-relaxed text-muted-foreground" />
+        <Ed
+          key={i}
+          as="p"
+          k={`protocolo.comoFunciona.${i}`}
+          pt={PT.comoFuncionaTexto[i]}
+          es={ES.comoFuncionaTexto[i]}
+          className="mb-2 block text-sm leading-relaxed text-muted-foreground"
+        />
       ))}
       <div className="mt-3 grid gap-2.5">
         {c.fases.map((f, i) => (
           <div key={i} className="rounded-2xl bg-secondary/40 p-4">
-            <Ed as="p" k={`protocolo.fase.${i}.titulo`} pt={PT.fases[i].titulo} es={ES.fases[i].titulo} className="block font-serif text-base text-foreground" />
-            <Ed as="p" k={`protocolo.fase.${i}.texto`} pt={PT.fases[i].texto} es={ES.fases[i].texto} className="mt-1 block text-xs leading-relaxed text-muted-foreground" />
+            <Ed
+              as="p"
+              k={`protocolo.fase.${i}.titulo`}
+              pt={PT.fases[i].titulo}
+              es={ES.fases[i].titulo}
+              className="block font-serif text-base text-foreground"
+            />
+            <Ed
+              as="p"
+              k={`protocolo.fase.${i}.texto`}
+              pt={PT.fases[i].texto}
+              es={ES.fases[i].texto}
+              className="mt-1 block text-xs leading-relaxed text-muted-foreground"
+            />
           </div>
         ))}
       </div>
@@ -552,7 +670,12 @@ function ComoFunciona({ c }: { c: ProtocoloContent }) {
         {c.estrutura.map((e, i) => (
           <div key={i} className="flex gap-2 py-1 text-xs">
             <span className="font-medium text-earth">{e.rotulo}:</span>
-            <Ed k={`protocolo.estrutura.${i}.texto`} pt={PT.estrutura[i].texto} es={ES.estrutura[i].texto} className="text-muted-foreground" />
+            <Ed
+              k={`protocolo.estrutura.${i}.texto`}
+              pt={PT.estrutura[i].texto}
+              es={ES.estrutura[i].texto}
+              className="text-muted-foreground"
+            />
           </div>
         ))}
       </div>
@@ -565,15 +688,32 @@ function AguaJordao({ c }: { c: ProtocoloContent }) {
   return (
     <>
       <div className="overflow-hidden rounded-2xl">
-        <EditImage id="protocolo-agua" src={img["protocolo-agua"]} alt={c.secAguaJordao} className="h-36 w-full object-cover" />
+        <EditImage
+          id="protocolo-agua"
+          src={img["protocolo-agua"]}
+          alt={c.secAguaJordao}
+          className="h-36 w-full object-cover"
+        />
       </div>
       <blockquote className="mt-3 rounded-2xl bg-gradient-devotional p-4">
-        <Ed as="p" k="protocolo.aguaVersiculo" pt={`"${PT.aguaVersiculo}"`} es={`"${ES.aguaVersiculo}"`} className="block font-serif italic text-sm text-foreground" />
+        <Ed
+          as="p"
+          k="protocolo.aguaVersiculo"
+          pt={`"${PT.aguaVersiculo}"`}
+          es={`"${ES.aguaVersiculo}"`}
+          className="block font-serif italic text-sm text-foreground"
+        />
         <p className="mt-2 text-[11px] uppercase tracking-wider text-muted-foreground">
           {c.aguaVersiculoRef}
         </p>
       </blockquote>
-      <Ed as="p" k="protocolo.aguaTexto" pt={PT.aguaTexto} es={ES.aguaTexto} className="mt-3 block text-sm leading-relaxed text-muted-foreground" />
+      <Ed
+        as="p"
+        k="protocolo.aguaTexto"
+        pt={PT.aguaTexto}
+        es={ES.aguaTexto}
+        className="mt-3 block text-sm leading-relaxed text-muted-foreground"
+      />
       <h4 className="mt-4 mb-2 text-xs font-medium uppercase tracking-wider text-foreground">
         {c.lblIngredientes}
       </h4>
@@ -581,7 +721,11 @@ function AguaJordao({ c }: { c: ProtocoloContent }) {
         {c.aguaIngredientes.map((it, i) => (
           <li key={i} className="flex items-start gap-2.5 text-sm text-muted-foreground">
             <span className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-olive" />
-            <Ed k={`protocolo.agua.ing.${i}`} pt={PT.aguaIngredientes[i]} es={ES.aguaIngredientes[i]} />
+            <Ed
+              k={`protocolo.agua.ing.${i}`}
+              pt={PT.aguaIngredientes[i]}
+              es={ES.aguaIngredientes[i]}
+            />
           </li>
         ))}
       </ul>
@@ -594,17 +738,36 @@ function AguaJordao({ c }: { c: ProtocoloContent }) {
             <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-highlight font-serif text-xs text-earth">
               {i + 1}
             </span>
-            <Ed k={`protocolo.agua.prep.${i}`} pt={PT.aguaPreparo[i]} es={ES.aguaPreparo[i]} className="pt-0.5 leading-relaxed" />
+            <Ed
+              k={`protocolo.agua.prep.${i}`}
+              pt={PT.aguaPreparo[i]}
+              es={ES.aguaPreparo[i]}
+              className="pt-0.5 leading-relaxed"
+            />
           </li>
         ))}
       </ol>
       <div className="mt-3 rounded-2xl bg-highlight/40 p-3.5">
         <p className="text-[11px] font-medium uppercase tracking-wider text-earth">{c.lblPorque}</p>
-        <Ed as="p" k="protocolo.aguaPorque" pt={PT.aguaPorque} es={ES.aguaPorque} className="mt-1 block text-xs leading-relaxed text-muted-foreground" />
+        <Ed
+          as="p"
+          k="protocolo.aguaPorque"
+          pt={PT.aguaPorque}
+          es={ES.aguaPorque}
+          className="mt-1 block text-xs leading-relaxed text-muted-foreground"
+        />
       </div>
       <div className="mt-3 rounded-2xl bg-highlight/40 p-3.5">
-        <p className="text-[11px] font-medium uppercase tracking-wider text-earth">{c.lblDicaBeatriz}</p>
-        <Ed as="p" k="protocolo.aguaDica" pt={PT.aguaDica} es={ES.aguaDica} className="mt-1 block text-xs leading-relaxed text-muted-foreground" />
+        <p className="text-[11px] font-medium uppercase tracking-wider text-earth">
+          {c.lblDicaBeatriz}
+        </p>
+        <Ed
+          as="p"
+          k="protocolo.aguaDica"
+          pt={PT.aguaDica}
+          es={ES.aguaDica}
+          className="mt-1 block text-xs leading-relaxed text-muted-foreground"
+        />
       </div>
     </>
   );
@@ -613,7 +776,13 @@ function AguaJordao({ c }: { c: ProtocoloContent }) {
 function Compras({ c }: { c: ProtocoloContent }) {
   return (
     <>
-      <Ed as="p" k="protocolo.comprasIntro" pt={PT.comprasIntro} es={ES.comprasIntro} className="block text-sm leading-relaxed text-muted-foreground" />
+      <Ed
+        as="p"
+        k="protocolo.comprasIntro"
+        pt={PT.comprasIntro}
+        es={ES.comprasIntro}
+        className="block text-sm leading-relaxed text-muted-foreground"
+      />
       <Accordion type="single" collapsible className="mt-2">
         {c.comprasSecoes.map((s, i) => (
           <AccordionItem key={i} value={`compra-${i}`} className="border-border/60">
@@ -625,7 +794,11 @@ function Compras({ c }: { c: ProtocoloContent }) {
                 {s.itens.map((it, j) => (
                   <li key={j} className="flex items-start gap-2.5 text-muted-foreground">
                     <span className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-olive" />
-                    <Ed k={`protocolo.compras.${i}.${j}`} pt={PT.comprasSecoes[i].itens[j]} es={ES.comprasSecoes[i].itens[j]} />
+                    <Ed
+                      k={`protocolo.compras.${i}.${j}`}
+                      pt={PT.comprasSecoes[i].itens[j]}
+                      es={ES.comprasSecoes[i].itens[j]}
+                    />
                   </li>
                 ))}
               </ul>
@@ -644,13 +817,26 @@ function GuiaAlimentos({ c }: { c: ProtocoloContent }) {
       <h3 className="font-serif text-base text-olive">{c.guiaSoltamTitulo}</h3>
       <div className="mt-2 space-y-2">
         {c.guiaSoltam.map((g, i) => (
-          <FoodItem key={i} item={g} good k={`protocolo.soltam.${i}`} pt={PT.guiaSoltam[i]} es={ES.guiaSoltam[i]} />
+          <FoodItem
+            key={i}
+            item={g}
+            good
+            k={`protocolo.soltam.${i}`}
+            pt={PT.guiaSoltam[i]}
+            es={ES.guiaSoltam[i]}
+          />
         ))}
       </div>
       <h3 className="mt-5 font-serif text-base text-earth">{c.guiaTravamTitulo}</h3>
       <div className="mt-2 space-y-2">
         {c.guiaTravam.map((g, i) => (
-          <FoodItem key={i} item={g} k={`protocolo.travam.${i}`} pt={PT.guiaTravam[i]} es={ES.guiaTravam[i]} />
+          <FoodItem
+            key={i}
+            item={g}
+            k={`protocolo.travam.${i}`}
+            pt={PT.guiaTravam[i]}
+            es={ES.guiaTravam[i]}
+          />
         ))}
       </div>
       <Tip label={c.lblDicaBeatriz} text={c.guiaDica} />
@@ -662,25 +848,53 @@ function Ritual({ c }: { c: ProtocoloContent }) {
   return (
     <>
       <blockquote className="rounded-2xl bg-gradient-devotional p-4">
-        <Ed as="p" k="protocolo.ritualVersiculo" pt={`"${PT.ritualVersiculo}"`} es={`"${ES.ritualVersiculo}"`} className="block font-serif italic text-sm text-foreground" />
+        <Ed
+          as="p"
+          k="protocolo.ritualVersiculo"
+          pt={`"${PT.ritualVersiculo}"`}
+          es={`"${ES.ritualVersiculo}"`}
+          className="block font-serif italic text-sm text-foreground"
+        />
         <p className="mt-2 text-[11px] uppercase tracking-wider text-muted-foreground">
           {c.ritualVersiculoRef}
         </p>
       </blockquote>
-      <Ed as="p" k="protocolo.ritualIntro" pt={PT.ritualIntro} es={ES.ritualIntro} className="mt-3 block text-sm leading-relaxed text-muted-foreground" />
+      <Ed
+        as="p"
+        k="protocolo.ritualIntro"
+        pt={PT.ritualIntro}
+        es={ES.ritualIntro}
+        className="mt-3 block text-sm leading-relaxed text-muted-foreground"
+      />
       <div className="mt-3 space-y-3">
         {c.ritualPartes.map((p, i) => (
           <div key={i} className="rounded-2xl bg-secondary/40 p-4">
-            <Ed as="p" k={`protocolo.ritual.${i}.titulo`} pt={PT.ritualPartes[i].titulo} es={ES.ritualPartes[i].titulo} className="block font-serif text-base text-foreground" />
+            <Ed
+              as="p"
+              k={`protocolo.ritual.${i}.titulo`}
+              pt={PT.ritualPartes[i].titulo}
+              es={ES.ritualPartes[i].titulo}
+              className="block font-serif text-base text-foreground"
+            />
             {p.intro && (
-              <Ed as="p" k={`protocolo.ritual.${i}.intro`} pt={PT.ritualPartes[i].intro ?? ""} es={ES.ritualPartes[i].intro ?? ""} className="mt-1 block text-xs leading-relaxed text-muted-foreground" />
+              <Ed
+                as="p"
+                k={`protocolo.ritual.${i}.intro`}
+                pt={PT.ritualPartes[i].intro ?? ""}
+                es={ES.ritualPartes[i].intro ?? ""}
+                className="mt-1 block text-xs leading-relaxed text-muted-foreground"
+              />
             )}
             {p.ingredientes && (
               <ul className="mt-2 space-y-1.5">
                 {p.ingredientes.map((it, j) => (
                   <li key={j} className="flex items-start gap-2.5 text-sm text-muted-foreground">
                     <span className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-olive" />
-                    <Ed k={`protocolo.ritual.${i}.ing.${j}`} pt={PT.ritualPartes[i].ingredientes![j]} es={ES.ritualPartes[i].ingredientes![j]} />
+                    <Ed
+                      k={`protocolo.ritual.${i}.ing.${j}`}
+                      pt={PT.ritualPartes[i].ingredientes![j]}
+                      es={ES.ritualPartes[i].ingredientes![j]}
+                    />
                   </li>
                 ))}
               </ul>
@@ -692,13 +906,24 @@ function Ritual({ c }: { c: ProtocoloContent }) {
                     <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-highlight font-serif text-xs text-earth">
                       {j + 1}
                     </span>
-                    <Ed k={`protocolo.ritual.${i}.passo.${j}`} pt={PT.ritualPartes[i].passos![j]} es={ES.ritualPartes[i].passos![j]} className="pt-0.5 leading-relaxed" />
+                    <Ed
+                      k={`protocolo.ritual.${i}.passo.${j}`}
+                      pt={PT.ritualPartes[i].passos![j]}
+                      es={ES.ritualPartes[i].passos![j]}
+                      className="pt-0.5 leading-relaxed"
+                    />
                   </li>
                 ))}
               </ol>
             )}
             {p.fecho && (
-              <Ed as="p" k={`protocolo.ritual.${i}.fecho`} pt={PT.ritualPartes[i].fecho ?? ""} es={ES.ritualPartes[i].fecho ?? ""} className="mt-2 block text-xs leading-relaxed text-muted-foreground" />
+              <Ed
+                as="p"
+                k={`protocolo.ritual.${i}.fecho`}
+                pt={PT.ritualPartes[i].fecho ?? ""}
+                es={ES.ritualPartes[i].fecho ?? ""}
+                className="mt-2 block text-xs leading-relaxed text-muted-foreground"
+              />
             )}
           </div>
         ))}
@@ -713,8 +938,20 @@ function Esperar({ c }: { c: ProtocoloContent }) {
     <div className="space-y-2.5">
       {c.esperarFases.map((f, i) => (
         <div key={i} className="rounded-2xl bg-secondary/40 p-4">
-          <Ed as="p" k={`protocolo.esperar.${i}.titulo`} pt={PT.esperarFases[i].titulo} es={ES.esperarFases[i].titulo} className="block font-serif text-base text-foreground" />
-          <Ed as="p" k={`protocolo.esperar.${i}.texto`} pt={PT.esperarFases[i].texto} es={ES.esperarFases[i].texto} className="mt-1 block text-xs leading-relaxed text-muted-foreground" />
+          <Ed
+            as="p"
+            k={`protocolo.esperar.${i}.titulo`}
+            pt={PT.esperarFases[i].titulo}
+            es={ES.esperarFases[i].titulo}
+            className="block font-serif text-base text-foreground"
+          />
+          <Ed
+            as="p"
+            k={`protocolo.esperar.${i}.texto`}
+            pt={PT.esperarFases[i].texto}
+            es={ES.esperarFases[i].texto}
+            className="mt-1 block text-xs leading-relaxed text-muted-foreground"
+          />
         </div>
       ))}
     </div>
@@ -750,7 +987,13 @@ function Faq({ c }: { c: ProtocoloContent }) {
             {f.q}
           </AccordionTrigger>
           <AccordionContent>
-            <Ed as="p" k={`protocolo.faq.${i}.a`} pt={PT.faq[i].a} es={ES.faq[i].a} className="block leading-relaxed text-muted-foreground" />
+            <Ed
+              as="p"
+              k={`protocolo.faq.${i}.a`}
+              pt={PT.faq[i].a}
+              es={ES.faq[i].a}
+              className="block leading-relaxed text-muted-foreground"
+            />
           </AccordionContent>
         </AccordionItem>
       ))}
@@ -763,9 +1006,22 @@ function Final({ c, lang }: { c: ProtocoloContent; lang: "pt" | "es" }) {
     <>
       <div className="rounded-3xl bg-gradient-devotional p-5">
         {c.finalTexto.map((p, i) => (
-          <Ed key={i} as="p" k={`protocolo.final.${i}`} pt={PT.finalTexto[i]} es={ES.finalTexto[i]} className="mb-2.5 block text-sm leading-relaxed text-foreground last:mb-0" />
+          <Ed
+            key={i}
+            as="p"
+            k={`protocolo.final.${i}`}
+            pt={PT.finalTexto[i]}
+            es={ES.finalTexto[i]}
+            className="mb-2.5 block text-sm leading-relaxed text-foreground last:mb-0"
+          />
         ))}
-        <Ed as="p" k="protocolo.finalAssinatura" pt={PT.finalAssinatura} es={ES.finalAssinatura} className="mt-4 block font-serif italic text-sm text-earth" />
+        <Ed
+          as="p"
+          k="protocolo.finalAssinatura"
+          pt={PT.finalAssinatura}
+          es={ES.finalAssinatura}
+          className="mt-4 block font-serif italic text-sm text-earth"
+        />
       </div>
       <Link
         to="/receitas"
@@ -794,8 +1050,20 @@ function FoodItem({
 }) {
   return (
     <div className="rounded-2xl bg-secondary/40 p-3.5">
-      <Ed as="p" k={`${k}.nome`} pt={pt.nome} es={es.nome} className={`block text-sm font-medium ${good ? "text-olive" : "text-earth"}`} />
-      <Ed as="p" k={`${k}.texto`} pt={pt.texto} es={es.texto} className="mt-0.5 block text-xs leading-relaxed text-muted-foreground" />
+      <Ed
+        as="p"
+        k={`${k}.nome`}
+        pt={pt.nome}
+        es={es.nome}
+        className={`block text-sm font-medium ${good ? "text-olive" : "text-earth"}`}
+      />
+      <Ed
+        as="p"
+        k={`${k}.texto`}
+        pt={pt.texto}
+        es={es.texto}
+        className="mt-0.5 block text-xs leading-relaxed text-muted-foreground"
+      />
     </div>
   );
 }

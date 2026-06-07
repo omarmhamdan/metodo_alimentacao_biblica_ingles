@@ -36,7 +36,12 @@ export const bonusSlots: BonusSlot[] = [
 
   // ── Guia Mesa Única ──
   { id: "mesa-hero", label: "Capa (hero)", group: G_MESA, fallback: heroMesa },
-  { id: "mesa-cat-lentilhas", label: "Categoria · Lentilhas e grãos", group: G_MESA, fallback: lentilhas },
+  {
+    id: "mesa-cat-lentilhas",
+    label: "Categoria · Lentilhas e grãos",
+    group: G_MESA,
+    fallback: lentilhas,
+  },
   { id: "mesa-cat-peixes", label: "Categoria · Peixes", group: G_MESA, fallback: peixe },
   { id: "mesa-cat-legumes", label: "Categoria · Legumes", group: G_MESA, fallback: salada },
   { id: "mesa-cat-paes", label: "Categoria · Pães", group: G_MESA, fallback: pao },

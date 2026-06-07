@@ -215,8 +215,7 @@ const pt: ProtocoloContent = {
     },
     {
       titulo: "Comece com a Água do Jordão",
-      texto:
-        "Toda manhã. É o gesto que abre o dia e ativa todo o resto. Esse passo nunca se pula.",
+      texto: "Toda manhã. É o gesto que abre o dia e ativa todo o resto. Esse passo nunca se pula.",
     },
     {
       titulo: "Beba água o dia inteiro",
@@ -594,7 +593,8 @@ const pt: ProtocoloContent = {
             "Monte o prato com arroz integral, lentilha refogada e salada de cenoura ralada com folhas verdes.",
             "Tempere a salada com azeite, limão e sal.",
           ],
-          substituicoes: "Sem lentilha? Feijão ou grão-de-bico. A cenoura pode virar beterraba ralada.",
+          substituicoes:
+            "Sem lentilha? Feijão ou grão-de-bico. A cenoura pode virar beterraba ralada.",
         },
         {
           rotulo: "Ceia",
@@ -786,7 +786,8 @@ const pt: ProtocoloContent = {
             "Bata metade da sopa no liquidificador e devolva à panela — dá corpo, mantendo pedaços para mastigar.",
             "Finalize com salsa fresca e azeite.",
           ],
-          substituicoes: "Use qualquer legume que tiver em casa — esta sopa é uma faxina de geladeira saudável.",
+          substituicoes:
+            "Use qualquer legume que tiver em casa — esta sopa é uma faxina de geladeira saudável.",
         },
       ],
       hidratacao:
@@ -1122,7 +1123,8 @@ const pt: ProtocoloContent = {
     },
     {
       nome: "Pular a Água do Jordão",
-      texto: "Ela abre o dia e ativa o metabolismo da limpeza. Pular é tirar a fundação do protocolo.",
+      texto:
+        "Ela abre o dia e ativa o metabolismo da limpeza. Pular é tirar a fundação do protocolo.",
     },
     {
       nome: "Beliscar fora das refeições",
@@ -1131,7 +1133,8 @@ const pt: ProtocoloContent = {
     },
     {
       nome: "Usar sal demais",
-      texto: "O sódio é o inimigo do desinchaço. Tempere com ervas, alho, limão e azeite — o paladar se reeduca em poucos dias.",
+      texto:
+        "O sódio é o inimigo do desinchaço. Tempere com ervas, alho, limão e azeite — o paladar se reeduca em poucos dias.",
     },
     {
       nome: "Desistir no Dia 2",
@@ -1142,32 +1145,32 @@ const pt: ProtocoloContent = {
 
   mitos: [
     {
-      nome: "\"Comer gordura engorda e inflama.\"",
+      nome: '"Comer gordura engorda e inflama."',
       texto:
         "Mito. A gordura boa — azeite de oliva, abacate, oleaginosas, ômega-3 do peixe — é justamente anti-inflamatória e dá saciedade. O que inflama são os óleos vegetais refinados (soja, milho, canola) e a gordura escondida nos ultraprocessados. Não tenha medo do fio de azeite cru: ele é remédio.",
     },
     {
-      nome: "\"Fruta tem muito açúcar, é melhor cortar.\"",
+      nome: '"Fruta tem muito açúcar, é melhor cortar."',
       texto:
         "Mito. O açúcar da fruta vem embrulhado em fibra, água e antioxidantes, então entra devagar no sangue — nada a ver com o açúcar refinado puro. A fruta inteira é liberada e incentivada. O cuidado é só com suco coado em excesso, que perde a fibra.",
     },
     {
-      nome: "\"Inchaço é só gordura, é só comer menos.\"",
+      nome: '"Inchaço é só gordura, é só comer menos."',
       texto:
         "Mito. Boa parte do que você chama de 'gordura' no rosto, nas mãos e na barriga é líquido retido pela inflamação e pelo excesso de sódio. Por isso o desinchaço aparece em poucos dias quando você corta o ultraprocessado e bebe mais água — rápido demais para ser gordura de verdade.",
     },
     {
-      nome: "\"Detox de suco verde por dias é o que limpa o corpo.\"",
+      nome: '"Detox de suco verde por dias é o que limpa o corpo."',
       texto:
         "Mito. Quem 'desintoxica' o corpo são o fígado e os rins, todos os dias — eles não precisam de jejum de suco. O que ajuda é parar de sobrecarregá-los com o que inflama e dar comida de verdade, com fibra e água. Este protocolo não é jejum: você come três refeições completas.",
     },
     {
-      nome: "\"Pular refeição acelera o resultado.\"",
+      nome: '"Pular refeição acelera o resultado."',
       texto:
         "Mito. Pular refeição costuma gerar fome descontrolada depois, queda de energia e perda de massa muscular. O corpo desincha melhor com refeições equilibradas e intervalos — não com privação. Comer bem é o que reeduca o metabolismo.",
     },
     {
-      nome: "\"Se não emagreci na balança, não funcionou.\"",
+      nome: '"Se não emagreci na balança, não funcionou."',
       texto:
         "Mito. A balança mede água, músculo, intestino e gordura tudo junto — é a pior medida nos primeiros dias. Olhe o rosto, os anéis, o caimento da roupa, a energia e o sono. O resultado real do protocolo é o corpo destravar; o número segue depois.",
     },
@@ -1535,7 +1538,8 @@ const es: ProtocoloContent = {
             "Licúa por 1 minuto, hasta que quede homogéneo.",
             "Tómalo de inmediato, sin colar si puedes (la fibra es parte del beneficio).",
           ],
-          substituicoes: "¿Sin col rizada? Espinaca. ¿Sin manzana verde? Manzana común o medio pepino.",
+          substituicoes:
+            "¿Sin col rizada? Espinaca. ¿Sin manzana verde? Manzana común o medio pepino.",
         },
         {
           rotulo: "Almuerzo",
@@ -1621,7 +1625,8 @@ const es: ProtocoloContent = {
             "Finaliza con orégano y hierbas frescas.",
             "Sirve con la rebanada de pan ligeramente tostada.",
           ],
-          substituicoes: "¿No comes huevo? Tofu revuelto con cúrcuma queda muy parecido y nutritivo.",
+          substituicoes:
+            "¿No comes huevo? Tofu revuelto con cúrcuma queda muy parecido y nutritivo.",
         },
         {
           rotulo: "Almuerzo",
@@ -1643,7 +1648,8 @@ const es: ProtocoloContent = {
             "Arma el plato con arroz integral, lentejas guisadas y ensalada de zanahoria rallada con hojas verdes.",
             "Sazona la ensalada con aceite, limón y sal.",
           ],
-          substituicoes: "¿Sin lentejas? Fríjol o garbanzo. La zanahoria puede cambiarse por remolacha rallada.",
+          substituicoes:
+            "¿Sin lentejas? Fríjol o garbanzo. La zanahoria puede cambiarse por remolacha rallada.",
         },
         {
           rotulo: "Cena",
@@ -1785,7 +1791,8 @@ const es: ProtocoloContent = {
             "En los últimos 2 minutos, agrega el banano aplastado y la canela.",
             "Sirve con las nueces y, si quieres, un hilo de miel.",
           ],
-          substituicoes: "El banano puede cambiarse por manzana o pera. La avena puede cambiarse por hojuelas de quinoa.",
+          substituicoes:
+            "El banano puede cambiarse por manzana o pera. La avena puede cambiarse por hojuelas de quinoa.",
         },
         {
           rotulo: "Almuerzo",
@@ -1835,7 +1842,8 @@ const es: ProtocoloContent = {
             "Licúa la mitad de la sopa y devuelve a la olla — esto da cuerpo, manteniendo trozos para masticar.",
             "Finaliza con perejil fresco y aceite.",
           ],
-          substituicoes: "Usa cualquier verdura que tengas en casa — esta sopa es una limpieza de nevera saludable.",
+          substituicoes:
+            "Usa cualquier verdura que tengas en casa — esta sopa es una limpieza de nevera saludable.",
         },
       ],
       hidratacao:
@@ -2131,7 +2139,8 @@ const es: ProtocoloContent = {
     },
     {
       titulo: "Parte 3 — El Automasaje de Drenaje",
-      intro: "Después de secar bien los pies, con un poco de aceite o crema en las manos para deslizar:",
+      intro:
+        "Después de secar bien los pies, con un poco de aceite o crema en las manos para deslizar:",
       passos: [
         "Comienza en los tobillos y sube hacia las rodillas, siempre de abajo hacia arriba, con presión suave y firme. Nunca de arriba hacia abajo.",
         "Haz 10 movimientos largos en cada pierna, del tobillo a la rodilla.",
@@ -2171,7 +2180,8 @@ const es: ProtocoloContent = {
     },
     {
       nome: "Saltarse el Agua del Jordán",
-      texto: "Abre el día y activa el metabolismo de la limpieza. Saltarla es quitarle la base al protocolo.",
+      texto:
+        "Abre el día y activa el metabolismo de la limpieza. Saltarla es quitarle la base al protocolo.",
     },
     {
       nome: "Picar entre comidas",
@@ -2180,7 +2190,8 @@ const es: ProtocoloContent = {
     },
     {
       nome: "Usar demasiada sal",
-      texto: "El sodio es el enemigo del deshinchamiento. Sazona con hierbas, ajo, limón y aceite — el paladar se reeduca en pocos días.",
+      texto:
+        "El sodio es el enemigo del deshinchamiento. Sazona con hierbas, ajo, limón y aceite — el paladar se reeduca en pocos días.",
     },
     {
       nome: "Abandonar en el Día 2",
@@ -2191,32 +2202,32 @@ const es: ProtocoloContent = {
 
   mitos: [
     {
-      nome: "\"Comer grasa engorda e inflama.\"",
+      nome: '"Comer grasa engorda e inflama."',
       texto:
         "Mito. La grasa buena — aceite de oliva, aguacate, frutos secos, omega-3 del pescado — es justamente antiinflamatoria y da saciedad. Lo que inflama son los aceites vegetales refinados (soya, maíz, canola) y la grasa escondida en los ultraprocesados. No le temas al hilo de aceite crudo: es remedio.",
     },
     {
-      nome: "\"La fruta tiene mucha azúcar, mejor cortarla.\"",
+      nome: '"La fruta tiene mucha azúcar, mejor cortarla."',
       texto:
         "Mito. El azúcar de la fruta viene envuelto en fibra, agua y antioxidantes, así que entra despacio en la sangre — nada que ver con el azúcar refinada pura. La fruta entera está permitida e incentivada. El cuidado es solo con el jugo colado en exceso, que pierde la fibra.",
     },
     {
-      nome: "\"La hinchazón es solo grasa, basta comer menos.\"",
+      nome: '"La hinchazón es solo grasa, basta comer menos."',
       texto:
         "Mito. Buena parte de lo que llamas 'grasa' en el rostro, las manos y la barriga es líquido retenido por la inflamación y el exceso de sodio. Por eso el deshinchamiento aparece en pocos días al cortar el ultraprocesado y tomar más agua — demasiado rápido para ser grasa de verdad.",
     },
     {
-      nome: "\"El detox de jugo verde por días es lo que limpia el cuerpo.\"",
+      nome: '"El detox de jugo verde por días es lo que limpia el cuerpo."',
       texto:
         "Mito. Quienes 'desintoxican' el cuerpo son el hígado y los riñones, todos los días — no necesitan ayuno de jugo. Lo que ayuda es dejar de sobrecargarlos con lo que inflama y dar comida de verdad, con fibra y agua. Este protocolo no es ayuno: comes tres comidas completas.",
     },
     {
-      nome: "\"Saltarse una comida acelera el resultado.\"",
+      nome: '"Saltarse una comida acelera el resultado."',
       texto:
         "Mito. Saltarse comidas suele generar hambre descontrolada después, caída de energía y pérdida de masa muscular. El cuerpo deshincha mejor con comidas equilibradas e intervalos — no con privación. Comer bien es lo que reeduca el metabolismo.",
     },
     {
-      nome: "\"Si no adelgacé en la balanza, no funcionó.\"",
+      nome: '"Si no adelgacé en la balanza, no funcionó."',
       texto:
         "Mito. La balanza mide agua, músculo, intestino y grasa todo junto — es la peor medida en los primeros días. Mira el rostro, los anillos, cómo cae la ropa, la energía y el sueño. El resultado real del protocolo es que el cuerpo se destrabe; el número viene después.",
     },

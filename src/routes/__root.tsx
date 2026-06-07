@@ -162,7 +162,9 @@ const BOOTSTRAP_PWA_META = `
 
 function RootShell({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en">
+    // lang is set client-side by the bootstrap script based on the user's
+    // language; the SSR default differs intentionally, so suppress the warning.
+    <html lang="en" suppressHydrationWarning>
       <head>
         <HeadContent />
         <script dangerouslySetInnerHTML={{ __html: BOOTSTRAP_PWA_META }} />

@@ -12,9 +12,15 @@ export async function adminLogin(
   password: string,
 ): Promise<{ ok: boolean; error?: string }> {
   if (!supabase) {
-    return { ok: false, error: "Supabase não configurado. Configure VITE_SUPABASE_URL + VITE_SUPABASE_ANON_KEY." };
+    return {
+      ok: false,
+      error: "Supabase não configurado. Configure VITE_SUPABASE_URL + VITE_SUPABASE_ANON_KEY.",
+    };
   }
-  const { error } = await supabase.auth.signInWithPassword({ email: email.trim().toLowerCase(), password });
+  const { error } = await supabase.auth.signInWithPassword({
+    email: email.trim().toLowerCase(),
+    password,
+  });
   if (error) return { ok: false, error: "Email ou senha incorretos." };
 
   // Verify the email is whitelisted as admin
