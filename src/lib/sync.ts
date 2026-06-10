@@ -88,11 +88,15 @@ export async function uploadRecipePhoto(recipeId: string, dataUrl: string): Prom
   }
   const { data: pub } = supabase.storage.from(PHOTOS_BUCKET).getPublicUrl(path);
   const url = pub.publicUrl;
-  // Save mapping in DB
+  // Save mapping in DB. This row is what makes the photo visible to everyone
+  // (fetchRecipePhotos reads it), so a failure here must NOT look like success.
   const { error: dbErr } = await supabase
     .from("recipe_photos")
     .upsert({ recipe_id: recipeId, url });
-  if (dbErr) console.warn("[Sync] photo db upsert failed", dbErr.message);
+  if (dbErr) {
+    console.warn("[Sync] photo db upsert failed", dbErr.message);
+    throw new Error(`Falha ao registrar a foto no Supabase: ${dbErr.message}`);
+  }
   return url;
 }
 

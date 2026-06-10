@@ -182,6 +182,11 @@ export function EditImage({
       await saveImage(id, dataUrl); // instant local + cache event
       const url = await uploadRecipePhoto(id, dataUrl); // → Supabase (global)
       if (url) await saveImage(id, url);
+    } catch (e) {
+      const msg = e instanceof Error ? e.message : String(e);
+      window.alert(
+        `A foto ficou salva só neste dispositivo — a publicação para todos falhou.\n\n${msg}`,
+      );
     } finally {
       setBusy(false);
     }
@@ -228,9 +233,13 @@ export function EditImage({
         accept="image/*"
         className="hidden"
         onClick={(e) => {
+          // The programmatic click on this input bubbles up to the parent
+          // card/Link and was navigating to the detail page. Contain it here.
+          e.stopPropagation();
           (e.target as HTMLInputElement).value = "";
         }}
         onChange={(e) => {
+          e.stopPropagation();
           const f = e.target.files?.[0];
           if (f) onFile(f);
         }}

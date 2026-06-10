@@ -80,24 +80,18 @@ export async function initImages(): Promise<void> {
     });
     _cache = { ..._cache, ...result };
 
-    // Pull GLOBAL cloud photos. Cloud is authoritative — it OVERWRITES the
-    // local cache for every recipe_id the cloud knows about. Also purges any
-    // stale legacy data: URLs from IDB so they don't shadow the cloud URLs.
+    // Pull GLOBAL cloud photos. Cloud is authoritative for every id it knows
+    // about (the spread below overwrites those entries). Local-only photos —
+    // e.g. an upload whose cloud publish failed — are kept as a device-local
+    // fallback instead of being purged.
     try {
       const { fetchRecipePhotos } = await import("./sync");
       const cloud = await fetchRecipePhotos();
       console.log(`[ImageStore] cloud returned ${Object.keys(cloud).length} photo URLs`);
       if (Object.keys(cloud).length) {
-        // 1) Purge legacy data: URLs from IDB — they can shadow real cloud URLs
-        for (const [id, value] of Object.entries(_cache)) {
-          if (typeof value === "string" && value.startsWith("data:")) {
-            delete _cache[id];
-            deleteImage(id).catch(() => {});
-          }
-        }
-        // 2) Cloud always wins
+        // Cloud wins for known ids
         _cache = { ..._cache, ...cloud };
-        // 3) Persist to IDB for fast next-load
+        // Persist to IDB for fast next-load
         for (const [id, url] of Object.entries(cloud)) saveImage(id, url).catch(() => {});
         window.dispatchEvent(new CustomEvent("mab:images"));
       }
@@ -122,13 +116,7 @@ if (typeof window !== "undefined") {
     import("./sync").then(({ fetchRecipePhotos }) => {
       fetchRecipePhotos().then((cloud) => {
         if (!Object.keys(cloud).length) return;
-        // Purge stale data: URLs first, then merge cloud
-        for (const [id, value] of Object.entries(_cache)) {
-          if (typeof value === "string" && value.startsWith("data:")) {
-            delete _cache[id];
-            deleteImage(id).catch(() => {});
-          }
-        }
+        // Cloud wins for known ids; local-only photos are kept as fallback
         _cache = { ..._cache, ...cloud };
         for (const [id, url] of Object.entries(cloud)) saveImage(id, url).catch(() => {});
         window.dispatchEvent(new CustomEvent("mab:images"));

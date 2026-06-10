@@ -104,6 +104,7 @@ function AdminPage() {
   }, [loggedIn, refreshCloud]);
 
   const [saveError, setSaveError] = useState("");
+  const [uploadError, setUploadError] = useState("");
   const [imgSizes, setImgSizes] = useState<Record<string, number>>({});
   // IDB images for admin preview (id → dataUrl)
   const [adminImages, setAdminImages] = useState<Record<string, string>>({});
@@ -172,6 +173,7 @@ function AdminPage() {
         // Save to IDB (instant local preview)
         saveImage(id, dataUrl).then(() => setAdminImages((prev) => ({ ...prev, [id]: dataUrl })));
         // Upload to Supabase Storage — global photo visible to ALL users.
+        setUploadError("");
         uploadRecipePhoto(id, dataUrl)
           .then((url) => {
             if (url) {
@@ -180,7 +182,13 @@ function AdminPage() {
               console.log(`[Admin] Cloud uploaded: ${url}`);
             }
           })
-          .catch((e) => console.warn("[Admin] cloud upload failed", e));
+          .catch((e) => {
+            console.warn("[Admin] cloud upload failed", e);
+            const msg = e instanceof Error ? e.message : String(e);
+            setUploadError(
+              `A foto "${id}" ficou salva só neste dispositivo — a publicação para todos falhou. ${msg}`,
+            );
+          });
       };
       img.src = e.target?.result as string;
     };
@@ -503,6 +511,12 @@ function AdminPage() {
               </div>
             )}
 
+            {uploadError && (
+              <div className="rounded-2xl border border-red-500/30 bg-red-500/10 p-4 text-xs text-red-300">
+                <p className="font-medium">⚠️ {uploadError}</p>
+              </div>
+            )}
+
             <div className="space-y-3">
               {recipes.map((r) => {
                 const ov = overrides.recipes[r.id] ?? {};
@@ -570,6 +584,13 @@ function AdminPage() {
                   Supabase não configurado neste ambiente — uploads ficam só neste dispositivo. Em
                   produção (com Supabase), as fotos sobem para todos.
                 </p>
+              </div>
+            )}
+
+            {uploadError && (
+              <div className="flex items-start gap-3 rounded-2xl border border-red-500/30 bg-red-500/10 p-4">
+                <AlertCircle className="mt-0.5 h-4 w-4 shrink-0 text-red-400" />
+                <p className="text-xs text-red-300">⚠️ {uploadError}</p>
               </div>
             )}
 
