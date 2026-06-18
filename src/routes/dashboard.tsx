@@ -149,7 +149,7 @@ function Dashboard() {
         </motion.div>
       </section>
 
-      <Link to="/suco-sagrado" className="mx-6 mb-6 block">
+      <Link to="/sucos" className="mx-6 mb-6 block">
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}

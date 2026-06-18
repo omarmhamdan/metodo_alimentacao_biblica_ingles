@@ -9,6 +9,7 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as SucosRouteImport } from './routes/sucos'
 import { Route as SucoSagradoRouteImport } from './routes/suco-sagrado'
 import { Route as ReceitasRouteImport } from './routes/receitas'
 import { Route as ProtocoloRouteImport } from './routes/protocolo'
@@ -24,6 +25,11 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as ReceitasIndexRouteImport } from './routes/receitas.index'
 import { Route as ReceitasIdRouteImport } from './routes/receitas.$id'
 
+const SucosRoute = SucosRouteImport.update({
+  id: '/sucos',
+  path: '/sucos',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const SucoSagradoRoute = SucoSagradoRouteImport.update({
   id: '/suco-sagrado',
   path: '/suco-sagrado',
@@ -108,6 +114,7 @@ export interface FileRoutesByFullPath {
   '/protocolo': typeof ProtocoloRoute
   '/receitas': typeof ReceitasRouteWithChildren
   '/suco-sagrado': typeof SucoSagradoRoute
+  '/sucos': typeof SucosRoute
   '/receitas/$id': typeof ReceitasIdRoute
   '/receitas/': typeof ReceitasIndexRoute
 }
@@ -123,6 +130,7 @@ export interface FileRoutesByTo {
   '/progresso': typeof ProgressoRoute
   '/protocolo': typeof ProtocoloRoute
   '/suco-sagrado': typeof SucoSagradoRoute
+  '/sucos': typeof SucosRoute
   '/receitas/$id': typeof ReceitasIdRoute
   '/receitas': typeof ReceitasIndexRoute
 }
@@ -140,6 +148,7 @@ export interface FileRoutesById {
   '/protocolo': typeof ProtocoloRoute
   '/receitas': typeof ReceitasRouteWithChildren
   '/suco-sagrado': typeof SucoSagradoRoute
+  '/sucos': typeof SucosRoute
   '/receitas/$id': typeof ReceitasIdRoute
   '/receitas/': typeof ReceitasIndexRoute
 }
@@ -158,6 +167,7 @@ export interface FileRouteTypes {
     | '/protocolo'
     | '/receitas'
     | '/suco-sagrado'
+    | '/sucos'
     | '/receitas/$id'
     | '/receitas/'
   fileRoutesByTo: FileRoutesByTo
@@ -173,6 +183,7 @@ export interface FileRouteTypes {
     | '/progresso'
     | '/protocolo'
     | '/suco-sagrado'
+    | '/sucos'
     | '/receitas/$id'
     | '/receitas'
   id:
@@ -189,6 +200,7 @@ export interface FileRouteTypes {
     | '/protocolo'
     | '/receitas'
     | '/suco-sagrado'
+    | '/sucos'
     | '/receitas/$id'
     | '/receitas/'
   fileRoutesById: FileRoutesById
@@ -206,10 +218,18 @@ export interface RootRouteChildren {
   ProtocoloRoute: typeof ProtocoloRoute
   ReceitasRoute: typeof ReceitasRouteWithChildren
   SucoSagradoRoute: typeof SucoSagradoRoute
+  SucosRoute: typeof SucosRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/sucos': {
+      id: '/sucos'
+      path: '/sucos'
+      fullPath: '/sucos'
+      preLoaderRoute: typeof SucosRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/suco-sagrado': {
       id: '/suco-sagrado'
       path: '/suco-sagrado'
@@ -338,6 +358,7 @@ const rootRouteChildren: RootRouteChildren = {
   ProtocoloRoute: ProtocoloRoute,
   ReceitasRoute: ReceitasRouteWithChildren,
   SucoSagradoRoute: SucoSagradoRoute,
+  SucosRoute: SucosRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
