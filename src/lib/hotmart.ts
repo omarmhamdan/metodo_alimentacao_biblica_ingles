@@ -22,6 +22,12 @@ export type HotmartEnv = {
 };
 
 // Events that unlock the bonus, and events that lock it back.
+// Known Hotmart product IDs → our upsell keys. HOTMART_PRODUCT_MAP env can extend/override.
+const DEFAULT_PRODUCT_MAP: Record<string, Produto> = {
+  "7909761": "anti-inflamacao", // Protocolo Antiinflamación de 7 Días
+  "7909787": "mesa-unica", // Guía Mesa Única
+};
+
 const GRANT_EVENTS = new Set(["PURCHASE_APPROVED", "PURCHASE_COMPLETE"]);
 const REVOKE_EVENTS = new Set([
   "PURCHASE_REFUNDED",
@@ -46,16 +52,17 @@ function mapProduct(product: unknown, env: HotmartEnv): Produto | null {
   if (!product || typeof product !== "object") return null;
   const p = product as { id?: unknown; ucode?: unknown; name?: unknown };
 
-  // 1) Explicit id map (preferred — set HOTMART_PRODUCT_MAP once you know the IDs).
+  // 1) Explicit id map (preferred). Defaults baked in; HOTMART_PRODUCT_MAP env can extend.
+  let map: Record<string, string> = DEFAULT_PRODUCT_MAP;
   if (env.HOTMART_PRODUCT_MAP) {
     try {
-      const m = JSON.parse(env.HOTMART_PRODUCT_MAP) as Record<string, string>;
-      const hit = m[String(p.id)] ?? m[String(p.ucode)];
-      if (hit === "mesa-unica" || hit === "anti-inflamacao") return hit;
+      map = { ...DEFAULT_PRODUCT_MAP, ...(JSON.parse(env.HOTMART_PRODUCT_MAP) as Record<string, string>) };
     } catch {
-      /* bad JSON — fall through to name heuristic */
+      /* bad JSON — keep defaults */
     }
   }
+  const hit = map[String(p.id)] ?? map[String(p.ucode)];
+  if (hit === "mesa-unica" || hit === "anti-inflamacao") return hit;
 
   // 2) Name heuristic fallback.
   const name = String(p.name ?? "").toLowerCase();
