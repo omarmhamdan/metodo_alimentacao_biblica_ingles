@@ -163,10 +163,8 @@ function Dashboard() {
               </div>
               <h3 className="font-serif text-xl text-foreground">{t("dash_sacred_juice")}</h3>
               <p className="mt-1 text-xs text-muted-foreground">{t("dash_juice_sub")}</p>
-              <div
-                className={`mt-3 inline-flex items-center rounded-full px-3 py-1 text-[11px] font-medium ${daily.sucoTomado ? "bg-sage/30 text-foreground" : "bg-gradient-primary text-primary-foreground"}`}
-              >
-                {daily.sucoTomado ? t("dash_juice_done") : t("dash_juice_access")}
+              <div className="mt-3 inline-flex items-center rounded-full bg-gradient-primary px-3 py-1 text-[11px] font-medium text-primary-foreground">
+                {t("dash_juice_access")}
               </div>
             </div>
             <div className="relative w-28 shrink-0">
