@@ -1,5 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Search, Heart, Clock } from "lucide-react";
 import { AppShell } from "@/components/AppShell";
 import { EditImage, EdI18n } from "@/components/Editable";
@@ -13,6 +13,7 @@ export const Route = createFileRoute("/receitas/")({
 
 // Category label map per language
 const CAT_ES: Record<Categoria, string> = {
+  "Café da Manhã": "Desayunos",
   "Pratos Principais": "Platos Principales",
   "Saladas e Acompanhamentos": "Ensaladas",
   Sopas: "Sopas",
@@ -21,6 +22,7 @@ const CAT_ES: Record<Categoria, string> = {
   "Receitas Âncora": "Recetas Ancla",
 };
 const CAT_PT: Record<Categoria, string> = {
+  "Café da Manhã": "Café da Manhã",
   "Pratos Principais": "Pratos Principais",
   "Saladas e Acompanhamentos": "Saladas",
   Sopas: "Sopas",
@@ -34,7 +36,17 @@ function ReceitasPage() {
   const { t, lang } = useLang();
   const recipes = useRecipes();
   const [q, setQ] = useState("");
-  const [cat, setCat] = useState<Categoria | "Todas">("Todas");
+  // Restore last-used category filter so returning from a recipe keeps the selection
+  const [cat, setCat] = useState<Categoria | "Todas">(() => {
+    if (typeof window === "undefined") return "Todas";
+    const saved = sessionStorage.getItem("mab:rec_filter");
+    return saved && (saved === "Todas" || categorias.includes(saved as Categoria))
+      ? (saved as Categoria | "Todas")
+      : "Todas";
+  });
+  useEffect(() => {
+    if (typeof window !== "undefined") sessionStorage.setItem("mab:rec_filter", cat);
+  }, [cat]);
   const catMap = lang === "es" ? CAT_ES : CAT_PT;
   const allLabel = t("rec_all");
 
