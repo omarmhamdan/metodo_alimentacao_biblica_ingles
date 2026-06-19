@@ -105,6 +105,37 @@ async function writeEntitlement(
   }
 }
 
+type LogRow = {
+  event?: string;
+  product_id?: string;
+  product_name?: string;
+  mapped_product?: string | null;
+  email?: string;
+  result: string; // granted | revoked | skipped | unauthorized | error
+  detail?: string;
+};
+
+/** Best-effort: record every received webhook so the admin can audit deliveries. */
+async function logWebhook(env: HotmartEnv, row: LogRow): Promise<void> {
+  const url = env.SUPABASE_URL;
+  const key = env.SUPABASE_SERVICE_ROLE_KEY;
+  if (!url || !key) return;
+  try {
+    await fetch(`${url}/rest/v1/webhook_logs`, {
+      method: "POST",
+      headers: {
+        apikey: key,
+        authorization: `Bearer ${key}`,
+        "content-type": "application/json",
+        prefer: "return=minimal",
+      },
+      body: JSON.stringify({ ...row, received_at: new Date().toISOString() }),
+    });
+  } catch {
+    /* never let logging break the webhook response */
+  }
+}
+
 export async function handleHotmartWebhook(request: Request, env: HotmartEnv): Promise<Response> {
   if (request.method !== "POST") return json({ error: "method not allowed" }, 405);
   if (!env.HOTMART_HOTTOK) return json({ error: "webhook not configured" }, 503);
@@ -116,39 +147,49 @@ export async function handleHotmartWebhook(request: Request, env: HotmartEnv): P
     return json({ error: "invalid json" }, 400);
   }
 
+  const event = typeof body.event === "string" ? body.event : "";
+  const data = (body.data ?? {}) as { buyer?: { email?: unknown }; product?: unknown };
+  const p = (data.product ?? {}) as { id?: unknown; name?: unknown };
+  const email = norm(data.buyer?.email);
+  const base = {
+    event,
+    product_id: p.id != null ? String(p.id) : undefined,
+    product_name: typeof p.name === "string" ? p.name : undefined,
+    email: email || undefined,
+  };
+
   // Hotmart 2.0 sends the token in the X-HOTMART-HOTTOK header; older payloads carry body.hottok.
   const headerTok = request.headers.get("x-hotmart-hottok") ?? "";
   const bodyTok = typeof body.hottok === "string" ? body.hottok : "";
   if (headerTok !== env.HOTMART_HOTTOK && bodyTok !== env.HOTMART_HOTTOK) {
+    await logWebhook(env, { ...base, result: "unauthorized" });
     return json({ error: "unauthorized" }, 401);
   }
 
-  const event = typeof body.event === "string" ? body.event : "";
-  const data = (body.data ?? {}) as {
-    buyer?: { email?: unknown };
-    product?: unknown;
-  };
-
-  const email = norm(data.buyer?.email);
-  if (!email) return json({ ok: true, skipped: "no buyer email" });
+  if (!email) {
+    await logWebhook(env, { ...base, result: "skipped", detail: "no buyer email" });
+    return json({ ok: true, skipped: "no buyer email" });
+  }
 
   const product = mapProduct(data.product, env);
   if (!product) {
-    // Main product or unknown — log id/name so you can fill HOTMART_PRODUCT_MAP if needed.
-    const p = data.product as { id?: unknown; name?: unknown } | undefined;
-    console.log(`[hotmart] ignored event=${event} productId=${p?.id} name=${p?.name}`);
+    await logWebhook(env, { ...base, mapped_product: null, result: "skipped", detail: "not an upsell" });
     return json({ ok: true, skipped: "not an upsell" });
   }
 
   const grant = GRANT_EVENTS.has(event);
   const revoke = REVOKE_EVENTS.has(event);
-  if (!grant && !revoke) return json({ ok: true, skipped: `event ${event} ignored` });
+  if (!grant && !revoke) {
+    await logWebhook(env, { ...base, mapped_product: product, result: "skipped", detail: `event ignored` });
+    return json({ ok: true, skipped: `event ${event} ignored` });
+  }
 
   const r = await writeEntitlement(env, email, product, grant);
   if (!r.ok) {
+    await logWebhook(env, { ...base, mapped_product: product, result: "error", detail: r.error });
     console.error(`[hotmart] write failed: ${r.error}`);
     return json({ error: r.error }, 502);
   }
-  console.log(`[hotmart] ${grant ? "granted" : "revoked"} ${product} for ${email} (event=${event})`);
+  await logWebhook(env, { ...base, mapped_product: product, result: grant ? "granted" : "revoked" });
   return json({ ok: true, email, product, active: grant });
 }

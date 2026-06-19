@@ -57,8 +57,12 @@ import { setEditMode } from "@/lib/edit-store";
 import {
   setEntitlement,
   adminFetchEntitlements,
+  adminListAllEntitlements,
+  adminListWebhookLogs,
   PRODUTOS,
   type Produto,
+  type EntitlementRow,
+  type WebhookLogRow,
 } from "@/lib/entitlements";
 
 export const Route = createFileRoute("/admin")({
@@ -66,7 +70,15 @@ export const Route = createFileRoute("/admin")({
   // title set by AppShell bootstrap (per-language)
 });
 
-type Tab = "dashboard" | "receitas" | "bonus" | "conteudo" | "acessos" | "usuarios" | "exportar";
+type Tab =
+  | "dashboard"
+  | "receitas"
+  | "bonus"
+  | "conteudo"
+  | "acessos"
+  | "logs"
+  | "usuarios"
+  | "exportar";
 
 function AdminPage() {
   const navigate = useNavigate();
@@ -321,6 +333,7 @@ function AdminPage() {
     { id: "bonus", label: "Bônus", icon: Sparkles },
     { id: "conteudo", label: "Conteúdo", icon: FileText },
     { id: "acessos", label: "Acessos", icon: Lock },
+    { id: "logs", label: "Logs Webhook", icon: BarChart3 },
     { id: "usuarios", label: "Usuários", icon: Users },
     { id: "exportar", label: "Exportar", icon: Download },
   ];
@@ -709,6 +722,8 @@ function AdminPage() {
         {/* ── ACESSOS (liberação manual dos upsells por email) ── */}
         {tab === "acessos" && <AccessPanel />}
 
+        {tab === "logs" && <LogsPanel />}
+
         {/* ── USUÁRIOS ── */}
         {tab === "usuarios" && (
           <div className="space-y-6">
@@ -927,6 +942,136 @@ function QuickAction({
     >
       <Icon className="h-5 w-5 text-olive" /> {label}
     </button>
+  );
+}
+
+function LogsPanel() {
+  const [logs, setLogs] = useState<WebhookLogRow[]>([]);
+  const [ents, setEnts] = useState<EntitlementRow[]>([]);
+  const [loading, setLoading] = useState(false);
+
+  const refresh = useCallback(async () => {
+    if (!supabaseEnabled) return;
+    setLoading(true);
+    try {
+      const [l, e] = await Promise.all([adminListWebhookLogs(100), adminListAllEntitlements()]);
+      setLogs(l);
+      setEnts(e);
+    } finally {
+      setLoading(false);
+    }
+  }, []);
+
+  useEffect(() => {
+    refresh();
+  }, [refresh]);
+
+  const fmt = (iso: string) =>
+    new Date(iso).toLocaleString("pt-BR", { dateStyle: "short", timeStyle: "short" });
+
+  const resultStyle: Record<string, string> = {
+    granted: "bg-green-500/20 text-green-400",
+    revoked: "bg-amber-500/20 text-amber-400",
+    skipped: "bg-stone-700 text-stone-400",
+    unauthorized: "bg-red-500/20 text-red-400",
+    error: "bg-red-500/20 text-red-400",
+  };
+  const prodLabel = (id: string | null) =>
+    id ? (PRODUTOS.find((p) => p.id === id)?.pt ?? id) : "—";
+
+  return (
+    <div className="space-y-6">
+      <div className="flex items-center justify-between">
+        <div>
+          <h2 className="text-xl font-semibold">Logs de Webhook</h2>
+          <p className="mt-1 text-sm text-stone-400">
+            Cada chamada da Hotmart ao nosso servidor + estado atual dos acessos.
+          </p>
+        </div>
+        <button
+          onClick={refresh}
+          disabled={loading || !supabaseEnabled}
+          className="rounded-xl border border-stone-700 px-3 py-1.5 text-xs text-stone-400 hover:text-white disabled:opacity-50"
+        >
+          {loading ? "..." : "↻ Atualizar"}
+        </button>
+      </div>
+
+      {!supabaseEnabled && (
+        <div className="flex items-start gap-3 rounded-2xl border border-amber-500/20 bg-amber-500/10 p-4">
+          <AlertCircle className="mt-0.5 h-4 w-4 shrink-0 text-amber-400" />
+          <p className="text-xs text-amber-400/90">
+            Supabase não configurado neste ambiente — logs só aparecem em produção.
+          </p>
+        </div>
+      )}
+
+      {/* ── Webhooks recebidos ── */}
+      <div>
+        <h3 className="mb-2 text-sm font-semibold text-stone-200">
+          Webhooks recebidos ({logs.length})
+        </h3>
+        <div className="overflow-hidden rounded-2xl border border-stone-700 bg-stone-900">
+          {logs.length === 0 ? (
+            <p className="p-6 text-center text-sm text-stone-400">
+              {loading ? "Carregando..." : "Nenhum webhook recebido ainda."}
+            </p>
+          ) : (
+            <div className="divide-y divide-stone-800">
+              {logs.map((l) => (
+                <div key={l.id} className="flex flex-wrap items-center gap-x-3 gap-y-1 px-4 py-2.5 text-xs">
+                  <span className="text-stone-500">{fmt(l.received_at)}</span>
+                  <span
+                    className={`rounded-full px-2 py-0.5 font-medium ${resultStyle[l.result ?? ""] ?? "bg-stone-700 text-stone-400"}`}
+                  >
+                    {l.result}
+                  </span>
+                  <span className="text-stone-300">{l.event}</span>
+                  <span className="min-w-0 flex-1 truncate text-stone-400">{l.email ?? "—"}</span>
+                  <span className="text-stone-500">
+                    {l.mapped_product ? prodLabel(l.mapped_product) : (l.product_name ?? l.product_id ?? "")}
+                  </span>
+                  {l.detail && <span className="w-full text-stone-600">↳ {l.detail}</span>}
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+      </div>
+
+      {/* ── Acessos na tabela (fonte da verdade) ── */}
+      <div>
+        <h3 className="mb-2 text-sm font-semibold text-stone-200">
+          Acessos liberados ({ents.filter((e) => e.active).length} ativos de {ents.length})
+        </h3>
+        <div className="overflow-hidden rounded-2xl border border-stone-700 bg-stone-900">
+          {ents.length === 0 ? (
+            <p className="p-6 text-center text-sm text-stone-400">
+              {loading ? "Carregando..." : "Nenhum acesso na tabela."}
+            </p>
+          ) : (
+            <div className="divide-y divide-stone-800">
+              {ents.map((e) => (
+                <div
+                  key={`${e.email}-${e.product}`}
+                  className="flex flex-wrap items-center gap-x-3 gap-y-1 px-4 py-2.5 text-xs"
+                >
+                  <span
+                    className={`rounded-full px-2 py-0.5 font-medium ${e.active ? "bg-green-500/20 text-green-400" : "bg-stone-700 text-stone-500"}`}
+                  >
+                    {e.active ? "ativo" : "inativo"}
+                  </span>
+                  <span className="min-w-0 flex-1 truncate text-stone-300">{e.email}</span>
+                  <span className="text-stone-400">{prodLabel(e.product)}</span>
+                  <span className="text-stone-600">{e.source ?? "—"}</span>
+                  <span className="text-stone-600">{fmt(e.updated_at)}</span>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+      </div>
+    </div>
   );
 }
 

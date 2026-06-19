@@ -181,6 +181,49 @@ export async function adminFetchEntitlements(
   }
 }
 
+export type EntitlementRow = {
+  email: string;
+  product: string;
+  active: boolean;
+  source: string | null;
+  updated_at: string;
+};
+
+/** Admin: list ALL entitlement rows (the source of truth, independent of profiles). */
+export async function adminListAllEntitlements(): Promise<EntitlementRow[]> {
+  if (!supabase) return [];
+  const { data, error } = await supabase
+    .from("entitlements")
+    .select("email, product, active, source, updated_at")
+    .order("updated_at", { ascending: false });
+  if (error || !data) return [];
+  return data as EntitlementRow[];
+}
+
+export type WebhookLogRow = {
+  id: number;
+  received_at: string;
+  event: string | null;
+  product_id: string | null;
+  product_name: string | null;
+  mapped_product: string | null;
+  email: string | null;
+  result: string | null;
+  detail: string | null;
+};
+
+/** Admin: recent webhook deliveries (requires is_admin via RLS). */
+export async function adminListWebhookLogs(limit = 50): Promise<WebhookLogRow[]> {
+  if (!supabase) return [];
+  const { data, error } = await supabase
+    .from("webhook_logs")
+    .select("*")
+    .order("received_at", { ascending: false })
+    .limit(limit);
+  if (error || !data) return [];
+  return data as WebhookLogRow[];
+}
+
 /** Reactive access check for a product. */
 export function useEntitlement(product: Produto): boolean {
   const [ok, setOk] = useState<boolean>(() => hasAccess(product));
