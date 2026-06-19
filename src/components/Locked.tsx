@@ -21,7 +21,7 @@ interface Pitch {
 const PITCH: Record<Produto, { pt: Pitch; es: Pitch }> = {
   "anti-inflamacao": {
     pt: {
-      titulo: "Anti-Inflamação 7 Dias",
+      titulo: "Protocolo Anti-Inflamação de 7 Dias",
       subtitulo: "O protocolo bíblico de 7 dias para desinchar, ganhar energia e destravar o corpo.",
       bullets: [
         "Cardápio dia a dia, do despertar à ceia",
@@ -32,7 +32,7 @@ const PITCH: Record<Produto, { pt: Pitch; es: Pitch }> = {
       cta: "Liberar acesso",
     },
     es: {
-      titulo: "Antiinflamación 7 Días",
+      titulo: "Protocolo Antiinflamación de 7 Días",
       subtitulo: "El protocolo bíblico de 7 días para desinflamar, ganar energía y destrabar el cuerpo.",
       bullets: [
         "Menú día a día, del despertar a la cena",
@@ -188,28 +188,29 @@ function Paywall({ product }: { product: Produto }) {
           </button>
 
           {msg && (
-            <p
-              className={`mt-3 rounded-xl p-3 text-center text-xs ${msg.ok ? "bg-sage/30 text-foreground" : "bg-terracotta/15 text-terracotta"}`}
+            <div
+              className={`mt-3 space-y-2 rounded-xl p-3 text-center text-xs ${msg.ok ? "bg-sage/30 text-foreground" : "bg-terracotta/15 text-terracotta"}`}
             >
-              {t[msg.kind]}
-            </p>
+              <p>{t[msg.kind]}</p>
+              {!msg.ok && (
+                <p className="leading-relaxed">
+                  {t.support.split("metodoalimentacionbiblica@gmail.com").map((part, i, arr) => (
+                    <span key={i}>
+                      {part}
+                      {i < arr.length - 1 && (
+                        <a
+                          href="mailto:metodoalimentacionbiblica@gmail.com"
+                          className="font-semibold underline underline-offset-2"
+                        >
+                          metodoalimentacionbiblica@gmail.com
+                        </a>
+                      )}
+                    </span>
+                  ))}
+                </p>
+              )}
+            </div>
           )}
-
-          <p className="mt-3 text-center text-[11px] leading-relaxed text-muted-foreground">
-            {t.support.split("metodoalimentacionbiblica@gmail.com").map((part, i, arr) => (
-              <span key={i}>
-                {part}
-                {i < arr.length - 1 && (
-                  <a
-                    href="mailto:metodoalimentacionbiblica@gmail.com"
-                    className="font-medium text-olive underline underline-offset-2"
-                  >
-                    metodoalimentacionbiblica@gmail.com
-                  </a>
-                )}
-              </span>
-            ))}
-          </p>
         </div>
       )}
     </div>

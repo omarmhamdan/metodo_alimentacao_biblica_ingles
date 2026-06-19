@@ -342,24 +342,24 @@ function AdminPage() {
     <div className="min-h-screen bg-stone-950 text-white">
       {/* Header */}
       <header className="sticky top-0 z-50 border-b border-stone-800 bg-stone-900/90 backdrop-blur">
-        <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-4">
-          <div className="flex items-center gap-3">
-            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-olive/20">
+        <div className="mx-auto flex max-w-6xl items-center justify-between gap-2 px-4 py-3 sm:px-6 sm:py-4">
+          <div className="flex min-w-0 items-center gap-3">
+            <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-olive/20">
               <Lock className="h-4 w-4 text-olive" />
             </div>
-            <div>
+            <div className="min-w-0">
               <h1 className="text-sm font-medium text-white">Admin Panel</h1>
-              <p className="text-[10px] text-stone-500">Método Alimentación Bíblica</p>
+              <p className="truncate text-[10px] text-stone-500">Método Alimentación Bíblica</p>
             </div>
           </div>
-          <div className="flex items-center gap-3">
+          <div className="flex shrink-0 items-center gap-2">
             {saved && (
               <motion.span
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
-                className="flex items-center gap-1 rounded-full bg-green-500/20 px-3 py-1 text-xs text-green-400"
+                className="flex items-center gap-1 rounded-full bg-green-500/20 px-2.5 py-1 text-xs text-green-400"
               >
-                <Check className="h-3 w-3" /> Salvo
+                <Check className="h-3 w-3" /> <span className="hidden sm:inline">Salvo</span>
               </motion.span>
             )}
             <button
@@ -367,32 +367,32 @@ function AdminPage() {
                 setEditMode(true);
                 navigate({ to: "/dashboard" });
               }}
-              className="flex items-center gap-1.5 rounded-xl bg-olive px-3 py-1.5 text-xs font-medium text-cream hover:opacity-90"
+              className="flex items-center gap-1.5 rounded-xl bg-olive px-2.5 py-1.5 text-xs font-medium text-cream hover:opacity-90"
             >
-              <Image className="h-3.5 w-3.5" /> Editar no app
+              <Image className="h-3.5 w-3.5" /> <span className="hidden sm:inline">Editar no app</span>
             </button>
             <button
               onClick={() => navigate({ to: "/dashboard" })}
-              className="rounded-xl border border-stone-700 px-3 py-1.5 text-xs text-stone-400 hover:text-white"
+              className="hidden rounded-xl border border-stone-700 px-3 py-1.5 text-xs text-stone-400 hover:text-white sm:block"
             >
               Ver app
             </button>
             <button
               onClick={handleLogout}
-              className="flex items-center gap-1.5 rounded-xl bg-stone-800 px-3 py-1.5 text-xs text-stone-400 hover:text-white"
+              className="flex items-center gap-1.5 rounded-xl bg-stone-800 px-2.5 py-1.5 text-xs text-stone-400 hover:text-white"
             >
-              <LogOut className="h-3.5 w-3.5" /> Sair
+              <LogOut className="h-3.5 w-3.5" /> <span className="hidden sm:inline">Sair</span>
             </button>
           </div>
         </div>
-        {/* Nav tabs */}
-        <div className="mx-auto max-w-6xl px-6">
+        {/* Nav tabs — horizontally scrollable on mobile */}
+        <div className="mx-auto max-w-6xl overflow-x-auto px-4 [-ms-overflow-style:none] [scrollbar-width:none] sm:px-6 [&::-webkit-scrollbar]:hidden">
           <div className="flex gap-1 pb-0">
             {tabs.map(({ id, label, icon: Icon }) => (
               <button
                 key={id}
                 onClick={() => setTab(id)}
-                className={`flex items-center gap-1.5 border-b-2 px-4 py-2.5 text-xs font-medium transition-all ${tab === id ? "border-olive text-olive" : "border-transparent text-stone-500 hover:text-stone-300"}`}
+                className={`flex shrink-0 items-center gap-1.5 whitespace-nowrap border-b-2 px-3 py-2.5 text-xs font-medium transition-all sm:px-4 ${tab === id ? "border-olive text-olive" : "border-transparent text-stone-500 hover:text-stone-300"}`}
               >
                 <Icon className="h-3.5 w-3.5" /> {label}
               </button>
@@ -401,7 +401,7 @@ function AdminPage() {
         </div>
       </header>
 
-      <main className="mx-auto max-w-6xl px-6 py-8">
+      <main className="mx-auto max-w-6xl px-4 py-6 sm:px-6 sm:py-8">
         {/* ── DASHBOARD ── */}
         {tab === "dashboard" && (
           <div className="space-y-6">
