@@ -22,7 +22,7 @@ function PerfilPage() {
   const { t, lang, setLang } = useLang();
   const allRecipes = useRecipes();
   const nome = user?.nome ?? (lang === "es" ? "Visitante" : "Visitante");
-  const favRecipes = allRecipes.filter((r) => daily.favoritos.includes(r.id));
+  const favRecipes = allRecipes.filter((r) => (daily.favoritos ?? []).includes(r.id));
   const [modal, setModal] = useState<Modal>(null);
   const [goalDraft, setGoalDraft] = useState("");
 

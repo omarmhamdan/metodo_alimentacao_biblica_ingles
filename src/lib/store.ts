@@ -129,6 +129,14 @@ const defaultDaily = (): DailyState => ({
   energiaHistorico: [],
 });
 
+// Load daily from storage, ALWAYS merged over defaults so array fields
+// (favoritos, pesoHistorico, energiaHistorico) are never undefined — a partial
+// daily (e.g. cloud-synced JSON missing fields) used to crash .includes/.map.
+const loadDaily = (): DailyState => ({
+  ...defaultDaily(),
+  ...read<Partial<DailyState>>(KEY_DAILY, {}),
+});
+
 // Difference in whole days between two "YYYY-MM-DD" dates (timezone-safe).
 function daysBetween(prev: string, curr: string): number {
   const a = new Date(prev + "T00:00:00").getTime();
@@ -138,7 +146,7 @@ function daysBetween(prev: string, curr: string): number {
 
 export function useDaily() {
   const [daily, setDaily] = useState<DailyState>(() => {
-    const d = read<DailyState>(KEY_DAILY, defaultDaily());
+    const d = loadDaily();
     if (d.date !== today()) {
       const gap = daysBetween(d.date, today());
       // gap === 1 (consecutive day) → streak continues; otherwise → reset to 1
@@ -158,7 +166,7 @@ export function useDaily() {
   });
 
   useEffect(() => {
-    const sync = () => setDaily(read<DailyState>(KEY_DAILY, defaultDaily()));
+    const sync = () => setDaily(loadDaily());
     window.addEventListener("mab:storage", sync);
     return () => window.removeEventListener("mab:storage", sync);
   }, []);

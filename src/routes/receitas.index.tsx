@@ -98,7 +98,7 @@ function ReceitasPage() {
 
       <div className="mx-6 mt-2 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4 gap-3 md:gap-4 pb-6">
         {filtered.map((r) => {
-          const isFav = daily.favoritos.includes(r.id);
+          const isFav = (daily.favoritos ?? []).includes(r.id);
           return (
             <div
               key={r.id}
