@@ -222,6 +222,7 @@ function Dashboard() {
           >
             <div className="relative aspect-[16/9]">
               <RecipePhoto
+                id={ultima.id}
                 src={ultima.imagem}
                 alt={ultima.titulo}
                 className="h-full w-full object-cover"

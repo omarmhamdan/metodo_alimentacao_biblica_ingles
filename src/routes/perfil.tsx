@@ -273,6 +273,7 @@ function FavRow({
           className="flex items-center gap-3 p-2 active:bg-secondary/60"
         >
           <RecipePhoto
+            id={id}
             src={imagem}
             alt={titulo}
             className="h-12 w-12 rounded-xl object-cover pointer-events-none"

@@ -7,10 +7,20 @@ const STORE = "photos";
 
 let _cache: Record<string, string> = {};
 let _ready = false;
+// True once the GLOBAL cloud photo fetch has completed (success or failure).
+// Until then, a recipe id missing from the cache is "unknown", not "no photo" —
+// callers should show a skeleton instead of the bundled stock fallback so stock
+// never flashes before the real cloud photo arrives.
+let _cloudDone = false;
 let _readyPromise: Promise<void> | null = null;
 
 export function isImagesReady(): boolean {
   return _ready;
+}
+
+/** True after the global cloud photo fetch has finished (so a cache miss is real). */
+export function isCloudDone(): boolean {
+  return _cloudDone;
 }
 
 /** Returns a promise that resolves once IDB images are loaded into cache. */
@@ -52,6 +62,7 @@ function openDB(): Promise<IDBDatabase> {
 export async function initImages(): Promise<void> {
   if (typeof indexedDB === "undefined") {
     _ready = true;
+    _cloudDone = true;
     return;
   }
   try {
@@ -102,6 +113,7 @@ export async function initImages(): Promise<void> {
     console.warn("[ImageStore] init failed", e);
   } finally {
     _ready = true;
+    _cloudDone = true;
     window.dispatchEvent(new CustomEvent("mab:images-ready"));
   }
 }

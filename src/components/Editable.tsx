@@ -11,7 +11,7 @@ import {
   clearTextOverride,
   setEditMode,
 } from "@/lib/edit-store";
-import { compressImage, saveImage, deleteImage, getCachedImages } from "@/lib/image-store";
+import { compressImage, saveImage, deleteImage, getCachedImages, isCloudDone } from "@/lib/image-store";
 import { uploadRecipePhoto, deleteRecipePhoto } from "@/lib/sync";
 
 /* ─────────────────────────── Editable TEXT ───────────────────────────
@@ -162,11 +162,17 @@ export function EditImage({
   const ready = useImagesReady();
   const fileRef = useRef<HTMLInputElement>(null);
   const [busy, setBusy] = useState(false);
-  // Resolve the cloud/IDB photo for this id (so every user sees uploads),
-  // falling back to the bundled `src`. Reactive to admin uploads.
-  const [resolved, setResolved] = useState<string>(() => getCachedImages()[id] ?? src);
+  // Resolve the cloud/IDB photo for this id (so every user sees uploads).
+  // `cached` is the real uploaded photo (undefined if none); `cloudDone` tells us
+  // whether the global cloud fetch has finished, so a cache miss is genuine and
+  // not just "cloud hasn't loaded yet" — that's what lets us avoid the stock flash.
+  const [cached, setCached] = useState<string | undefined>(() => getCachedImages()[id]);
+  const [cloudDone, setCloudDone] = useState<boolean>(() => isCloudDone());
   useEffect(() => {
-    const fn = () => setResolved(getCachedImages()[id] ?? src);
+    const fn = () => {
+      setCached(getCachedImages()[id]);
+      setCloudDone(isCloudDone());
+    };
     fn();
     window.addEventListener("mab:images", fn);
     window.addEventListener("mab:images-ready", fn);
@@ -193,15 +199,20 @@ export function EditImage({
     }
   };
 
-  const shown = resolved;
+  const shown = cached ?? src;
 
   if (!edit) {
-    // Hold back the <img> until the image cache (IDB + cloud) is hydrated, so
-    // the bundled stock fallback doesn't flash before the real photo swaps in.
-    if (!ready) {
+    // Never flash the bundled stock fallback. Show the real uploaded photo as
+    // soon as it's known; otherwise hold a skeleton until the cloud fetch has
+    // finished. Only fall back to the bundled `src` once the cloud has confirmed
+    // this id genuinely has no uploaded photo.
+    if (cached) {
+      return <img src={cached} alt={alt} className={className} loading={loading} />;
+    }
+    if (!ready || !cloudDone) {
       return <span className={`${className ?? ""} block animate-pulse bg-highlight/60`} aria-label={alt} role="img" />;
     }
-    return <img src={shown} alt={alt} className={className} loading={loading} />;
+    return <img src={src} alt={alt} className={className} loading={loading} />;
   }
 
   return (
