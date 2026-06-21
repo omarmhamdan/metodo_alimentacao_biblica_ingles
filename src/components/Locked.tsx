@@ -33,7 +33,7 @@ const PITCH: Record<Produto, { pt: Pitch; es: Pitch }> = {
     },
     es: {
       titulo: "Protocolo Antiinflamación de 7 Días",
-      subtitulo: "El protocolo bíblico de 7 días para desinflamar, ganar energía y destrabar el cuerpo.",
+      subtitulo: "El protocolo bíblico de 7 días para desinflamar, ganar energía y soltar el cuerpo.",
       bullets: [
         "Menú día a día, del despertar a la cena",
         "Agua del Jordán + Ritual de Drenaje (bono secreto)",
@@ -142,7 +142,7 @@ function Paywall({ product }: { product: Produto }) {
         <h1 className="mt-1 font-serif text-2xl leading-tight text-foreground text-balance">
           {p.titulo}
         </h1>
-        <p className="mt-2 text-sm text-muted-foreground text-balance">{p.subtitulo}</p>
+        <p className="mt-2 text-sm text-muted-foreground">{p.subtitulo}</p>
       </div>
 
       <ul className="mt-5 space-y-2.5">
