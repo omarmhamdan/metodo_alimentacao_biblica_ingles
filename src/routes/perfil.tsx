@@ -12,7 +12,7 @@ import {
   Trash2,
   X,
 } from "lucide-react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { motion, AnimatePresence, type PanInfo } from "framer-motion";
 import { AppShell } from "@/components/AppShell";
 import { EdI18n } from "@/components/Editable";
@@ -40,6 +40,24 @@ function PerfilPage() {
   const [modal, setModal] = useState<Modal>(null);
   const [goalDraft, setGoalDraft] = useState("");
   const [nameDraft, setNameDraft] = useState("");
+  // iOS: the on-screen keyboard covers bottom-anchored sheets (position:fixed
+  // tracks the layout viewport, not the visual one). Track the keyboard inset
+  // via the VisualViewport API so we can lift the sheet above it.
+  const [kbInset, setKbInset] = useState(0);
+  useEffect(() => {
+    const vv = window.visualViewport;
+    if (!vv) return;
+    const onResize = () => {
+      setKbInset(Math.max(0, window.innerHeight - vv.height - vv.offsetTop));
+    };
+    vv.addEventListener("resize", onResize);
+    vv.addEventListener("scroll", onResize);
+    onResize();
+    return () => {
+      vv.removeEventListener("resize", onResize);
+      vv.removeEventListener("scroll", onResize);
+    };
+  }, []);
 
   return (
     <AppShell>
@@ -183,6 +201,7 @@ function PerfilPage() {
               exit={{ y: "100%" }}
               transition={{ type: "spring", damping: 28, stiffness: 300 }}
               className="w-full max-w-md rounded-t-3xl bg-background p-6 pb-[calc(env(safe-area-inset-bottom)+2rem)] shadow-2xl"
+              style={{ marginBottom: kbInset }}
               onClick={(e) => e.stopPropagation()}
             >
               {modal === "preferences" && (
