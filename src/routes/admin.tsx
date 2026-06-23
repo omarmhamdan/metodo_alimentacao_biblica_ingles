@@ -1487,6 +1487,21 @@ function MiniStat({ label, value }: { label: string; value: string }) {
   );
 }
 
+/** Short motive label shown next to the "Bloqueado" chip (e.g. Reembolso, Chargeback). */
+function blockLabel(b: BlacklistRow): string {
+  switch (b.event) {
+    case "PURCHASE_CHARGEBACK":
+      return "Chargeback";
+    case "PURCHASE_REFUNDED":
+    case "PURCHASE_PROTEST":
+      return "Reembolso";
+    case "PURCHASE_CANCELED":
+      return "Cancelamento";
+    default:
+      return b.source === "admin" ? "Manual" : "Bloqueado";
+  }
+}
+
 function CloudUserRow({
   u,
   recipesMap,
@@ -1523,7 +1538,7 @@ function CloudUserRow({
                 title={blocked.reason ?? "Bloqueado"}
                 className="inline-flex shrink-0 items-center gap-1 rounded-full border border-red-500/40 bg-red-500/15 px-2 py-0.5 text-[10px] font-semibold text-red-400"
               >
-                <Lock className="h-3 w-3" /> Bloqueado
+                <Lock className="h-3 w-3" /> Bloqueado · {blockLabel(blocked)}
               </span>
             )}
           </div>
