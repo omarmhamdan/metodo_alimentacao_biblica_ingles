@@ -36,6 +36,14 @@ const REVOKE_EVENTS = new Set([
   "PURCHASE_CANCELED",
 ]);
 
+// Human-readable reason shown next to the lead in the admin blacklist (per event).
+const REVOKE_REASON: Record<string, string> = {
+  PURCHASE_PROTEST: "Solicitou reembolso / abriu disputa (PURCHASE_PROTEST)",
+  PURCHASE_REFUNDED: "Compra reembolsada (PURCHASE_REFUNDED)",
+  PURCHASE_CHARGEBACK: "Chargeback (PURCHASE_CHARGEBACK)",
+  PURCHASE_CANCELED: "Compra cancelada (PURCHASE_CANCELED)",
+};
+
 function json(payload: unknown, status = 200): Response {
   return new Response(JSON.stringify(payload), {
     status,
@@ -56,7 +64,10 @@ function mapProduct(product: unknown, env: HotmartEnv): Produto | null {
   let map: Record<string, string> = DEFAULT_PRODUCT_MAP;
   if (env.HOTMART_PRODUCT_MAP) {
     try {
-      map = { ...DEFAULT_PRODUCT_MAP, ...(JSON.parse(env.HOTMART_PRODUCT_MAP) as Record<string, string>) };
+      map = {
+        ...DEFAULT_PRODUCT_MAP,
+        ...(JSON.parse(env.HOTMART_PRODUCT_MAP) as Record<string, string>),
+      };
     } catch {
       /* bad JSON — keep defaults */
     }
@@ -102,6 +113,51 @@ async function writeEntitlement(
       body: JSON.stringify(row),
     });
     if (!res.ok) return { ok: false, error: `supabase ${res.status}: ${await res.text()}` };
+    return { ok: true };
+  } catch (err) {
+    return { ok: false, error: err instanceof Error ? err.message : String(err) };
+  }
+}
+
+/**
+ * Add (active=true) or lift (active=false) a blacklist block for an email via the
+ * Supabase REST API (service role bypasses RLS). Used for MAIN-product refunds.
+ */
+async function setBlacklist(
+  env: HotmartEnv,
+  email: string,
+  active: boolean,
+  opts: { reason?: string; event?: string } = {},
+): Promise<{ ok: boolean; error?: string }> {
+  const url = env.SUPABASE_URL;
+  const key = env.SUPABASE_SERVICE_ROLE_KEY;
+  if (!url || !key) return { ok: false, error: "supabase not configured" };
+  try {
+    if (active) {
+      const res = await fetch(`${url}/rest/v1/blacklist?on_conflict=email`, {
+        method: "POST",
+        headers: {
+          apikey: key,
+          authorization: `Bearer ${key}`,
+          "content-type": "application/json",
+          prefer: "resolution=merge-duplicates,return=minimal",
+        },
+        body: JSON.stringify({
+          email,
+          reason: opts.reason ?? null,
+          source: "hotmart",
+          event: opts.event ?? null,
+          created_at: new Date().toISOString(),
+        }),
+      });
+      if (!res.ok) return { ok: false, error: `supabase ${res.status}: ${await res.text()}` };
+    } else {
+      const res = await fetch(`${url}/rest/v1/blacklist?email=eq.${encodeURIComponent(email)}`, {
+        method: "DELETE",
+        headers: { apikey: key, authorization: `Bearer ${key}`, prefer: "return=minimal" },
+      });
+      if (!res.ok) return { ok: false, error: `supabase ${res.status}: ${await res.text()}` };
+    }
     return { ok: true };
   } catch (err) {
     return { ok: false, error: err instanceof Error ? err.message : String(err) };
@@ -226,15 +282,59 @@ export async function handleHotmartWebhook(request: Request, env: HotmartEnv): P
   }
 
   const product = mapProduct(data.product, env);
+  const grant = GRANT_EVENTS.has(event);
+  const revoke = REVOKE_EVENTS.has(event);
+
+  // ── MAIN product (not one of the two upsells) ────────────────────────────────
+  // Refund/chargeback/protest/cancel → blacklist the buyer (blocks ALL app access).
+  // A later approved purchase lifts the block. Other events are ignored.
   if (!product) {
-    await logWebhook(env, { ...base, mapped_product: null, result: "skipped", detail: "not an upsell" });
+    if (revoke) {
+      const r = await setBlacklist(env, email, true, {
+        reason: REVOKE_REASON[event] ?? `Reembolso/cancelamento (${event})`,
+        event,
+      });
+      if (!r.ok) {
+        await logWebhook(env, { ...base, mapped_product: null, result: "error", detail: r.error });
+        console.error(`[hotmart] blacklist failed: ${r.error}`);
+        return json({ error: r.error }, 502);
+      }
+      await logWebhook(env, {
+        ...base,
+        mapped_product: null,
+        result: "blacklisted",
+        detail: REVOKE_REASON[event] ?? event,
+      });
+      return json({ ok: true, email, blacklisted: true });
+    }
+    if (grant) {
+      // New approved purchase of the main product → lift any existing block.
+      const r = await setBlacklist(env, email, false, { event });
+      await logWebhook(env, {
+        ...base,
+        mapped_product: null,
+        result: r.ok ? "unblacklisted" : "skipped",
+        detail: r.ok ? "main product approved — block lifted" : (r.error ?? "main product"),
+      });
+      return json({ ok: true, email, blacklisted: false });
+    }
+    await logWebhook(env, {
+      ...base,
+      mapped_product: null,
+      result: "skipped",
+      detail: "main product — event ignored",
+    });
     return json({ ok: true, skipped: "not an upsell" });
   }
 
-  const grant = GRANT_EVENTS.has(event);
-  const revoke = REVOKE_EVENTS.has(event);
+  // ── Upsell product ───────────────────────────────────────────────────────────
   if (!grant && !revoke) {
-    await logWebhook(env, { ...base, mapped_product: product, result: "skipped", detail: `event ignored` });
+    await logWebhook(env, {
+      ...base,
+      mapped_product: product,
+      result: "skipped",
+      detail: `event ignored`,
+    });
     return json({ ok: true, skipped: `event ${event} ignored` });
   }
 
@@ -244,6 +344,10 @@ export async function handleHotmartWebhook(request: Request, env: HotmartEnv): P
     console.error(`[hotmart] write failed: ${r.error}`);
     return json({ error: r.error }, 502);
   }
-  await logWebhook(env, { ...base, mapped_product: product, result: grant ? "granted" : "revoked" });
+  await logWebhook(env, {
+    ...base,
+    mapped_product: product,
+    result: grant ? "granted" : "revoked",
+  });
   return json({ ok: true, email, product, active: grant });
 }

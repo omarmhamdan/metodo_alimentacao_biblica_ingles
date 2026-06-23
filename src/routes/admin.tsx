@@ -60,11 +60,14 @@ import {
   adminListAllEntitlements,
   adminListWebhookLogs,
   adminDeleteWebhookLog,
+  adminListBlacklist,
+  adminRemoveBlacklist,
   PRODUTOS,
   type Produto,
   type EntState,
   type EntitlementRow,
   type WebhookLogRow,
+  type BlacklistRow,
 } from "@/lib/entitlements";
 
 export const Route = createFileRoute("/admin")({
@@ -100,18 +103,35 @@ function AdminPage() {
   const [cloudLoading, setCloudLoading] = useState(false);
   // email → { product → {active, restoredFrom} } (Supabase entitlements, per-user view)
   const [entMap, setEntMap] = useState<Record<string, Partial<Record<Produto, EntState>>>>({});
+  // email → blacklist row (refund/cancel of the main product → blocked lead)
+  const [blacklistMap, setBlacklistMap] = useState<Record<string, BlacklistRow>>({});
 
   const refreshCloud = useCallback(async () => {
     if (!supabaseEnabled) return;
     setCloudLoading(true);
     try {
-      const [u, s] = await Promise.all([adminListUsers(), adminStats()]);
+      const [u, s, bl] = await Promise.all([adminListUsers(), adminStats(), adminListBlacklist()]);
       setCloudUsers(u);
       setCloudStats(s);
       setEntMap(await adminFetchEntitlements(u.map((x) => x.email)));
+      setBlacklistMap(Object.fromEntries(bl.map((r) => [r.email.trim().toLowerCase(), r])));
     } finally {
       setCloudLoading(false);
     }
+  }, []);
+
+  const unblockLead = useCallback(async (email: string) => {
+    if (!confirm(`Remover bloqueio de ${email}? O acesso será liberado novamente.`)) return;
+    const ok = await adminRemoveBlacklist(email);
+    if (!ok) {
+      alert("Falha ao remover bloqueio.");
+      return;
+    }
+    setBlacklistMap((prev) => {
+      const next = { ...prev };
+      delete next[email.trim().toLowerCase()];
+      return next;
+    });
   }, []);
 
   const toggleEntitlement = useCallback(
@@ -357,7 +377,8 @@ function AdminPage() {
               }}
               className="flex items-center gap-1.5 rounded-xl bg-olive px-2.5 py-1.5 text-xs font-medium text-cream hover:opacity-90"
             >
-              <Image className="h-3.5 w-3.5" /> <span className="hidden sm:inline">Editar no app</span>
+              <Image className="h-3.5 w-3.5" />{" "}
+              <span className="hidden sm:inline">Editar no app</span>
             </button>
             <button
               onClick={() => navigate({ to: "/dashboard" })}
@@ -741,6 +762,38 @@ function AdminPage() {
               )}
             </div>
 
+            {/* Blocked leads (refund/cancel of the main product) — includes those
+                without a profile row. */}
+            {supabaseEnabled && Object.keys(blacklistMap).length > 0 && (
+              <div className="overflow-hidden rounded-2xl border border-red-500/40 bg-red-500/5">
+                <div className="flex items-center gap-2 border-b border-red-500/20 px-4 py-2.5">
+                  <Lock className="h-4 w-4 text-red-400" />
+                  <span className="text-sm font-semibold text-red-300">
+                    Bloqueados por reembolso ({Object.keys(blacklistMap).length})
+                  </span>
+                </div>
+                <div className="divide-y divide-red-500/10">
+                  {Object.values(blacklistMap).map((b) => (
+                    <div key={b.email} className="flex items-center gap-3 px-4 py-2.5">
+                      <div className="min-w-0 flex-1">
+                        <p className="truncate text-sm font-medium text-red-200">{b.email}</p>
+                        <p className="truncate text-[11px] text-red-400/80">
+                          {b.reason ?? "Reembolso/cancelamento"} ·{" "}
+                          {new Date(b.created_at).toLocaleDateString("pt-BR")}
+                        </p>
+                      </div>
+                      <button
+                        onClick={() => unblockLead(b.email)}
+                        className="shrink-0 rounded-lg border border-amber-500/40 bg-amber-500/10 px-2.5 py-1 text-[11px] font-medium text-amber-300 hover:bg-amber-500/20"
+                      >
+                        Desbloquear
+                      </button>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
             {/* All cloud users (full list) */}
             {supabaseEnabled && (
               <div className="overflow-hidden rounded-2xl border border-stone-700 bg-stone-900">
@@ -759,9 +812,9 @@ function AdminPage() {
                         u={u}
                         recipesMap={Object.fromEntries(recipes.map((r) => [r.id, r.titulo]))}
                         ent={entMap[u.email.trim().toLowerCase()]}
-                        onToggle={(product, active) =>
-                          toggleEntitlement(u.email, product, active)
-                        }
+                        blocked={blacklistMap[u.email.trim().toLowerCase()]}
+                        onUnblock={() => unblockLead(u.email)}
+                        onToggle={(product, active) => toggleEntitlement(u.email, product, active)}
                         onDelete={async () => {
                           if (
                             !confirm(`Apagar usuário ${u.email}? Esta ação não pode ser desfeita.`)
@@ -988,7 +1041,10 @@ function LogsPanel() {
           ) : (
             <div className="divide-y divide-stone-800">
               {logs.map((l) => (
-                <div key={l.id} className="flex flex-wrap items-center gap-x-3 gap-y-1 px-4 py-2.5 text-xs">
+                <div
+                  key={l.id}
+                  className="flex flex-wrap items-center gap-x-3 gap-y-1 px-4 py-2.5 text-xs"
+                >
                   <span className="text-stone-500">{fmt(l.received_at)}</span>
                   <span
                     className={`rounded-full px-2 py-0.5 font-medium ${resultStyle[l.result ?? ""] ?? "bg-stone-700 text-stone-400"}`}
@@ -998,12 +1054,15 @@ function LogsPanel() {
                   <span className="text-stone-300">{l.event}</span>
                   <span className="min-w-0 flex-1 truncate text-stone-400">{l.email ?? "—"}</span>
                   <span className="text-stone-500">
-                    {l.mapped_product ? prodLabel(l.mapped_product) : (l.product_name ?? l.product_id ?? "")}
+                    {l.mapped_product
+                      ? prodLabel(l.mapped_product)
+                      : (l.product_name ?? l.product_id ?? "")}
                   </span>
                   <button
                     onClick={async () => {
                       if (!confirm("Apagar esta linha do log?")) return;
-                      if (await adminDeleteWebhookLog(l.id)) setLogs((prev) => prev.filter((x) => x.id !== l.id));
+                      if (await adminDeleteWebhookLog(l.id))
+                        setLogs((prev) => prev.filter((x) => x.id !== l.id));
                       else alert("Falha ao apagar.");
                     }}
                     className="rounded-lg border border-red-500/30 bg-red-500/10 p-1 text-red-400 hover:bg-red-500/20"
@@ -1059,7 +1118,6 @@ function LogsPanel() {
     </div>
   );
 }
-
 
 function StorageBar() {
   const measure = () => {
@@ -1411,12 +1469,16 @@ function CloudUserRow({
   u,
   recipesMap,
   ent,
+  blocked,
+  onUnblock,
   onToggle,
   onDelete,
 }: {
   u: AdminUserRow;
   recipesMap: Record<string, string>;
   ent?: Partial<Record<Produto, EntState>>;
+  blocked?: BlacklistRow;
+  onUnblock: () => void;
   onToggle: (product: Produto, active: boolean) => void | Promise<void>;
   onDelete: () => void;
 }) {
@@ -1424,14 +1486,28 @@ function CloudUserRow({
   const favoritos = (u.daily?.favoritos ?? []) as string[];
   const aguaMl = u.daily?.aguaMl ?? 0;
   return (
-    <div className="px-4 py-3 hover:bg-stone-800/40">
+    <div className={`px-4 py-3 hover:bg-stone-800/40 ${blocked ? "bg-red-500/5" : ""}`}>
       <div className="flex items-center gap-3">
-        <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-olive/20 text-sm font-bold text-olive">
+        <div
+          className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-full text-sm font-bold ${blocked ? "bg-red-500/20 text-red-400" : "bg-olive/20 text-olive"}`}
+        >
           {(u.nome || u.email).charAt(0).toUpperCase()}
         </div>
         <div className="min-w-0 flex-1">
-          <p className="truncate text-sm font-medium text-white">{u.nome || "—"}</p>
+          <div className="flex items-center gap-2">
+            <p className="truncate text-sm font-medium text-white">{u.nome || "—"}</p>
+            {blocked && (
+              <span className="inline-flex shrink-0 items-center gap-1 rounded-full border border-red-500/40 bg-red-500/15 px-2 py-0.5 text-[10px] font-semibold text-red-400">
+                <Lock className="h-3 w-3" /> BLOQUEADO
+              </span>
+            )}
+          </div>
           <p className="truncate text-xs text-stone-400">{u.email}</p>
+          {blocked && (
+            <p className="mt-0.5 truncate text-[11px] text-red-400/90">
+              {blocked.reason ?? "Reembolso/cancelamento"}
+            </p>
+          )}
         </div>
         <div className="hidden sm:flex items-center gap-2">
           <span
@@ -1449,6 +1525,15 @@ function CloudUserRow({
         >
           {open ? "Ocultar" : "Detalhes"}
         </button>
+        {blocked && (
+          <button
+            onClick={onUnblock}
+            className="rounded-lg border border-amber-500/40 bg-amber-500/10 px-2 py-1 text-[10px] font-medium text-amber-300 hover:bg-amber-500/20"
+            title="Remover bloqueio e liberar acesso"
+          >
+            Desbloquear
+          </button>
+        )}
         <button
           onClick={onDelete}
           className="rounded-lg border border-red-500/30 bg-red-500/10 p-1.5 text-red-400 hover:bg-red-500/20"

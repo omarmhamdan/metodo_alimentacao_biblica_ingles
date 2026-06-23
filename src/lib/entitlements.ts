@@ -27,9 +27,13 @@ export const CHECKOUT_URLS: Record<Produto, string> = {
 
 const LS_KEY = "mab:entitlements"; // Record<Produto, boolean> resolvido neste dispositivo
 const LS_EMAILS = "mab:entitlement_emails"; // emails já verificados (login + restaurados)
+const LS_BLACKLIST = "mab:blacklist"; // BlacklistInfo | null — bloqueio por reembolso do produto principal
+
+export type BlacklistInfo = { email: string; reason: string | null };
 
 let _access: Record<string, boolean> = {};
 let _emails: string[] = [];
+let _blacklist: BlacklistInfo | null = null;
 
 function readLS<T>(k: string, fb: T): T {
   if (typeof window === "undefined") return fb;
@@ -45,8 +49,7 @@ function writeLS(k: string, v: unknown) {
 }
 
 function emit() {
-  if (typeof window !== "undefined")
-    window.dispatchEvent(new CustomEvent("mab:entitlements"));
+  if (typeof window !== "undefined") window.dispatchEvent(new CustomEvent("mab:entitlements"));
 }
 
 function norm(e: string | undefined | null): string {
@@ -60,7 +63,19 @@ function norm(e: string | undefined | null): string {
  * the existing cache, so a flaky network never wrongly blocks a paid user.
  */
 async function pullFromCloud(emails: string[]): Promise<void> {
-  if (!supabase || emails.length === 0) return;
+  // No verified email on this device → this is a plain visitor. Drop any stale
+  // cache so a browser previously used for a purchase/restore/admin test doesn't
+  // keep leaking paid access. (A flaky network never reaches here — emails empty
+  // means there's genuinely nobody to resolve access for.)
+  if (emails.length === 0) {
+    if (Object.keys(_access).length > 0) {
+      _access = {};
+      writeLS(LS_KEY, _access);
+      emit();
+    }
+    return;
+  }
+  if (!supabase) return; // can't validate; keep cache so a paid user stays unlocked offline
   try {
     const { data, error } = await supabase
       .from("entitlements")
@@ -80,10 +95,49 @@ async function pullFromCloud(emails: string[]): Promise<void> {
   }
 }
 
+/**
+ * Resolve the blacklist (refund/chargeback on the MAIN product) for the tracked
+ * emails. Authoritative on success: a removed block actually unblocks. On
+ * failure (offline) we keep the cached state so a refunded user can't dodge the
+ * block by going offline. No emails → never blacklisted (plain visitor).
+ */
+async function refreshBlacklist(): Promise<void> {
+  if (_emails.length === 0) {
+    if (_blacklist) {
+      _blacklist = null;
+      writeLS(LS_BLACKLIST, null);
+      emit();
+    }
+    return;
+  }
+  if (!supabase) return; // can't validate — keep cached block
+  try {
+    const { data, error } = await supabase
+      .from("blacklist")
+      .select("email, reason")
+      .in("email", _emails)
+      .limit(1);
+    if (error || !data) return; // keep cache on failure
+    const next: BlacklistInfo | null =
+      data.length > 0
+        ? {
+            email: String((data[0] as { email: string }).email),
+            reason: (data[0] as { reason: string | null }).reason ?? null,
+          }
+        : null;
+    _blacklist = next;
+    writeLS(LS_BLACKLIST, _blacklist);
+    emit();
+  } catch {
+    /* offline — keep cached block */
+  }
+}
+
 /** Load cached access + refresh from cloud for the logged-in email. Call at startup. */
 export async function initEntitlements(loginEmail?: string): Promise<void> {
   _access = readLS<Record<string, boolean>>(LS_KEY, {});
   _emails = readLS<string[]>(LS_EMAILS, []);
+  _blacklist = readLS<BlacklistInfo | null>(LS_BLACKLIST, null);
   const le = norm(loginEmail);
   if (le && !_emails.includes(le)) {
     _emails.push(le);
@@ -91,6 +145,7 @@ export async function initEntitlements(loginEmail?: string): Promise<void> {
   }
   emit();
   await pullFromCloud(_emails);
+  await refreshBlacklist();
 }
 
 /** Wipe entitlement cache + tracked emails (call on logout — prevents access
@@ -98,11 +153,56 @@ export async function initEntitlements(loginEmail?: string): Promise<void> {
 export function clearEntitlements(): void {
   _access = {};
   _emails = [];
+  _blacklist = null;
   if (typeof window !== "undefined") {
     localStorage.removeItem(LS_KEY);
     localStorage.removeItem(LS_EMAILS);
+    localStorage.removeItem(LS_BLACKLIST);
   }
   emit();
+}
+
+/** Current blacklist block for this device, or null. Admin login bypasses it. */
+export function blacklistInfo(): BlacklistInfo | null {
+  if (isAdminLoggedIn()) return null;
+  return _blacklist;
+}
+
+/**
+ * One-off authoritative blacklist check for a single email (used at login before
+ * a profile is loaded). Returns the block info or null. Null on offline (the
+ * AppShell gate re-checks once the email is tracked and the network is back).
+ */
+export async function checkBlacklist(email: string): Promise<BlacklistInfo | null> {
+  const e = norm(email);
+  if (!supabase || !e) return null;
+  try {
+    const { data, error } = await supabase
+      .from("blacklist")
+      .select("email, reason")
+      .eq("email", e)
+      .limit(1);
+    if (error || !data || data.length === 0) return null;
+    return { email: e, reason: (data[0] as { reason: string | null }).reason ?? null };
+  } catch {
+    return null;
+  }
+}
+
+/** Reactive blacklist gate for components (null = not blocked). */
+export function useBlacklist(): BlacklistInfo | null {
+  const [bl, setBl] = useState<BlacklistInfo | null>(() => blacklistInfo());
+  useEffect(() => {
+    const fn = () => setBl(blacklistInfo());
+    fn();
+    window.addEventListener("mab:entitlements", fn);
+    window.addEventListener("mab:editmode", fn); // admin login state may change
+    return () => {
+      window.removeEventListener("mab:entitlements", fn);
+      window.removeEventListener("mab:editmode", fn);
+    };
+  }, []);
+  return bl;
 }
 
 /** True if the product is unlocked (admin bypass, else entitlement). */
@@ -224,7 +324,10 @@ export async function adminFetchEntitlements(
       const e = norm(row.email);
       if (!out[e]) out[e] = {};
       if (row.product === "anti-inflamacao" || row.product === "mesa-unica") {
-        out[e][row.product as Produto] = { active: row.active, restoredFrom: row.restored_from ?? null };
+        out[e][row.product as Produto] = {
+          active: row.active,
+          restoredFrom: row.restored_from ?? null,
+        };
       }
     }
     return out;
@@ -251,9 +354,9 @@ export async function adminListAllEntitlements(): Promise<EntitlementRow[]> {
     .select("*")
     .order("updated_at", { ascending: false });
   if (error || !data) return [];
-  return (data as (Omit<EntitlementRow, "restored_from"> & { restored_from?: string | null })[]).map(
-    (r) => ({ ...r, restored_from: r.restored_from ?? null }),
-  );
+  return (
+    data as (Omit<EntitlementRow, "restored_from"> & { restored_from?: string | null })[]
+  ).map((r) => ({ ...r, restored_from: r.restored_from ?? null }));
 }
 
 export type WebhookLogRow = {
@@ -284,6 +387,55 @@ export async function adminListWebhookLogs(limit = 50): Promise<WebhookLogRow[]>
 export async function adminDeleteWebhookLog(id: number): Promise<boolean> {
   if (!supabase) return false;
   const { error } = await supabase.from("webhook_logs").delete().eq("id", id);
+  return !error;
+}
+
+export type BlacklistRow = {
+  email: string;
+  reason: string | null;
+  source: string | null;
+  event: string | null;
+  created_at: string;
+};
+
+/** Admin/app: fetch all blacklist rows. Public read (RLS), used to flag leads in red. */
+export async function adminListBlacklist(): Promise<BlacklistRow[]> {
+  if (!supabase) return [];
+  const { data, error } = await supabase
+    .from("blacklist")
+    .select("*")
+    .order("created_at", { ascending: false });
+  if (error || !data) return [];
+  return data as BlacklistRow[];
+}
+
+/** Admin: remove a block (lifts the refund blacklist for an email). Requires is_admin via RLS. */
+export async function adminRemoveBlacklist(email: string): Promise<boolean> {
+  const e = norm(email);
+  if (!supabase || !e) return false;
+  const { error } = await supabase.from("blacklist").delete().eq("email", e);
+  if (error) return false;
+  // Reflect immediately if it's an email tracked on this device.
+  if (_blacklist && norm(_blacklist.email) === e) {
+    _blacklist = null;
+    writeLS(LS_BLACKLIST, null);
+    emit();
+  }
+  return true;
+}
+
+/** Admin: manually blacklist an email with a reason. Requires is_admin via RLS. */
+export async function adminAddBlacklist(email: string, reason: string): Promise<boolean> {
+  const e = norm(email);
+  if (!supabase || !e) return false;
+  const { error } = await supabase
+    .from("blacklist")
+    .upsert({
+      email: e,
+      reason: reason || null,
+      source: "admin",
+      created_at: new Date().toISOString(),
+    });
   return !error;
 }
 

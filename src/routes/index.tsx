@@ -6,6 +6,8 @@ import heroMesa from "@/assets/hero-mesa.jpg";
 import { useUser, useLang, findUserByEmail } from "@/lib/store";
 import { fetchProfileByEmail, upsertProfile, fetchRecipePhotos } from "@/lib/sync";
 import { mergeCloudImages } from "@/lib/image-store";
+import { checkBlacklist, type BlacklistInfo } from "@/lib/entitlements";
+import { BlacklistBlock } from "@/components/BlacklistBlock";
 import { EdI18n } from "@/components/Editable";
 import { initTextOverrides } from "@/lib/edit-store";
 
@@ -22,6 +24,7 @@ function LandingLogin() {
   const [nome, setNome] = useState("");
   const [loading, setLoading] = useState(false);
   const [emailError, setEmailError] = useState<"" | "empty" | "invalid">("");
+  const [blocked, setBlocked] = useState<BlacklistInfo | null>(null);
 
   // Translated on render so language toggle updates the message live.
   const emailErrorMsg = !emailError
@@ -70,6 +73,14 @@ function LandingLogin() {
     setEmailError("");
     setLoading(true);
 
+    // 0) Blacklist (refund/cancel of the main product) → block access entirely.
+    const block = await checkBlacklist(cleanEmail);
+    if (block) {
+      setLoading(false);
+      setBlocked(block);
+      return;
+    }
+
     // 1) Try local first (fastest)
     const local = findUserByEmail(cleanEmail);
     if (local) {
@@ -114,6 +125,29 @@ function LandingLogin() {
     setLoading(false);
     navigate({ to: "/onboarding", replace: true });
   };
+
+  // Email is blacklisted (refunded/canceled the main product) → red block + re-buy CTA.
+  if (blocked) {
+    return (
+      <div className="relative mx-auto min-h-screen w-full max-w-md overflow-hidden bg-background">
+        <div className="sticky top-0 z-20 flex items-center justify-center gap-2 bg-cream/95 px-4 py-2.5 backdrop-blur border-b border-border/40">
+          <button
+            onClick={() => setLang("es")}
+            className={`flex-1 max-w-[170px] rounded-xl px-3 py-2 text-xs font-semibold transition-all ${lang === "es" ? "bg-gradient-primary text-primary-foreground shadow-soft" : "bg-card text-muted-foreground border border-border"}`}
+          >
+            🇨🇴 Español
+          </button>
+          <button
+            onClick={() => setLang("pt")}
+            className={`flex-1 max-w-[170px] rounded-xl px-3 py-2 text-xs font-semibold transition-all ${lang === "pt" ? "bg-gradient-primary text-primary-foreground shadow-soft" : "bg-card text-muted-foreground border border-border"}`}
+          >
+            🇧🇷 Português
+          </button>
+        </div>
+        <BlacklistBlock info={blocked} />
+      </div>
+    );
+  }
 
   return (
     <div className="relative mx-auto min-h-screen w-full max-w-md overflow-hidden bg-background">
