@@ -145,7 +145,7 @@ async function setBlacklist(
   email: string,
   active: boolean,
   opts: { reason?: string; event?: string } = {},
-): Promise<{ ok: boolean; error?: string }> {
+): Promise<{ ok: boolean; error?: string; lifted?: boolean }> {
   const url = env.SUPABASE_URL;
   const key = env.SUPABASE_SERVICE_ROLE_KEY;
   if (!url || !key) return { ok: false, error: "supabase not configured" };
@@ -171,9 +171,11 @@ async function setBlacklist(
     } else {
       const res = await fetch(`${url}/rest/v1/blacklist?email=eq.${encodeURIComponent(email)}`, {
         method: "DELETE",
-        headers: { apikey: key, authorization: `Bearer ${key}`, prefer: "return=minimal" },
+        headers: { apikey: key, authorization: `Bearer ${key}`, prefer: "return=representation" },
       });
       if (!res.ok) return { ok: false, error: `supabase ${res.status}: ${await res.text()}` };
+      const removed = (await res.json()) as unknown[];
+      return { ok: true, lifted: Array.isArray(removed) && removed.length > 0 };
     }
     return { ok: true };
   } catch (err) {
@@ -544,12 +546,20 @@ export async function handleHotmartWebhook(request: Request, env: HotmartEnv): P
     if (grant) {
       // New approved purchase of the main product → lift any existing block.
       const r = await setBlacklist(env, email, false, { event });
-      await logWebhook(env, {
-        ...base,
-        mapped_product: null,
-        result: r.ok ? "unblacklisted" : "skipped",
-        detail: r.ok ? "main product approved — block lifted" : (r.error ?? "main product"),
-      });
+      // Only log when a real block was actually lifted (rare: a refunded buyer
+      // re-purchased) or when the lift errored. A normal first purchase has no
+      // block to remove, so we skip the noisy "unblacklisted" line — the
+      // access-email log (email_sent) is the record of the sale.
+      if (!r.ok) {
+        await logWebhook(env, { ...base, mapped_product: null, result: "error", detail: r.error });
+      } else if (r.lifted) {
+        await logWebhook(env, {
+          ...base,
+          mapped_product: null,
+          result: "unblacklisted",
+          detail: "main product approved — block lifted",
+        });
+      }
       // Access provisioning is done. The email below is fully isolated: it can
       // never throw into, block, or undo the access we just granted.
       await maybeSendAccessEmail(env, { email, name: buyerName, transactionId: transaction, base });
