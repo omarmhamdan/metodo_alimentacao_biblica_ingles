@@ -11,6 +11,7 @@
 //   SUPABASE_SERVICE_ROLE_KEY  — service role key (bypasses RLS to write entitlements)
 //   HOTMART_PRODUCT_MAP        — optional JSON: {"<productId>":"mesa-unica", ...}
 //                                 (hardens mapping once you know the numeric IDs)
+//   BREVO_API_KEY              — Brevo transactional email API key (access email)
 
 type Produto = "anti-inflamacao" | "mesa-unica";
 
@@ -19,7 +20,20 @@ export type HotmartEnv = {
   SUPABASE_URL?: string;
   SUPABASE_SERVICE_ROLE_KEY?: string;
   HOTMART_PRODUCT_MAP?: string;
+  BREVO_API_KEY?: string;
 };
+
+// ── Access email (Brevo) ───────────────────────────────────────────────────────
+// Sent once per buyer (idempotent by transaction) when the MAIN product is approved.
+const APP_URL = "https://app.metodoalimentacionbiblica.online";
+const EMAIL_FROM = { name: "Método Alimentación Bíblica", email: "acceso@metodoalimentacionbiblica.online" };
+// Reply-To on the same domain as From (more aligned/trusted than an external Gmail).
+// Replies to acceso@ still land in the Gmail via the Cloudflare Email Routing catch-all.
+const EMAIL_REPLY_TO = { name: "Método Alimentación Bíblica", email: "acceso@metodoalimentacionbiblica.online" };
+const EMAIL_SUBJECT = "Tu acceso al Método Alimentación Bíblica";
+// Delay the access email a few minutes after the webhook (purchase moment) via
+// Brevo's `scheduledAt`. Brevo holds and delivers it — no extra infra needed.
+const SEND_DELAY_MS = 3 * 60 * 1000;
 
 // Events that unlock the bonus, and events that lock it back.
 // Known Hotmart product IDs → our upsell keys. HOTMART_PRODUCT_MAP env can extend/override.
@@ -246,6 +260,213 @@ async function logWebhook(env: HotmartEnv, row: LogRow): Promise<void> {
   }
 }
 
+/** Spanish, responsive, image-free HTML body for the access email. */
+function accessEmailHtml(saludo: string): string {
+  return `<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>${EMAIL_SUBJECT}</title>
+</head>
+<body style="margin:0;padding:0;background-color:#f4f1ea;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;color:#3a3a3a;">
+  <span style="display:none;max-height:0;overflow:hidden;opacity:0;">Tu compra fue aprobada y tu acceso ya está activo. Entra con tu correo.</span>
+  <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background-color:#f4f1ea;">
+    <tr>
+      <td align="center" style="padding:24px 12px;">
+        <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="max-width:560px;background-color:#ffffff;border-radius:14px;overflow:hidden;box-shadow:0 1px 4px rgba(0,0,0,0.06);">
+          <tr>
+            <td style="background-color:#5a7247;padding:28px 32px;text-align:center;">
+              <div style="color:#ffffff;font-size:18px;font-weight:600;letter-spacing:0.3px;">Método Alimentación Bíblica</div>
+            </td>
+          </tr>
+          <tr>
+            <td style="padding:32px 32px 8px 32px;">
+              <p style="margin:0 0 18px 0;font-size:18px;font-weight:600;color:#2f3a25;">${saludo}</p>
+              <p style="margin:0 0 16px 0;font-size:16px;line-height:1.6;">
+                Tu compra fue aprobada y <strong>tu acceso ya está activo</strong>. ✨
+                Gracias por dar este paso hacia una alimentación más sana, sencilla y llena de sentido.
+              </p>
+              <p style="margin:0 0 8px 0;font-size:16px;line-height:1.6;">
+                Para entrar es muy simple: <strong>tu usuario es este mismo correo electrónico</strong>.
+                No necesitas crear ninguna contraseña — solo ingresa con tu email y empieza.
+              </p>
+            </td>
+          </tr>
+          <tr>
+            <td style="padding:16px 32px 24px 32px;text-align:center;">
+              <a href="${APP_URL}" style="display:inline-block;background-color:#5a7247;color:#ffffff;text-decoration:none;font-size:16px;font-weight:600;padding:14px 34px;border-radius:10px;">
+                Entrar al Método
+              </a>
+              <p style="margin:14px 0 0 0;font-size:13px;color:#7a7a72;">
+                o copia este enlace: <br>
+                <a href="${APP_URL}" style="color:#5a7247;">${APP_URL}</a>
+              </p>
+            </td>
+          </tr>
+          <tr>
+            <td style="padding:0 32px 8px 32px;">
+              <p style="margin:0 0 16px 0;font-size:15px;line-height:1.6;color:#555;">
+                Funciona en cualquier dispositivo — celular, tablet o computadora — y puedes
+                guardarlo en la pantalla de inicio para abrirlo como una app.
+              </p>
+              <p style="margin:0 0 16px 0;font-size:15px;line-height:1.6;color:#555;">
+                Si también compraste el <strong>Protocolo Antiinflamación de 7 Días</strong> o la
+                <strong>Guía Mesa Única</strong>, ya quedaron liberados para tu acceso en este mismo enlace.
+              </p>
+              <p style="margin:0 0 16px 0;font-size:15px;line-height:1.6;color:#555;">
+                ¿Tienes alguna duda? Solo <strong>responde a este correo</strong> y con gusto te ayudamos.
+              </p>
+            </td>
+          </tr>
+          <tr>
+            <td style="padding:8px 32px 32px 32px;border-top:1px solid #eee;">
+              <p style="margin:18px 0 4px 0;font-size:15px;line-height:1.5;color:#3a3a3a;">
+                Con cariño,<br>
+                <strong>Beatriz Morales</strong>
+              </p>
+              <p style="margin:0;font-size:13px;color:#8a8a82;">Método Alimentación Bíblica</p>
+            </td>
+          </tr>
+        </table>
+        <p style="max-width:560px;margin:18px auto 0 auto;font-size:11px;line-height:1.5;color:#a8a8a0;text-align:center;">
+          Recibiste este correo porque realizaste una compra del Método Alimentación Bíblica.
+        </p>
+      </td>
+    </tr>
+  </table>
+</body>
+</html>`;
+}
+
+/** Plain-text alternative of the access email (multipart → better deliverability). */
+function accessEmailText(saludo: string): string {
+  return `${saludo}
+
+Tu compra fue aprobada y tu acceso ya está activo. Gracias por dar este paso hacia una alimentación más sana, sencilla y llena de sentido.
+
+Para entrar es muy simple: tu usuario es este mismo correo electrónico. No necesitas crear ninguna contraseña — solo ingresa con tu email y empieza.
+
+Entra al Método: ${APP_URL}
+
+Funciona en cualquier dispositivo (celular, tablet o computadora) y puedes guardarlo en la pantalla de inicio para abrirlo como una app.
+
+Si también compraste el Protocolo Antiinflamación de 7 Días o la Guía Mesa Única, ya quedaron liberados para tu acceso en este mismo enlace.
+
+¿Tienes alguna duda? Solo responde a este correo y con gusto te ayudamos.
+
+Con cariño,
+Beatriz Morales
+Método Alimentación Bíblica`;
+}
+
+/** Send the access email via Brevo. Returns ok/error; never throws. */
+async function sendAccessEmail(
+  env: HotmartEnv,
+  opts: { email: string; name?: string },
+): Promise<{ ok: boolean; error?: string }> {
+  const key = env.BREVO_API_KEY;
+  if (!key) return { ok: false, error: "brevo not configured" };
+  const firstName = (opts.name ?? "").trim().split(/\s+/)[0] ?? "";
+  const saludo = firstName ? `¡Hola, ${firstName}!` : "¡Hola!";
+  try {
+    const res = await fetch("https://api.brevo.com/v3/smtp/email", {
+      method: "POST",
+      headers: {
+        "api-key": key,
+        "content-type": "application/json",
+        accept: "application/json",
+      },
+      body: JSON.stringify({
+        sender: EMAIL_FROM,
+        to: [{ email: opts.email, ...(opts.name ? { name: opts.name } : {}) }],
+        replyTo: EMAIL_REPLY_TO,
+        subject: EMAIL_SUBJECT,
+        htmlContent: accessEmailHtml(saludo),
+        textContent: accessEmailText(saludo),
+        scheduledAt: new Date(Date.now() + SEND_DELAY_MS).toISOString(),
+      }),
+    });
+    if (!res.ok) return { ok: false, error: `brevo ${res.status}: ${await res.text()}` };
+    return { ok: true };
+  } catch (err) {
+    return { ok: false, error: err instanceof Error ? err.message : String(err) };
+  }
+}
+
+/**
+ * Atomically claim the right to send the access email for this transaction.
+ * Inserts the row only if absent (on_conflict do nothing). Returns true if WE
+ * inserted it (first delivery) → caller should send; false if it already existed
+ * (Hotmart retry) or the write failed → caller must NOT send.
+ */
+async function claimAccessEmail(
+  env: HotmartEnv,
+  transactionId: string,
+  email: string,
+): Promise<boolean> {
+  const url = env.SUPABASE_URL;
+  const key = env.SUPABASE_SERVICE_ROLE_KEY;
+  if (!url || !key) return false;
+  try {
+    const res = await fetch(`${url}/rest/v1/access_emails?on_conflict=transaction_id`, {
+      method: "POST",
+      headers: {
+        apikey: key,
+        authorization: `Bearer ${key}`,
+        "content-type": "application/json",
+        prefer: "resolution=ignore-duplicates,return=representation",
+      },
+      body: JSON.stringify({ transaction_id: transactionId, email }),
+    });
+    if (!res.ok) return false;
+    const rows = (await res.json()) as unknown[];
+    return Array.isArray(rows) && rows.length > 0;
+  } catch {
+    return false;
+  }
+}
+
+/** Release a previously claimed transaction so a Hotmart retry can resend (used on send failure). */
+async function releaseAccessEmail(env: HotmartEnv, transactionId: string): Promise<void> {
+  const url = env.SUPABASE_URL;
+  const key = env.SUPABASE_SERVICE_ROLE_KEY;
+  if (!url || !key) return;
+  try {
+    await fetch(
+      `${url}/rest/v1/access_emails?transaction_id=eq.${encodeURIComponent(transactionId)}`,
+      { method: "DELETE", headers: { apikey: key, authorization: `Bearer ${key}`, prefer: "return=minimal" } },
+    );
+  } catch {
+    /* best-effort */
+  }
+}
+
+/**
+ * Fully isolated access-email step. NEVER throws and NEVER affects the access
+ * provisioning that ran before it. Idempotent across Hotmart webhook retries.
+ */
+async function maybeSendAccessEmail(
+  env: HotmartEnv,
+  opts: { email: string; name?: string; transactionId: string; base: Partial<LogRow> },
+): Promise<void> {
+  try {
+    if (!env.BREVO_API_KEY) return; // not configured — skip silently
+    const claimed = await claimAccessEmail(env, opts.transactionId, opts.email);
+    if (!claimed) return; // already sent for this transaction, or claim write failed
+    const r = await sendAccessEmail(env, { email: opts.email, name: opts.name });
+    if (!r.ok) {
+      console.error(`[hotmart] access email failed: ${r.error}`);
+      await releaseAccessEmail(env, opts.transactionId); // allow a retry to resend
+      await logWebhook(env, { ...opts.base, mapped_product: null, result: "email_error", detail: r.error });
+      return;
+    }
+    await logWebhook(env, { ...opts.base, mapped_product: null, result: "email_sent", detail: opts.email });
+  } catch (err) {
+    console.error("[hotmart] access email unexpected error", err);
+  }
+}
+
 export async function handleHotmartWebhook(request: Request, env: HotmartEnv): Promise<Response> {
   if (request.method !== "POST") return json({ error: "method not allowed" }, 405);
   if (!env.HOTMART_HOTTOK) return json({ error: "webhook not configured" }, 503);
@@ -258,9 +479,18 @@ export async function handleHotmartWebhook(request: Request, env: HotmartEnv): P
   }
 
   const event = typeof body.event === "string" ? body.event : "";
-  const data = (body.data ?? {}) as { buyer?: { email?: unknown }; product?: unknown };
+  const data = (body.data ?? {}) as {
+    buyer?: { email?: unknown; name?: unknown };
+    product?: unknown;
+    purchase?: { transaction?: unknown };
+  };
   const p = (data.product ?? {}) as { id?: unknown; name?: unknown };
   const email = norm(data.buyer?.email);
+  const buyerName = typeof data.buyer?.name === "string" ? data.buyer.name : undefined;
+  const transaction =
+    typeof data.purchase?.transaction === "string" && data.purchase.transaction
+      ? data.purchase.transaction
+      : `noTx:${email}`; // fallback: dedupe per buyer when Hotmart omits the transaction
   const base = {
     event,
     product_id: p.id != null ? String(p.id) : undefined,
@@ -316,6 +546,9 @@ export async function handleHotmartWebhook(request: Request, env: HotmartEnv): P
         result: r.ok ? "unblacklisted" : "skipped",
         detail: r.ok ? "main product approved — block lifted" : (r.error ?? "main product"),
       });
+      // Access provisioning is done. The email below is fully isolated: it can
+      // never throw into, block, or undo the access we just granted.
+      await maybeSendAccessEmail(env, { email, name: buyerName, transactionId: transaction, base });
       return json({ ok: true, email, blacklisted: false });
     }
     await logWebhook(env, {
