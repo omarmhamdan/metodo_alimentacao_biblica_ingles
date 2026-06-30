@@ -1,5 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { motion } from "framer-motion";
+import { useState, useEffect } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import {
   Droplets,
   BookOpen,
@@ -9,6 +10,8 @@ import {
   TrendingUp,
   Plus,
   Minus,
+  RotateCcw,
+  X,
 } from "lucide-react";
 import { AppShell } from "@/components/AppShell";
 import { RecipePhoto } from "@/components/RecipePhoto";
@@ -26,6 +29,7 @@ function Dashboard() {
   const { user } = useUser();
   const { daily, update } = useDaily();
   const { t, lang } = useLang();
+  const [dayPicker, setDayPicker] = useState(false);
   const recipes = useRecipes();
   const verso = versiculoDoDia(lang);
   const nome = user?.nome ?? "Amada";
@@ -106,6 +110,14 @@ function Dashboard() {
             <span className="font-medium text-olive">{daily.sequencia}</span>{" "}
             {daily.sequencia === 1 ? t("dash_day_seq") : t("dash_days_seq")}
           </p>
+          {daily.jornadaDiaMax > 1 && (
+            <button
+              onClick={() => setDayPicker(true)}
+              className="mt-2.5 inline-flex items-center gap-1 rounded-full bg-highlight px-2.5 py-1 text-[11px] font-medium text-earth transition-all active:scale-95"
+            >
+              <RotateCcw className="h-3 w-3" /> {t("dash_change_day")}
+            </button>
+          )}
         </motion.div>
 
         <motion.div
@@ -239,7 +251,149 @@ function Dashboard() {
           </Link>
         </section>
       )}
+
+      <DayPicker
+        open={dayPicker}
+        current={daily.jornadaDia}
+        max={daily.jornadaDiaMax}
+        onClose={() => setDayPicker(false)}
+        onSelect={(n) => {
+          update({ jornadaDia: n });
+          setDayPicker(false);
+        }}
+        t={t}
+      />
     </AppShell>
+  );
+}
+
+function DayPicker({
+  open,
+  current,
+  max,
+  onClose,
+  onSelect,
+  t,
+}: {
+  open: boolean;
+  current: number;
+  max: number;
+  onClose: () => void;
+  onSelect: (n: number) => void;
+  t: (
+    k: "dash_day" | "dash_change_day_title" | "dash_change_day_hint" | "dash_go" | "dash_cancel",
+  ) => string;
+}) {
+  // The user can jump to ANY day they have already reached — back or forward —
+  // from day 1 up to their peak (max). A stepper + free numeric entry keeps this
+  // usable whether the peak is 5 or 500 (no giant scrolling grid).
+  const clamp = (n: number) => Math.min(max, Math.max(1, Math.round(n) || 1));
+  const [sel, setSel] = useState(current);
+  // Reset the local selection to where the user actually is each time it opens.
+  useEffect(() => {
+    if (open) setSel(clamp(current));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [open, current, max]);
+
+  return (
+    <AnimatePresence>
+      {open && (
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          className="fixed inset-0 z-[60] flex items-end justify-center bg-black/40 backdrop-blur-sm sm:items-center sm:p-6"
+          onClick={onClose}
+        >
+          <motion.div
+            initial={{ y: 24, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            exit={{ y: 24, opacity: 0 }}
+            transition={{ type: "spring", damping: 26, stiffness: 280 }}
+            onClick={(e) => e.stopPropagation()}
+            className="w-full max-w-md rounded-t-3xl bg-card p-6 pb-[max(1.5rem,env(safe-area-inset-bottom))] shadow-soft sm:rounded-3xl sm:pb-6"
+          >
+            {/* Header */}
+            <div className="mb-1 flex items-start justify-between gap-3">
+              <h2 className="font-serif text-xl leading-tight text-foreground">
+                {t("dash_change_day_title")}
+              </h2>
+              <button
+                onClick={onClose}
+                className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-secondary text-muted-foreground"
+                aria-label={t("dash_cancel")}
+              >
+                <X className="h-4 w-4" />
+              </button>
+            </div>
+            <p className="text-xs leading-relaxed text-muted-foreground">
+              {t("dash_change_day_hint")}
+            </p>
+
+            {/* Stepper: − [ Día N ] + */}
+            <div className="mt-5 flex items-center justify-center gap-4">
+              <button
+                onClick={() => setSel((s) => clamp(s - 1))}
+                disabled={sel <= 1}
+                className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-secondary text-foreground shadow-card transition-all active:scale-90 disabled:opacity-30"
+                aria-label="−1"
+              >
+                <Minus className="h-5 w-5" />
+              </button>
+
+              <div className="flex flex-col items-center">
+                <span className="text-[10px] font-medium uppercase tracking-[0.18em] text-muted-foreground">
+                  {t("dash_day")}
+                </span>
+                <input
+                  type="number"
+                  inputMode="numeric"
+                  min={1}
+                  max={max}
+                  value={sel}
+                  onChange={(e) => setSel(clamp(Number(e.target.value)))}
+                  className="w-24 bg-transparent text-center font-serif text-4xl text-foreground outline-none [appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
+                />
+                <span className="text-[11px] text-muted-foreground">1 – {max}</span>
+              </div>
+
+              <button
+                onClick={() => setSel((s) => clamp(s + 1))}
+                disabled={sel >= max}
+                className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-secondary text-foreground shadow-card transition-all active:scale-90 disabled:opacity-30"
+                aria-label="+1"
+              >
+                <Plus className="h-5 w-5" />
+              </button>
+            </div>
+
+            {/* Quick jumps */}
+            <div className="mt-5 flex justify-center gap-2">
+              <button
+                onClick={() => setSel(1)}
+                className="rounded-full bg-secondary px-3.5 py-1.5 text-xs font-medium text-foreground transition-all active:scale-95"
+              >
+                {t("dash_day")} 1
+              </button>
+              <button
+                onClick={() => setSel(max)}
+                className="rounded-full bg-secondary px-3.5 py-1.5 text-xs font-medium text-foreground transition-all active:scale-95"
+              >
+                {t("dash_day")} {max}
+              </button>
+            </div>
+
+            {/* Confirm */}
+            <button
+              onClick={() => onSelect(clamp(sel))}
+              className="mt-5 w-full rounded-2xl bg-gradient-primary px-5 py-3.5 text-sm font-medium text-primary-foreground shadow-soft transition-all active:scale-[0.98]"
+            >
+              {t("dash_go")} {t("dash_day")} {clamp(sel)}
+            </button>
+          </motion.div>
+        </motion.div>
+      )}
+    </AnimatePresence>
   );
 }
 

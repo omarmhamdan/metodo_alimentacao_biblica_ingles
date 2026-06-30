@@ -25,6 +25,10 @@ export interface DailyState {
   aguaMl: number;
   sucoTomado: boolean;
   jornadaDia: number;
+  /** Highest journey day the user ever reached. Lets them freely move back and
+   *  forth between day 1 and this peak without ever advancing past where they
+   *  actually got. Always >= jornadaDia. */
+  jornadaDiaMax: number;
   sequencia: number;
   ultimaReceita?: string;
   favoritos: string[];
@@ -125,6 +129,7 @@ const defaultDaily = (): DailyState => ({
   aguaMl: 0,
   sucoTomado: false,
   jornadaDia: 1,
+  jornadaDiaMax: 1,
   sequencia: 1,
   favoritos: [],
   pesoHistorico: [],
@@ -134,10 +139,16 @@ const defaultDaily = (): DailyState => ({
 // Load daily from storage, ALWAYS merged over defaults so array fields
 // (favoritos, pesoHistorico, energiaHistorico) are never undefined — a partial
 // daily (e.g. cloud-synced JSON missing fields) used to crash .includes/.map.
-const loadDaily = (): DailyState => ({
-  ...defaultDaily(),
-  ...read<Partial<DailyState>>(KEY_DAILY, {}),
-});
+const loadDaily = (): DailyState => {
+  const d: DailyState = {
+    ...defaultDaily(),
+    ...read<Partial<DailyState>>(KEY_DAILY, {}),
+  };
+  // Backfill the peak for users saved before this field existed: it must never
+  // be lower than the day they're currently on.
+  d.jornadaDiaMax = Math.max(d.jornadaDiaMax ?? 0, d.jornadaDia ?? 1, 1);
+  return d;
+};
 
 // Difference in whole days between two "YYYY-MM-DD" dates (timezone-safe).
 function daysBetween(prev: string, curr: string): number {
@@ -153,12 +164,14 @@ export function useDaily() {
       const gap = daysBetween(d.date, today());
       // gap === 1 (consecutive day) → streak continues; otherwise → reset to 1
       const newStreak = gap === 1 ? (d.sequencia ?? 0) + 1 : 1;
+      const newDay = (d.jornadaDia ?? 0) + 1;
       const nd: DailyState = {
         ...d,
         date: today(),
         aguaMl: 0,
         sucoTomado: false,
-        jornadaDia: (d.jornadaDia ?? 0) + 1,
+        jornadaDia: newDay,
+        jornadaDiaMax: Math.max(d.jornadaDiaMax ?? 0, newDay),
         sequencia: newStreak,
       };
       write(KEY_DAILY, nd);
