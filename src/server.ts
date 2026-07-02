@@ -9,6 +9,7 @@ import {
   handleAccessResolve,
   type DataEnv,
 } from "./lib/data-api";
+import { handlePhotoProxy } from "./lib/photo-proxy";
 
 type ServerEntry = {
   fetch: (request: Request, env: unknown, ctx: unknown) => Promise<Response> | Response;
@@ -93,6 +94,15 @@ export default {
       }
       if (url.pathname === "/api/access/resolve") {
         return await handleAccessResolve(request, env as DataEnv);
+      }
+      // Recipe photo proxy — serves Storage objects via the Cloudflare edge cache
+      // to keep Supabase egress near zero. Falls back to Supabase on any error.
+      if (url.pathname.startsWith("/api/photo/")) {
+        return await handlePhotoProxy(
+          request,
+          env as { SUPABASE_URL?: string },
+          ctx as { waitUntil?: (promise: Promise<unknown>) => void },
+        );
       }
       const handler = await getServerEntry();
       const response = await handler.fetch(request, env, ctx);

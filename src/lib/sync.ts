@@ -94,7 +94,12 @@ export async function uploadRecipePhoto(recipeId: string, dataUrl: string): Prom
 
   const { error: upErr } = await supabase.storage
     .from(PHOTOS_BUCKET)
-    .upload(path, blob, { upsert: true, contentType: blob.type, cacheControl: "3600" });
+    // Paths are cache-busted (`${recipeId}-${Date.now()}`), so a new upload gets a
+    // brand-new URL — the old object is never re-requested. That makes a 1-year
+    // immutable cache safe and cuts Supabase Storage egress (the metered "cached
+    // egress") by ~90%: each client downloads a given photo once, then serves from
+    // its own browser cache instead of re-fetching from the Supabase CDN.
+    .upload(path, blob, { upsert: true, contentType: blob.type, cacheControl: "31536000" });
   if (upErr) {
     console.warn("[Sync] photo upload failed", upErr.message);
     throw new Error(`Falha ao enviar a foto para o Storage do Supabase: ${upErr.message}`);
@@ -113,13 +118,33 @@ export async function uploadRecipePhoto(recipeId: string, dataUrl: string): Prom
   return url;
 }
 
+/**
+ * Rewrite a Supabase Storage public URL to the same-origin Worker photo proxy
+ * (`/api/photo/<file>`), so photos are served from the Cloudflare edge cache
+ * instead of Supabase Storage (which meters egress on the free plan). Any URL
+ * that isn't a recipe-photos Storage object is returned unchanged — the proxy is
+ * purely an egress optimization and never a hard dependency.
+ */
+function toProxiedPhotoUrl(url: string): string {
+  // In local dev the Worker has no SUPABASE_URL binding, so the proxy can't run —
+  // serve the raw Storage URL directly (dev traffic doesn't count toward egress).
+  if (import.meta.env.DEV) return url;
+  const marker = "/storage/v1/object/public/recipe-photos/";
+  const i = url.indexOf(marker);
+  if (i === -1) return url;
+  const file = url.slice(i + marker.length).split(/[?#]/)[0];
+  // Only proxy a flat in-bucket filename; anything odd falls back to the raw URL.
+  if (!file || file.includes("/") || file.includes("..")) return url;
+  return `/api/photo/${file}`;
+}
+
 /** Fetch ALL global recipe photos. */
 export async function fetchRecipePhotos(): Promise<Record<string, string>> {
   if (!supabase) return {};
   const { data, error } = await supabase.from("recipe_photos").select("recipe_id, url");
   if (error || !data) return {};
   const out: Record<string, string> = {};
-  for (const row of data) out[row.recipe_id] = row.url;
+  for (const row of data) out[row.recipe_id] = toProxiedPhotoUrl(row.url);
   return out;
 }
 
