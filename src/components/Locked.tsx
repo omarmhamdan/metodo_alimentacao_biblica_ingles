@@ -52,7 +52,7 @@ const COPY = {
   found: "Access unlocked! 🎉",
   foundOther: "That email has access to {p}, but not to this one. If you think it's a mistake, contact support below.",
   soon: "Checkout coming soon. Contact support to unlock.",
-  support: "Didn't work? Email metodoalimentacionbiblica@gmail.com and we'll unlock your access within minutes.",
+  support: "Didn't work? Email biblicalnutritionmethod@gmail.com and we'll unlock your access within minutes.",
 };
 
 export function Locked({ product, children }: { product: Produto; children: React.ReactNode }) {
@@ -158,15 +158,15 @@ function Paywall({ product }: { product: Produto }) {
               </p>
               {!msg.ok && (
                 <p className="leading-relaxed">
-                  {t.support.split("metodoalimentacionbiblica@gmail.com").map((part, i, arr) => (
+                  {t.support.split("biblicalnutritionmethod@gmail.com").map((part, i, arr) => (
                     <span key={i}>
                       {part}
                       {i < arr.length - 1 && (
                         <a
-                          href="mailto:metodoalimentacionbiblica@gmail.com"
+                          href="mailto:biblicalnutritionmethod@gmail.com"
                           className="font-semibold underline underline-offset-2"
                         >
-                          metodoalimentacionbiblica@gmail.com
+                          biblicalnutritionmethod@gmail.com
                         </a>
                       )}
                     </span>

@@ -25,14 +25,14 @@ export type HotmartEnv = {
 
 // ── Access email (Brevo) ───────────────────────────────────────────────────────
 // Sent once per buyer (idempotent by transaction) when the MAIN product is approved.
-const APP_URL = "https://app.metodoalimentacionbiblica.online";
-const EMAIL_FROM = { name: "The Biblical Nutrition Method", email: "acceso@metodoalimentacionbiblica.online" };
+const APP_URL = "https://app.biblicalnutritionmethod.online";
+const EMAIL_FROM = { name: "The Biblical Nutrition Method", email: "access@biblicalnutritionmethod.online" };
 // Reply-To on the same domain as From (more aligned/trusted than an external Gmail).
-// Replies to acceso@ still land in the Gmail via the Cloudflare Email Routing catch-all.
-const EMAIL_REPLY_TO = { name: "The Biblical Nutrition Method", email: "acceso@metodoalimentacionbiblica.online" };
+// Replies to access@ still land in the Gmail via the Cloudflare Email Routing catch-all.
+const EMAIL_REPLY_TO = { name: "The Biblical Nutrition Method", email: "access@biblicalnutritionmethod.online" };
 // Hidden BCC archive: a copy of every access email lands in this inbox, so the
 // owner has a "sent items" feed on their phone (Gmail filter can auto-label it).
-const EMAIL_ARCHIVE_BCC = "metodoalimentacionbiblica@gmail.com";
+const EMAIL_ARCHIVE_BCC = "biblicalnutritionmethod@gmail.com";
 const EMAIL_SUBJECT = "Your access to The Biblical Nutrition Method";
 // Delay the access email a few minutes after the webhook (purchase moment) via
 // Brevo's `scheduledAt`. Brevo holds and delivers it — no extra infra needed.

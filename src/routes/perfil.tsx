@@ -25,7 +25,7 @@ export const Route = createFileRoute("/perfil")({
 
 type Modal = "edit_goal" | "edit_name" | "help" | null;
 
-const SUPPORT_EMAIL = "metodoalimentacionbiblica@gmail.com";
+const SUPPORT_EMAIL = "biblicalnutritionmethod@gmail.com";
 
 function PerfilPage() {
   const { user, save } = useUser();

@@ -19,7 +19,7 @@ Domínio do app: https://app.metodoalimentacionbiblica.online
 É um PWA (Progressive Web App): instalável no celular como ícone,
 funciona offline depois de instalado.
 
-E-MAIL OFICIAL DE SUPORTE: metodoalimentacionbiblica@gmail.com
+E-MAIL OFICIAL DE SUPORTE: biblicalnutritionmethod@gmail.com
 (é o e-mail usado em todo o app — telas de bloqueio, FAQ, paywall etc.)
 
 ================================================================
@@ -95,7 +95,7 @@ PRODUTO PRINCIPAL (recompra / link de garantia):
   mostra mensagem dizendo que aquele e-mail tem acesso a X mas não a Y
   — é esperado, pois são produtos vendidos separados.
 - Se mesmo com e-mail certo não liberar: orientar a escrever para
-  metodoalimentacionbiblica@gmail.com — equipe libera manualmente em
+  biblicalnutritionmethod@gmail.com — equipe libera manualmente em
   poucos minutos.
 - Bloqueio por reembolso: se o cliente pediu reembolso/chargeback do
   PRODUTO PRINCIPAL, o e-mail é bloqueado e o app mostra tela vermelha
@@ -118,7 +118,7 @@ PRODUTO PRINCIPAL (recompra / link de garantia):
 ================================================================
 - Garantia segue as políticas padrão da plataforma de compra (Hotmart).
 - Antes de pedir reembolso, orientação do próprio app é: escrever pra
-  metodoalimentacionbiblica@gmail.com — "quase sempre resolvemos o
+  biblicalnutritionmethod@gmail.com — "quase sempre resolvemos o
   problema na hora" (problemas de acesso geralmente são só e-mail
   errado/digitação ou delay do webhook).
 - Reembolso do produto principal aprovado/efetivado → bloqueia acesso
@@ -130,12 +130,12 @@ PRODUTO PRINCIPAL (recompra / link de garantia):
 
 Q: Comprei mas não consigo acessar, e agora? (PT)
 A: "Entre com o mesmo e-mail que usou na compra. Se ainda não liberar,
-escreva pra gente em metodoalimentacionbiblica@gmail.com que liberamos
+escreva pra gente em biblicalnutritionmethod@gmail.com que liberamos
 seu acesso em poucos minutos."
 
 Q: Compré pero no puedo acceder, ¿qué hago? (ES)
 A: "Ingresa con el mismo correo que usaste en la compra. Si aún no
-entra, escríbenos a metodoalimentacionbiblica@gmail.com y liberamos tu
+entra, escríbenos a biblicalnutritionmethod@gmail.com y liberamos tu
 acceso en pocos minutos."
 
 Q: Como instalo o app no meu celular? (PT)
@@ -149,7 +149,7 @@ favoritos e objetivos voltam automaticamente."
 Q: Tenho garantia? (PT)
 A: "Sim. Você tem garantia de reembolso conforme as políticas da
 plataforma de compra. Antes de pedir, fale com a gente em
-metodoalimentacionbiblica@gmail.com: quase sempre resolvemos o
+biblicalnutritionmethod@gmail.com: quase sempre resolvemos o
 problema na hora."
 
 (Equivalentes em espanhol seguem o mesmo conteúdo, trocando só idioma.)
@@ -194,7 +194,7 @@ FAQ específico do Protocolo Anti-Inflamação:
   pra comprar de novo" → Pedir o e-mail exato da compra (Hotmart) e
   confirmar se está digitando exatamente esse e-mail no login/restore;
   se sim, escalar pra liberação manual via
-  metodoalimentacionbiblica@gmail.com.
+  biblicalnutritionmethod@gmail.com.
 - "Recebi e-mail dizendo que meu acesso foi bloqueado" → Indica
   reembolso/chargeback processado no produto principal; para
   reverter, only opção é fazer nova compra aprovada (link de recompra
@@ -204,7 +204,7 @@ FAQ específico do Protocolo Anti-Inflamação:
 9. LINKS ÚTEIS
 ================================================================
 - App: https://app.metodoalimentacionbiblica.online
-- Suporte: metodoalimentacionbiblica@gmail.com
+- Suporte: biblicalnutritionmethod@gmail.com
 - Checkout produto principal (recompra/garantia):
   https://pay.hotmart.com/E106250747Q?checkoutMode=10
 - Checkout Protocolo Anti-Inflamação: https://pay.hotmart.com/A106251023T
@@ -217,7 +217,7 @@ FAQ específico do Protocolo Anti-Inflamação:
 - Não revelar dados de outro cliente.
 - Não liberar acesso manualmente (isso é ação de admin/backend) —
   só orientar e, se preciso, escalar pra equipe humana via
-  metodoalimentacionbiblica@gmail.com.
+  biblicalnutritionmethod@gmail.com.
 - Casos de bloqueio por reembolso contestado, fraude, ou cobrança
   indevida → sempre escalar pra humano, não dar resposta automática
   definitiva.

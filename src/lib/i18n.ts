@@ -123,7 +123,7 @@ export const T = {
   help_close: "Close",
   faq_access_q: "I purchased but can't get in — what do I do?",
   faq_access_a:
-    "Sign in with the same email you used at checkout. If it still doesn't work, email us at metodoalimentacionbiblica@gmail.com and we'll unlock your access within minutes.",
+    "Sign in with the same email you used at checkout. If it still doesn't work, email us at biblicalnutritionmethod@gmail.com and we'll unlock your access within minutes.",
   faq_install_q: "How do I install the app on my phone?",
   faq_install_a:
     'Open your browser menu and tap "Add to Home Screen". The app will appear as a regular icon without taking up storage.',
@@ -132,7 +132,7 @@ export const T = {
     "No. Sign in with the same email on your new device and your progress, favorites, and goals come back automatically.",
   faq_refund_q: "Is there a guarantee?",
   faq_refund_a:
-    "Yes. You have a money-back guarantee under the purchase platform's policies. Before requesting it, email us at metodoalimentacionbiblica@gmail.com — we can almost always fix the issue right away.",
+    "Yes. You have a money-back guarantee under the purchase platform's policies. Before requesting it, email us at biblicalnutritionmethod@gmail.com — we can almost always fix the issue right away.",
   prof_verse:
     '"Come to me, all you who are weary and burdened, and I will give you rest." — Matthew 11:28',
 
