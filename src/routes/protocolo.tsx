@@ -21,14 +21,14 @@ import {
   FlaskConical,
 } from "lucide-react";
 import { AppShell } from "@/components/AppShell";
-import { useLang, useStoredImageMap } from "@/lib/store";
+import { useStoredImageMap } from "@/lib/store";
 import { protocoloContent, type Refeicao, type Dia, type ProtocoloContent } from "@/lib/protocolo";
 import { bonusFallbacks } from "@/lib/bonus-images";
 import { Ed, EditImage } from "@/components/Editable";
 import { Locked } from "@/components/Locked";
 
-const PT = protocoloContent.pt;
-const ES = protocoloContent.es;
+const PT = protocoloContent;
+const ES = protocoloContent;
 import {
   Accordion,
   AccordionItem,
@@ -41,8 +41,7 @@ export const Route = createFileRoute("/protocolo")({
 });
 
 function Protocolo() {
-  const { lang } = useLang();
-  const c = protocoloContent[lang];
+  const c = protocoloContent;
   const [sel, setSel] = useState<number | null>(null);
   const dia = sel ? c.dias.find((d) => d.numero === sel) : null;
 
@@ -60,7 +59,7 @@ function Protocolo() {
               total={c.dias.length}
             />
           ) : (
-            <Landing key="landing" c={c} onPick={setSel} lang={lang} />
+            <Landing key="landing" c={c} onPick={setSel} />
           )}
         </AnimatePresence>
       </Locked>
@@ -72,11 +71,9 @@ function Protocolo() {
 function Landing({
   c,
   onPick,
-  lang,
 }: {
   c: ProtocoloContent;
   onPick: (n: number) => void;
-  lang: "pt" | "es";
 }) {
   const img = useStoredImageMap(bonusFallbacks);
   return (
@@ -171,7 +168,7 @@ function Landing({
                 <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent" />
                 {d.ritual && (
                   <span className="absolute right-2 top-2 inline-flex items-center gap-1 rounded-full bg-earth/90 px-2 py-0.5 text-[9px] font-medium uppercase tracking-wider text-cream">
-                    <Sparkles className="h-2.5 w-2.5" /> {lang === "es" ? "Bono" : "Bônus"}
+                    <Sparkles className="h-2.5 w-2.5" /> Bonus
                   </span>
                 )}
                 <div className="absolute inset-x-0 bottom-0 p-2.5 text-cream">
@@ -235,7 +232,7 @@ function Landing({
             <Faq c={c} />
           </GuideCard>
           <GuideCard icon={BookHeart} title={c.secFinal} accent>
-            <Final c={c} lang={lang} />
+            <Final c={c} />
           </GuideCard>
         </div>
         <div className="h-6" />
@@ -1004,7 +1001,7 @@ function Faq({ c }: { c: ProtocoloContent }) {
   );
 }
 
-function Final({ c, lang }: { c: ProtocoloContent; lang: "pt" | "es" }) {
+function Final({ c }: { c: ProtocoloContent }) {
   return (
     <>
       <div className="rounded-3xl bg-gradient-devotional p-5">
@@ -1030,9 +1027,7 @@ function Final({ c, lang }: { c: ProtocoloContent; lang: "pt" | "es" }) {
         to="/receitas"
         className="mt-4 block w-full rounded-2xl bg-gradient-primary px-5 py-4 text-center text-sm font-medium text-primary-foreground shadow-soft transition-all active:scale-[0.98]"
       >
-        {lang === "es"
-          ? "Continuar en el Método Alimentación Bíblica →"
-          : "Continuar no Método Alimentação Bíblica →"}
+        Continue in the Biblical Nutrition Method →
       </Link>
     </>
   );

@@ -51,7 +51,6 @@ import {
 } from "@/lib/sync";
 import { useUser } from "@/lib/store";
 import { recipes } from "@/lib/recipes";
-import { recipeTranslationsES } from "@/lib/recipes-es";
 import { bonusSlots } from "@/lib/bonus-images";
 import { setEditMode } from "@/lib/edit-store";
 import {
@@ -213,7 +212,7 @@ function AdminPage() {
   };
 
   const updateRecipeOverride = useCallback(
-    (id: string, field: "imagem" | "titulo" | "titulo_es", value: string) => {
+    (id: string, field: "imagem" | "titulo", value: string) => {
       setOverrides((prev) => ({
         ...prev,
         recipes: { ...prev.recipes, [id]: { ...prev.recipes[id], [field]: value } },
@@ -599,11 +598,7 @@ function AdminPage() {
                 const hasCustomImg = Boolean(
                   adminImages[r.id] || (ov.imagem?.trim() && !ov.imagem.startsWith("data:")),
                 );
-                const trES = recipeTranslationsES[r.id];
-                const currentTitlePT = ov.titulo?.trim() ? ov.titulo : r.titulo;
-                const currentTitleES = ov.titulo_es?.trim()
-                  ? ov.titulo_es
-                  : (trES?.titulo ?? r.titulo);
+                const currentTitle = ov.titulo?.trim() ? ov.titulo : r.titulo;
 
                 return (
                   <RecipeCard
@@ -612,8 +607,7 @@ function AdminPage() {
                     ov={ov}
                     currentImg={currentImg}
                     hasCustomImg={hasCustomImg}
-                    currentTitlePT={currentTitlePT}
-                    currentTitleES={currentTitleES}
+                    currentTitle={currentTitle}
                     imgKb={imgSizes[r.id]}
                     onImgChange={(v) => updateRecipeOverride(r.id, "imagem", v)}
                     onPhotoUpload={(file) => handlePhotoUpload(r.id, file)}
@@ -628,8 +622,7 @@ function AdminPage() {
                       updateRecipeOverride(r.id, "imagem", "");
                       deleteRecipePhoto(r.id).catch(() => {});
                     }}
-                    onTitlePTChange={(v) => updateRecipeOverride(r.id, "titulo", v)}
-                    onTitleESChange={(v) => updateRecipeOverride(r.id, "titulo_es", v)}
+                    onTitleChange={(v) => updateRecipeOverride(r.id, "titulo", v)}
                   />
                 );
               })}
@@ -1188,43 +1181,35 @@ function RecipeCard({
   ov,
   currentImg,
   hasCustomImg,
-  currentTitlePT,
-  currentTitleES,
+  currentTitle,
   imgKb,
   onImgChange,
   onPhotoUpload,
   onRestoreImg,
-  onTitlePTChange,
-  onTitleESChange,
+  onTitleChange,
 }: {
   recipe: import("@/lib/recipes").Receita;
-  ov: { imagem?: string; titulo?: string; titulo_es?: string };
+  ov: { imagem?: string; titulo?: string };
   currentImg: string;
   hasCustomImg: boolean;
-  currentTitlePT: string;
-  currentTitleES: string;
+  currentTitle: string;
   imgKb?: number;
   onImgChange: (v: string) => void;
   onPhotoUpload: (f: File) => void;
   onRestoreImg: () => void;
-  onTitlePTChange: (v: string) => void;
-  onTitleESChange: (v: string) => void;
+  onTitleChange: (v: string) => void;
 }) {
   const fileRef = useRef<HTMLInputElement>(null);
   const [imgPreviewErr, setImgPreviewErr] = useState(false);
 
   // Local input state — pre-filled with current values so user can select/copy/edit
-  const [titlePT, setTitlePT] = useState(currentTitlePT);
-  const [titleES, setTitleES] = useState(currentTitleES);
+  const [title, setTitle] = useState(currentTitle);
   const [urlInput, setUrlInput] = useState(ov.imagem?.startsWith("data:") ? "" : (ov.imagem ?? ""));
 
   // Sync from parent when overrides change externally
   useEffect(() => {
-    setTitlePT(currentTitlePT);
-  }, [currentTitlePT]);
-  useEffect(() => {
-    setTitleES(currentTitleES);
-  }, [currentTitleES]);
+    setTitle(currentTitle);
+  }, [currentTitle]);
 
   // hasCustomImg comes from parent (checks IDB + URL overrides)
 
@@ -1324,28 +1309,14 @@ function RecipeCard({
           </div>
           <div>
             <label className="mb-1 block text-[10px] text-stone-500">
-              Título PT — clique para editar/copiar
+              Title — click to edit/copy
             </label>
             <input
               type="text"
-              value={titlePT}
+              value={title}
               onChange={(e) => {
-                setTitlePT(e.target.value);
-                onTitlePTChange(e.target.value);
-              }}
-              className="w-full rounded-xl border border-stone-600 bg-stone-800 px-3 py-2 text-xs text-white outline-none focus:border-olive/50"
-            />
-          </div>
-          <div>
-            <label className="mb-1 block text-[10px] text-stone-500">
-              Título ES — clique para editar/copiar
-            </label>
-            <input
-              type="text"
-              value={titleES}
-              onChange={(e) => {
-                setTitleES(e.target.value);
-                onTitleESChange(e.target.value);
+                setTitle(e.target.value);
+                onTitleChange(e.target.value);
               }}
               className="w-full rounded-xl border border-stone-600 bg-stone-800 px-3 py-2 text-xs text-white outline-none focus:border-olive/50"
             />

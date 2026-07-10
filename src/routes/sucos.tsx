@@ -3,45 +3,27 @@ import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { ChevronDown, Sparkles, ChefHat, Leaf } from "lucide-react";
 import { AppShell } from "@/components/AppShell";
-import { useLang } from "@/lib/store";
 import { sucos, sucoCats, type SucoCat } from "@/lib/sucos";
 
 export const Route = createFileRoute("/sucos")({
   component: SucosPage,
 });
 
-const chrome = {
-  pt: {
-    badge: "Biblioteca de sucos",
-    title: "Sucos da Terra",
-    subtitle: "Mais de 50 sucos naturais para cada necessidade do corpo. Simples, vivos e bíblicos.",
-    todos: "Todos",
-    ritualBadge: "Ritual da manhã",
-    ritualTitle: "Suco Sagrado da Manhã",
-    ritualSub: "O suco-ritual do dia, com versículo e marcação de progresso.",
-    ritualCta: "Abrir ritual →",
-    lblIngredientes: "Ingredientes",
-    lblPreparo: "Modo de preparo",
-    count: (n: number) => `${n} sucos`,
-  },
-  es: {
-    badge: "Biblioteca de jugos",
-    title: "Jugos de la Tierra",
-    subtitle: "Más de 50 jugos naturales para cada necesidad del cuerpo. Simples, vivos y bíblicos.",
-    todos: "Todos",
-    ritualBadge: "Ritual de la mañana",
-    ritualTitle: "Jugo Sagrado de la Mañana",
-    ritualSub: "El jugo-ritual del día, con versículo y registro de progreso.",
-    ritualCta: "Abrir ritual →",
-    lblIngredientes: "Ingredientes",
-    lblPreparo: "Modo de preparación",
-    count: (n: number) => `${n} jugos`,
-  },
+const c = {
+  badge: "Juice library",
+  title: "Juices of the Land",
+  subtitle: "50+ natural juices for every need of the body. Simple, living, and biblical.",
+  todos: "All",
+  ritualBadge: "Morning ritual",
+  ritualTitle: "Sacred Morning Juice",
+  ritualSub: "The juice-ritual of the day, with a verse and progress tracking.",
+  ritualCta: "Open ritual →",
+  lblIngredientes: "Ingredients",
+  lblPreparo: "Instructions",
+  count: (n: number) => `${n} juices`,
 };
 
 function SucosPage() {
-  const { lang } = useLang();
-  const c = chrome[lang];
   const [cat, setCat] = useState<SucoCat | "todos">("todos");
   const [open, setOpen] = useState<string | null>(null);
 
@@ -80,7 +62,7 @@ function SucosPage() {
         </Chip>
         {sucoCats.map((sc) => (
           <Chip key={sc.id} active={cat === sc.id} onClick={() => setCat(sc.id)}>
-            {sc.emoji} {sc[lang]}
+            {sc.emoji} {sc.label}
           </Chip>
         ))}
       </div>
@@ -101,10 +83,10 @@ function SucosPage() {
               >
                 <span className="flex-1">
                   <span className="block font-serif text-base leading-tight text-foreground">
-                    {s.nome[lang]}
+                    {s.nome}
                   </span>
                   <span className="mt-0.5 block text-xs leading-snug text-muted-foreground">
-                    {s.beneficio[lang]}
+                    {s.beneficio}
                   </span>
                 </span>
                 <ChevronDown
@@ -125,7 +107,7 @@ function SucosPage() {
                         <ChefHat className="h-3 w-3" /> {c.lblIngredientes}
                       </h4>
                       <ul className="space-y-1">
-                        {s.ingredientes[lang].map((it, i) => (
+                        {s.ingredientes.map((it, i) => (
                           <li
                             key={i}
                             className="flex items-start gap-2 text-[13px] text-muted-foreground"
@@ -139,7 +121,7 @@ function SucosPage() {
                         {c.lblPreparo}
                       </h4>
                       <ol className="space-y-1.5">
-                        {s.preparo[lang].map((p, i) => (
+                        {s.preparo.map((p, i) => (
                           <li key={i} className="flex gap-2.5 text-[13px] text-muted-foreground">
                             <span className="font-serif text-xs text-earth">{i + 1}.</span>
                             <span className="leading-relaxed">{p}</span>

@@ -4,7 +4,7 @@ import { motion } from "framer-motion";
 import { ArrowLeft, Heart, Clock, ChefHat, Sparkles } from "lucide-react";
 import { AppShell } from "@/components/AppShell";
 import { EditImage, EdI18n } from "@/components/Editable";
-import { getRecipeLang, categoriaES, dificuldadeES } from "@/lib/recipes";
+import { getRecipeMerged } from "@/lib/recipes";
 import { useDaily, useLang } from "@/lib/store";
 
 import { getRecipe as _getRecipe } from "@/lib/recipes";
@@ -16,20 +16,16 @@ export const Route = createFileRoute("/receitas/$id")({
     if (!r) throw notFound();
     return { recipe: r };
   },
-  // title set by AppShell bootstrap (per-language)
   notFoundComponent: NotFoundRecipe,
 });
 
 function NotFoundRecipe() {
-  const { lang } = useLang();
   return (
     <AppShell>
       <div className="p-10 text-center">
-        <h1 className="font-serif text-2xl">
-          {lang === "es" ? "Receta no encontrada" : "Receita não encontrada"}
-        </h1>
+        <h1 className="font-serif text-2xl">Recipe not found</h1>
         <Link to="/receitas" className="mt-4 inline-block text-sm text-earth underline">
-          {lang === "es" ? "Volver" : "Voltar"}
+          Back
         </Link>
       </div>
     </AppShell>
@@ -40,11 +36,11 @@ function ReceitaDetalhe() {
   const { recipe: base } = Route.useLoaderData() as { recipe: import("@/lib/recipes").Receita };
   const navigate = useNavigate();
   const { daily, toggleFavorito, update } = useDaily();
-  const { t, lang } = useLang();
-  // Apply language translation at render time
-  const r = getRecipeLang(base.id, lang) ?? base;
-  const catLabel = lang === "es" ? categoriaES[base.categoria] : base.categoria;
-  const difLabel = lang === "es" ? dificuldadeES[base.dificuldade] : base.dificuldade;
+  const { t } = useLang();
+  // Apply admin overrides + uploaded image at render time
+  const r = getRecipeMerged(base.id) ?? base;
+  const catLabel = r.categoria;
+  const difLabel = r.dificuldade;
   const isFav = daily.favoritos.includes(r.id);
 
   useEffect(() => {
@@ -73,7 +69,7 @@ function ReceitaDetalhe() {
           <button
             onClick={() => toggleFavorito(r.id)}
             className={`absolute right-4 top-20 flex h-10 w-10 items-center justify-center rounded-full backdrop-blur shadow-card ${isFav ? "bg-terracotta text-cream" : "bg-cream/85 text-earth"}`}
-            aria-label="Favoritar"
+            aria-label="Favorite"
           >
             <Heart className="h-4 w-4" fill={isFav ? "currentColor" : "none"} />
           </button>

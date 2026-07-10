@@ -26,14 +26,14 @@ export type HotmartEnv = {
 // ── Access email (Brevo) ───────────────────────────────────────────────────────
 // Sent once per buyer (idempotent by transaction) when the MAIN product is approved.
 const APP_URL = "https://app.metodoalimentacionbiblica.online";
-const EMAIL_FROM = { name: "Método Alimentación Bíblica", email: "acceso@metodoalimentacionbiblica.online" };
+const EMAIL_FROM = { name: "The Biblical Nutrition Method", email: "acceso@metodoalimentacionbiblica.online" };
 // Reply-To on the same domain as From (more aligned/trusted than an external Gmail).
 // Replies to acceso@ still land in the Gmail via the Cloudflare Email Routing catch-all.
-const EMAIL_REPLY_TO = { name: "Método Alimentación Bíblica", email: "acceso@metodoalimentacionbiblica.online" };
+const EMAIL_REPLY_TO = { name: "The Biblical Nutrition Method", email: "acceso@metodoalimentacionbiblica.online" };
 // Hidden BCC archive: a copy of every access email lands in this inbox, so the
 // owner has a "sent items" feed on their phone (Gmail filter can auto-label it).
 const EMAIL_ARCHIVE_BCC = "metodoalimentacionbiblica@gmail.com";
-const EMAIL_SUBJECT = "Tu acceso al Método Alimentación Bíblica";
+const EMAIL_SUBJECT = "Your access to The Biblical Nutrition Method";
 // Delay the access email a few minutes after the webhook (purchase moment) via
 // Brevo's `scheduledAt`. Brevo holds and delivers it — no extra infra needed.
 const SEND_DELAY_MS = 3 * 60 * 1000;
@@ -265,46 +265,46 @@ async function logWebhook(env: HotmartEnv, row: LogRow): Promise<void> {
   }
 }
 
-/** Spanish, responsive, image-free HTML body for the access email. */
+/** English, responsive, image-free HTML body for the access email. */
 function accessEmailHtml(saludo: string): string {
   return `<!DOCTYPE html>
-<html lang="es">
+<html lang="en">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>${EMAIL_SUBJECT}</title>
 </head>
 <body style="margin:0;padding:0;background-color:#f4f1ea;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;color:#3a3a3a;">
-  <span style="display:none;max-height:0;overflow:hidden;opacity:0;">Tu compra fue aprobada y tu acceso ya está activo. Entra con tu correo.</span>
+  <span style="display:none;max-height:0;overflow:hidden;opacity:0;">Your purchase was approved and your access is now active. Sign in with your email.</span>
   <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background-color:#f4f1ea;">
     <tr>
       <td align="center" style="padding:24px 12px;">
         <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="max-width:560px;background-color:#ffffff;border-radius:14px;overflow:hidden;box-shadow:0 1px 4px rgba(0,0,0,0.06);">
           <tr>
             <td style="background-color:#5a7247;padding:28px 32px;text-align:center;">
-              <div style="color:#ffffff;font-size:18px;font-weight:600;letter-spacing:0.3px;">Método Alimentación Bíblica</div>
+              <div style="color:#ffffff;font-size:18px;font-weight:600;letter-spacing:0.3px;">The Biblical Nutrition Method</div>
             </td>
           </tr>
           <tr>
             <td style="padding:32px 32px 8px 32px;">
               <p style="margin:0 0 18px 0;font-size:18px;font-weight:600;color:#2f3a25;">${saludo}</p>
               <p style="margin:0 0 16px 0;font-size:16px;line-height:1.6;">
-                Tu compra fue aprobada y <strong>tu acceso ya está activo</strong>. ✨
-                Gracias por dar este paso hacia una alimentación más sana, sencilla y llena de sentido.
+                Your purchase was approved and <strong>your access is now active</strong>. ✨
+                Thank you for taking this step toward eating that's healthier, simpler, and full of meaning.
               </p>
               <p style="margin:0 0 8px 0;font-size:16px;line-height:1.6;">
-                Para entrar es muy simple: <strong>tu usuario es este mismo correo electrónico</strong>.
-                No necesitas crear ninguna contraseña — solo ingresa con tu email y empieza.
+                Signing in is very simple: <strong>your username is this same email address</strong>.
+                You don't need to create any password — just enter your email and get started.
               </p>
             </td>
           </tr>
           <tr>
             <td style="padding:16px 32px 24px 32px;text-align:center;">
               <a href="${APP_URL}" style="display:inline-block;background-color:#5a7247;color:#ffffff;text-decoration:none;font-size:16px;font-weight:600;padding:14px 34px;border-radius:10px;">
-                Entrar al Método
+                Enter the Method
               </a>
               <p style="margin:14px 0 0 0;font-size:13px;color:#7a7a72;">
-                o copia este enlace: <br>
+                or copy this link: <br>
                 <a href="${APP_URL}" style="color:#5a7247;">${APP_URL}</a>
               </p>
             </td>
@@ -312,30 +312,30 @@ function accessEmailHtml(saludo: string): string {
           <tr>
             <td style="padding:0 32px 8px 32px;">
               <p style="margin:0 0 16px 0;font-size:15px;line-height:1.6;color:#555;">
-                Funciona en cualquier dispositivo — celular, tablet o computadora — y puedes
-                guardarlo en la pantalla de inicio para abrirlo como una app.
+                It works on any device — phone, tablet, or computer — and you can
+                save it to your home screen to open it like an app.
               </p>
               <p style="margin:0 0 16px 0;font-size:15px;line-height:1.6;color:#555;">
-                Si también compraste el <strong>Protocolo Antiinflamación de 7 Días</strong> o la
-                <strong>Guía Mesa Única</strong>, ya quedaron liberados para tu acceso en este mismo enlace.
+                If you also purchased the <strong>7-Day Anti-Inflammatory Protocol</strong> or
+                <strong>The Family Table Guide</strong>, they're already unlocked for your access at this same link.
               </p>
               <p style="margin:0 0 16px 0;font-size:15px;line-height:1.6;color:#555;">
-                ¿Tienes alguna duda? Solo <strong>responde a este correo</strong> y con gusto te ayudamos.
+                Any questions? Just <strong>reply to this email</strong> and we'll be glad to help.
               </p>
             </td>
           </tr>
           <tr>
             <td style="padding:8px 32px 32px 32px;border-top:1px solid #eee;">
               <p style="margin:18px 0 4px 0;font-size:15px;line-height:1.5;color:#3a3a3a;">
-                Con cariño,<br>
+                With care,<br>
                 <strong>Beatriz Morales</strong>
               </p>
-              <p style="margin:0;font-size:13px;color:#8a8a82;">Método Alimentación Bíblica</p>
+              <p style="margin:0;font-size:13px;color:#8a8a82;">The Biblical Nutrition Method</p>
             </td>
           </tr>
         </table>
         <p style="max-width:560px;margin:18px auto 0 auto;font-size:11px;line-height:1.5;color:#a8a8a0;text-align:center;">
-          Recibiste este correo porque realizaste una compra del Método Alimentación Bíblica.
+          You received this email because you made a purchase of The Biblical Nutrition Method.
         </p>
       </td>
     </tr>
@@ -348,21 +348,21 @@ function accessEmailHtml(saludo: string): string {
 function accessEmailText(saludo: string): string {
   return `${saludo}
 
-Tu compra fue aprobada y tu acceso ya está activo. Gracias por dar este paso hacia una alimentación más sana, sencilla y llena de sentido.
+Your purchase was approved and your access is now active. Thank you for taking this step toward eating that's healthier, simpler, and full of meaning.
 
-Para entrar es muy simple: tu usuario es este mismo correo electrónico. No necesitas crear ninguna contraseña — solo ingresa con tu email y empieza.
+Signing in is very simple: your username is this same email address. You don't need to create any password — just enter your email and get started.
 
-Entra al Método: ${APP_URL}
+Enter the Method: ${APP_URL}
 
-Funciona en cualquier dispositivo (celular, tablet o computadora) y puedes guardarlo en la pantalla de inicio para abrirlo como una app.
+It works on any device (phone, tablet, or computer) and you can save it to your home screen to open it like an app.
 
-Si también compraste el Protocolo Antiinflamación de 7 Días o la Guía Mesa Única, ya quedaron liberados para tu acceso en este mismo enlace.
+If you also purchased the 7-Day Anti-Inflammatory Protocol or The Family Table Guide, they're already unlocked for your access at this same link.
 
-¿Tienes alguna duda? Solo responde a este correo y con gusto te ayudamos.
+Any questions? Just reply to this email and we'll be glad to help.
 
-Con cariño,
+With care,
 Beatriz Morales
-Método Alimentación Bíblica`;
+The Biblical Nutrition Method`;
 }
 
 /** Send the access email via Brevo. Returns ok/error; never throws. */
@@ -373,7 +373,7 @@ async function sendAccessEmail(
   const key = env.BREVO_API_KEY;
   if (!key) return { ok: false, error: "brevo not configured" };
   const firstName = (opts.name ?? "").trim().split(/\s+/)[0] ?? "";
-  const saludo = firstName ? `¡Hola, ${firstName}!` : "¡Hola!";
+  const saludo = firstName ? `Hi, ${firstName}!` : "Hi there!";
   try {
     const res = await fetch("https://api.brevo.com/v3/smtp/email", {
       method: "POST",

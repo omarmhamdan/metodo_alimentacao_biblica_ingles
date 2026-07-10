@@ -18,7 +18,7 @@ export const Route = createFileRoute("/")({
 function LandingLogin() {
   const { user, save } = useUser();
   const navigate = useNavigate();
-  const { t, lang, setLang } = useLang();
+  const { t } = useLang();
   const [mode, setMode] = useState<"login" | "signup">("login");
   const [email, setEmail] = useState("");
   const [nome, setNome] = useState("");
@@ -26,16 +26,11 @@ function LandingLogin() {
   const [emailError, setEmailError] = useState<"" | "empty" | "invalid">("");
   const [blocked, setBlocked] = useState<BlacklistInfo | null>(null);
 
-  // Translated on render so language toggle updates the message live.
   const emailErrorMsg = !emailError
     ? ""
     : emailError === "empty"
-      ? lang === "es"
-        ? "Escribe tu email para continuar."
-        : "Digite seu email para continuar."
-      : lang === "es"
-        ? "Email inválido. Verifica el formato (ej.: nombre@gmail.com)."
-        : "Email inválido. Verifique o formato (ex.: nome@gmail.com).";
+      ? "Enter your email to continue."
+      : "Invalid email. Check the format (e.g., name@gmail.com).";
 
   // Email needs local-part + "@" + domain + "." + TLD (any TLD: .com, .br, .net, .io, .ai…)
   const isValidEmail = (e: string) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(e.trim());
@@ -130,20 +125,6 @@ function LandingLogin() {
   if (blocked) {
     return (
       <div className="relative mx-auto min-h-screen w-full max-w-md overflow-hidden bg-background">
-        <div className="sticky top-0 z-20 flex items-center justify-center gap-2 bg-cream/95 px-4 py-2.5 backdrop-blur border-b border-border/40">
-          <button
-            onClick={() => setLang("es")}
-            className={`flex-1 max-w-[170px] rounded-xl px-3 py-2 text-xs font-semibold transition-all ${lang === "es" ? "bg-gradient-primary text-primary-foreground shadow-soft" : "bg-card text-muted-foreground border border-border"}`}
-          >
-            🇨🇴 Español
-          </button>
-          <button
-            onClick={() => setLang("pt")}
-            className={`flex-1 max-w-[170px] rounded-xl px-3 py-2 text-xs font-semibold transition-all ${lang === "pt" ? "bg-gradient-primary text-primary-foreground shadow-soft" : "bg-card text-muted-foreground border border-border"}`}
-          >
-            🇧🇷 Português
-          </button>
-        </div>
         <BlacklistBlock />
       </div>
     );
@@ -151,34 +132,6 @@ function LandingLogin() {
 
   return (
     <div className="relative mx-auto min-h-screen w-full max-w-md overflow-hidden bg-background">
-      {/* Prominent language picker — pinned to the top of the screen */}
-      <div className="sticky top-0 z-20 flex items-center justify-center gap-2 bg-cream/95 backdrop-blur px-4 py-2.5 border-b border-border/40">
-        <button
-          onClick={() => setLang("es")}
-          className={`flex-1 max-w-[170px] flex items-center justify-center gap-2 rounded-xl px-3 py-2 text-xs font-semibold transition-all ${
-            lang === "es"
-              ? "bg-gradient-primary text-primary-foreground shadow-soft"
-              : "bg-card text-muted-foreground border border-border hover:border-olive/40"
-          }`}
-          aria-pressed={lang === "es"}
-        >
-          <span className="text-base">🇨🇴</span> Español
-          {lang === "es" && <span className="text-[10px]">✓</span>}
-        </button>
-        <button
-          onClick={() => setLang("pt")}
-          className={`flex-1 max-w-[170px] flex items-center justify-center gap-2 rounded-xl px-3 py-2 text-xs font-semibold transition-all ${
-            lang === "pt"
-              ? "bg-gradient-primary text-primary-foreground shadow-soft"
-              : "bg-card text-muted-foreground border border-border hover:border-olive/40"
-          }`}
-          aria-pressed={lang === "pt"}
-        >
-          <span className="text-base">🇧🇷</span> Português
-          {lang === "pt" && <span className="text-[10px]">✓</span>}
-        </button>
-      </div>
-
       {/* PWA standalone banner — first time opening the installed app */}
       {isStandalone && !user && (
         <div className="mx-4 mt-3 rounded-2xl border border-olive/40 bg-highlight/60 p-4">
@@ -192,7 +145,7 @@ function LandingLogin() {
       <div className="relative h-[38vh] min-h-[260px] w-full overflow-hidden">
         <img
           src={heroMesa}
-          alt="Mesa mediterrânea bíblica"
+          alt="Biblical Mediterranean table"
           className="h-full w-full object-cover"
           width={1280}
           height={1600}

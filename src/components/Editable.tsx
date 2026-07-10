@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState, type ElementType } from "react";
 import { createPortal } from "react-dom";
 import { Pencil, ImageUp, X, Check, RotateCcw } from "lucide-react";
-import { useLang, useImagesReady } from "@/lib/store";
+import { useImagesReady } from "@/lib/store";
 import { T, type TKey } from "@/lib/i18n";
 import {
   useEditMode,
@@ -15,8 +15,9 @@ import { compressImage, saveImage, deleteImage, getCachedImages, isCloudDone } f
 import { uploadRecipePhoto, deleteRecipePhoto } from "@/lib/sync";
 
 /* ─────────────────────────── Editable TEXT ───────────────────────────
- * <Ed k="unique.key" pt="default PT" es="default ES" /> renders the resolved
- * string. In admin edit mode it becomes clickable → opens a PT+ES editor.
+ * <Ed k="unique.key" pt="default" es="default" /> renders the resolved
+ * string. The app is English-only; pt/es props both carry the English text
+ * (kept for call-site compatibility). In admin edit mode it opens an editor.
  * Renders a <span> by default; pass `as` for a block tag.
  */
 export function Ed({
@@ -27,14 +28,14 @@ export function Ed({
   className,
 }: {
   k: string;
-  pt: string;
-  es: string;
+  pt?: string;
+  es?: string;
   as?: ElementType;
   className?: string;
 }) {
-  const { lang } = useLang();
   const edit = useEditMode();
-  const display = useText(k, lang, lang === "pt" ? pt : es);
+  const fallback = es ?? pt ?? "";
+  const display = useText(k, fallback);
   const [open, setOpen] = useState(false);
 
   if (!edit) {
@@ -50,64 +51,51 @@ export function Ed({
           e.stopPropagation();
           setOpen(true);
         }}
-        title="Editar texto"
+        title="Edit text"
       >
         {display}
         <Pencil className="ml-1 inline-block h-3 w-3 align-baseline text-olive" />
       </As>
-      {open && <TextEditorModal k={k} defPt={pt} defEs={es} onClose={() => setOpen(false)} />}
+      {open && <TextEditorModal k={k} def={fallback} onClose={() => setOpen(false)} />}
     </>
   );
 }
 
 /** Shortcut for editing an i18n (UI chrome) string by its key. */
 export function EdI18n({ k, as, className }: { k: TKey; as?: ElementType; className?: string }) {
-  return <Ed k={`i18n.${k}`} pt={T.pt[k]} es={T.es[k]} as={as} className={className} />;
+  return <Ed k={`i18n.${k}`} es={T[k]} as={as} className={className} />;
 }
 
 function TextEditorModal({
   k,
-  defPt,
-  defEs,
+  def,
   onClose,
 }: {
   k: string;
-  defPt: string;
-  defEs: string;
+  def: string;
   onClose: () => void;
 }) {
   const ov = getOverride(k);
-  const [valPt, setValPt] = useState(ov?.pt ?? defPt);
-  const [valEs, setValEs] = useState(ov?.es ?? defEs);
-  const multiline = defPt.length > 60 || defEs.length > 60;
+  const [val, setVal] = useState(ov?.text ?? def);
+  const multiline = def.length > 60;
   const Field = multiline ? "textarea" : "input";
 
   return createPortal(
     <div className="fixed inset-0 z-[100] flex items-end justify-center bg-black/50 p-0 sm:items-center sm:p-4">
       <div className="w-full max-w-lg rounded-t-3xl bg-stone-900 p-5 text-white shadow-2xl sm:rounded-3xl">
         <div className="mb-3 flex items-center justify-between">
-          <h3 className="text-sm font-medium">Editar texto</h3>
+          <h3 className="text-sm font-medium">Edit text</h3>
           <button onClick={onClose} className="rounded-lg p-1 text-stone-400 hover:text-white">
             <X className="h-4 w-4" />
           </button>
         </div>
         <p className="mb-3 truncate text-[10px] text-stone-500">{k}</p>
 
-        <label className="mb-1 block text-[11px] font-medium text-stone-400">🇧🇷 Português</label>
+        <label className="mb-1 block text-[11px] font-medium text-stone-400">Text</label>
         <Field
-          value={valPt}
+          value={val}
           onChange={(e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) =>
-            setValPt(e.target.value)
-          }
-          rows={multiline ? 4 : undefined}
-          className="mb-3 w-full rounded-xl border border-stone-600 bg-stone-800 px-3 py-2 text-sm outline-none focus:border-olive"
-        />
-
-        <label className="mb-1 block text-[11px] font-medium text-stone-400">🇨🇴 Español</label>
-        <Field
-          value={valEs}
-          onChange={(e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) =>
-            setValEs(e.target.value)
+            setVal(e.target.value)
           }
           rows={multiline ? 4 : undefined}
           className="mb-4 w-full rounded-xl border border-stone-600 bg-stone-800 px-3 py-2 text-sm outline-none focus:border-olive"
@@ -116,12 +104,12 @@ function TextEditorModal({
         <div className="flex items-center gap-2">
           <button
             onClick={() => {
-              saveTextOverride(k, { pt: valPt, es: valEs });
+              saveTextOverride(k, { text: val });
               onClose();
             }}
             className="flex flex-1 items-center justify-center gap-1.5 rounded-xl bg-olive py-2.5 text-sm font-medium text-cream hover:opacity-90"
           >
-            <Check className="h-4 w-4" /> Salvar
+            <Check className="h-4 w-4" /> Save
           </button>
           <button
             onClick={() => {
@@ -129,9 +117,9 @@ function TextEditorModal({
               onClose();
             }}
             className="flex items-center justify-center gap-1.5 rounded-xl border border-stone-600 px-3 py-2.5 text-xs text-stone-300 hover:text-white"
-            title="Restaurar texto original"
+            title="Restore original text"
           >
-            <RotateCcw className="h-3.5 w-3.5" /> Restaurar
+            <RotateCcw className="h-3.5 w-3.5" /> Reset
           </button>
         </div>
       </div>
@@ -192,7 +180,7 @@ export function EditImage({
     } catch (e) {
       const msg = e instanceof Error ? e.message : String(e);
       window.alert(
-        `A foto ficou salva só neste dispositivo — a publicação para todos falhou.\n\n${msg}`,
+        `The photo was saved only on this device — publishing it for everyone failed.\n\n${msg}`,
       );
     } finally {
       setBusy(false);
@@ -227,7 +215,7 @@ export function EditImage({
           }}
           className="flex items-center gap-1.5 rounded-full bg-olive px-3 py-1.5 text-xs font-medium text-cream shadow-lg"
         >
-          <ImageUp className="h-3.5 w-3.5" /> {busy ? "Enviando..." : "Trocar foto"}
+          <ImageUp className="h-3.5 w-3.5" /> {busy ? "Uploading..." : "Change photo"}
         </button>
         {getCachedImages()[id] && (
           <button
@@ -238,7 +226,7 @@ export function EditImage({
               deleteRecipePhoto(id).catch(() => {});
             }}
             className="flex items-center gap-1 rounded-full bg-red-500/90 px-2.5 py-1.5 text-xs text-white shadow-lg"
-            title="Restaurar foto original"
+            title="Restore original photo"
           >
             <RotateCcw className="h-3.5 w-3.5" />
           </button>
@@ -272,9 +260,9 @@ export function EditModeBar() {
   return createPortal(
     <div className="fixed bottom-24 left-1/2 z-[90] flex -translate-x-1/2 items-center gap-3 rounded-full bg-stone-900/95 px-4 py-2 text-xs text-white shadow-2xl backdrop-blur lg:bottom-6">
       <span className="flex items-center gap-1.5 font-medium text-olive">
-        <Pencil className="h-3.5 w-3.5" /> Modo edição
+        <Pencil className="h-3.5 w-3.5" /> Edit mode
       </span>
-      <span className="hidden text-stone-400 sm:inline">Toque em textos e fotos para editar</span>
+      <span className="hidden text-stone-400 sm:inline">Tap texts and photos to edit</span>
       <button
         onClick={() => {
           setEditMode(false);
@@ -282,7 +270,7 @@ export function EditModeBar() {
         }}
         className="rounded-full bg-stone-700 px-3 py-1 text-stone-200 hover:text-white"
       >
-        Sair
+        Exit
       </button>
     </div>,
     document.body,

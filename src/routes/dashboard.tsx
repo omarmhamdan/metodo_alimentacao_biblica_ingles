@@ -28,18 +28,18 @@ export const Route = createFileRoute("/dashboard")({
 function Dashboard() {
   const { user } = useUser();
   const { daily, update } = useDaily();
-  const { t, lang } = useLang();
+  const { t } = useLang();
   const [dayPicker, setDayPicker] = useState(false);
   const recipes = useRecipes();
-  const verso = versiculoDoDia(lang);
-  const nome = user?.nome ?? "Amada";
+  const verso = versiculoDoDia();
+  const nome = user?.nome ?? "friend";
   const aguaMeta = user?.aguaMeta ?? 2000;
   const aguaPct = Math.min(100, (daily.aguaMl / aguaMeta) * 100);
   const ultima = daily.ultimaReceita
     ? recipes.find((r) => r.id === daily.ultimaReceita)
     : recipes[0];
 
-  const weekday = new Date().toLocaleDateString(lang === "es" ? "es-CO" : "pt-BR", {
+  const weekday = new Date().toLocaleDateString("en-US", {
     weekday: "long",
   });
 
@@ -52,14 +52,14 @@ function Dashboard() {
               {weekday}
             </p>
             <h1 className="mt-1 font-serif text-[26px] leading-tight text-foreground text-balance">
-              <Ed k="i18n.dash_greeting" pt={T.pt.dash_greeting} es={T.es.dash_greeting} /> {nome}{" "}
+              <Ed k="i18n.dash_greeting" pt={T.dash_greeting} es={T.dash_greeting} /> {nome}{" "}
               <span className="text-sage">🌿</span>
             </h1>
             <Ed
               as="p"
               k="i18n.dash_subtitle"
-              pt={T.pt.dash_subtitle}
-              es={T.es.dash_subtitle}
+              pt={T.dash_subtitle}
+              es={T.dash_subtitle}
               className="mt-1 block text-sm text-muted-foreground text-balance"
             />
           </div>
@@ -183,7 +183,7 @@ function Dashboard() {
               <EditImage
                 id="suco-sagrado"
                 src={sucoImg}
-                alt="Jugo Sagrado"
+                alt="Sacred Juice"
                 className="absolute inset-0 h-full w-full object-cover"
                 loading="lazy"
               />
@@ -197,7 +197,7 @@ function Dashboard() {
           to="/receitas"
           icon={ChefHat}
           title={t("dash_recipes")}
-          subtitle={`${recipes.length} ${lang === "es" ? "recetas" : "receitas"}`}
+          subtitle={`${recipes.length} recipes`}
         />
         <ShortcutCard
           to="/fundamentos"

@@ -1,0 +1,91 @@
+================================================================
+MÉTODO ALIMENTACIÓN BÍBLICA — CONTEXTO DO PRODUTO
+(documento para colar no chat do Claude como contexto)
+================================================================
+
+--- O QUE É ---
+Aplicativo de alimentação saudável de inspiração cristã/bíblica.
+Nomes/branding: "Método Alimentación Bíblica", "Recetas Bíblicas",
+"La Mesa del Edén". Proposta: comida viva, simples e com propósito,
+inspirada nas Escrituras. Cada receita acompanha um versículo bíblico.
+
+Público principal: Espanhol (América Latina, com foco Colômbia).
+Também disponível em Português. App bilíngue (ES/PT) com troca de
+idioma dentro do app.
+
+Vendido via HOTMART. Acesso liberado por e-mail (sem senha).
+
+--- PLATAFORMA / TÉCNICO ---
+- Progressive Web App (PWA): instalável no celular, funciona offline.
+- Stack: TanStack Start (React) hospedado em Cloudflare Workers.
+- Banco/sync: Supabase (perfis sincronizados entre dispositivos).
+- Domínio: app.metodoalimentacionbiblica.online
+- Login: por e-mail, sem senha. Perfil sincroniza entre dispositivos.
+
+================================================================
+O QUE ENTREGAMOS (CONTEÚDO)
+================================================================
+
+RECEITAS BÍBLICAS: 100 receitas
+  - Cada uma com versículo bíblico, ingredientes, rendimento e
+    nível de dificuldade.
+  - ~100 receitas totalmente traduzidas para Espanhol.
+  - 7 categorias:
+      1. Café da Manhã
+      2. Pratos Principais
+      3. Saladas e Acompanhamentos
+      4. Sopas
+      5. Ervas e Temperos
+      6. Sobremesas
+      7. Receitas Âncora
+
+SUCOS NATURAIS: 50+ sucos
+  - 6 categorias: Desinflamar, Energia, Sono e Calma,
+    Detox/Fígado, Imunidade.
+  - Mais o "Suco Sagrado do dia".
+
+DEVOCIONAL: 60 devocionais (plano de 60 dias)
+  - Cada dia com versículo + reflexão. Conteúdo bilíngue (PT/ES).
+
+FUNDAMENTOS: seção completa com os fundamentos da Alimentação
+  Bíblica (a base/filosofia do método).
+
+================================================================
+FUNCIONALIDADES PRINCIPAIS
+================================================================
+- Onboarding personalizado: nome, idade, peso, objetivo, meta de
+  água, nível de energia, restrições alimentares.
+- Dashboard com devocional do dia + acesso a receitas, sucos,
+  fundamentos e progresso.
+- Acompanhamento de progresso: água, peso, energia, metas.
+- Instalável como app (PWA) com prompt de instalação; uso offline.
+- Ajuda & Suporte integrado (FAQ + contato por e-mail).
+- Seletor de idioma ES/PT.
+
+================================================================
+BÔNUS / UPSELLS (PROGRAMAS PAGOS EXTRAS)
+================================================================
+- PROTOCOLO ANTI-INFLAMAÇÃO: plano alimentar de 7 dias, em 6 fases,
+  com versículos, refeições, hidratação e fundamentação ("ciência").
+- MESA ÚNICA: programa de 5 receitas focado em refeição única em
+  família.
+
+Acesso aos bônus é liberado por compra (resolvido por e-mail via
+Hotmart). Admin tem acesso total.
+
+================================================================
+PAINEL ADMINISTRATIVO (uso interno)
+================================================================
+- Edição de receitas e fotos.
+- Gestão de usuários (liberar/revogar acesso inline).
+- Logs de webhook Hotmart.
+- Visão de entitlements (quem comprou o quê).
+- Exportação de dados.
+
+================================================================
+RESUMO RÁPIDO (1 linha)
+================================================================
+App bíblico de alimentação saudável (PWA, ES/PT) com 100 receitas
+bíblicas, 50+ sucos, devocional de 60 dias e fundamentos; bônus
+pagos de Protocolo Anti-inflamação (7 dias) e Mesa Única (5 receitas);
+vendido via Hotmart, acesso por e-mail.

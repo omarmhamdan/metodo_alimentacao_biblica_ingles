@@ -2,7 +2,7 @@ import { ReactNode, useState, useEffect } from "react";
 import { BottomNav } from "./BottomNav";
 import { SideNav } from "./SideNav";
 import { EditModeBar } from "./Editable";
-import { useLang, useUser } from "@/lib/store";
+import { useUser } from "@/lib/store";
 import { initTextOverrides } from "@/lib/edit-store";
 import { initEntitlements, useBlacklist } from "@/lib/entitlements";
 import { BlacklistBlock } from "./BlacklistBlock";
@@ -17,7 +17,6 @@ import { BlacklistBlock } from "./BlacklistBlock";
  *  so cards expand naturally to use the available space.
  */
 export function AppShell({ children, hideNav }: { children: ReactNode; hideNav?: boolean }) {
-  const { lang, setLang } = useLang();
   const { user } = useUser();
   const blacklist = useBlacklist();
   const [isWide, setIsWide] = useState(false);
@@ -40,50 +39,11 @@ export function AppShell({ children, hideNav }: { children: ReactNode; hideNav?:
     initEntitlements(user?.email);
   }, [user?.email]);
 
-  // PWA: serve the per-language manifest + update the iOS "Add to Home Screen" name
-  useEffect(() => {
-    const appTitle = lang === "es" ? "Método Alimentación Bíblica" : "Método Alimentação Bíblica";
-    const manifestHref = lang === "es" ? "/manifest-es.json" : "/manifest-pt.json";
-
-    // Switch manifest link
-    let link = document.querySelector<HTMLLinkElement>('link[rel="manifest"]');
-    if (!link) {
-      link = document.createElement("link");
-      link.rel = "manifest";
-      document.head.appendChild(link);
-    }
-    link.href = manifestHref;
-
-    // Update iOS home-screen title
-    const setMeta = (name: string, content: string) => {
-      let el = document.querySelector<HTMLMetaElement>(`meta[name="${name}"]`);
-      if (!el) {
-        el = document.createElement("meta");
-        el.name = name;
-        document.head.appendChild(el);
-      }
-      el.content = content;
-    };
-    setMeta("apple-mobile-web-app-title", appTitle);
-    setMeta("application-name", appTitle);
-    document.documentElement.lang = lang;
-    // Keep document.title aligned — iOS Safari can use it for the home-screen label
-    document.title = appTitle;
-  }, [lang]);
-
   // Blocked by refund blacklist → replace the whole app with the red block screen
-  // (admin login bypasses this; see blacklistInfo()). Language toggle stays available.
+  // (admin login bypasses this; see blacklistInfo()).
   if (blacklist) {
     return (
       <div className="relative min-h-screen w-full bg-background">
-        <button
-          onClick={() => setLang(lang === "es" ? "pt" : "es")}
-          className="absolute right-4 top-4 z-50 flex h-8 items-center gap-1.5 rounded-full bg-cream/90 px-3 text-[11px] font-medium text-earth shadow-card backdrop-blur border border-border/40"
-          aria-label="Cambiar idioma / Trocar idioma"
-        >
-          <span className="text-sm">{lang === "es" ? "🇨🇴" : "🇧🇷"}</span>
-          <span>{lang === "es" ? "ES" : "PT"}</span>
-        </button>
         <BlacklistBlock />
       </div>
     );
@@ -105,16 +65,6 @@ export function AppShell({ children, hideNav }: { children: ReactNode; hideNav?:
             isWide ? "max-w-[1400px] mx-auto" : "",
           ].join(" ")}
         >
-          {/* Language toggle (top-right) */}
-          <button
-            onClick={() => setLang(lang === "es" ? "pt" : "es")}
-            className="absolute right-4 top-4 z-50 flex h-8 items-center gap-1.5 rounded-full bg-cream/90 px-3 text-[11px] font-medium text-earth shadow-card backdrop-blur border border-border/40"
-            aria-label="Cambiar idioma / Trocar idioma"
-          >
-            <span className="text-sm">{lang === "es" ? "🇨🇴" : "🇧🇷"}</span>
-            <span>{lang === "es" ? "ES" : "PT"}</span>
-          </button>
-
           <main className={isWide ? "pb-10" : "pb-28"}>{children}</main>
 
           {/* Bottom nav only on mobile + small tablet */}

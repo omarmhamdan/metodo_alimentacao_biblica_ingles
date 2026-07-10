@@ -1,361 +1,172 @@
-export type Lang = "es" | "pt";
-
-const KEY = "mab:lang";
-
-export function getLang(): Lang {
-  if (typeof window === "undefined") return "es";
-  const stored = localStorage.getItem(KEY) as Lang | null;
-  if (stored === "es" || stored === "pt") return stored;
-  // First visit: default to Spanish (primary audience). User can switch to PT.
-  return "es";
-}
-
-export function setLang(l: Lang) {
-  if (typeof window === "undefined") return;
-  localStorage.setItem(KEY, l);
-  window.dispatchEvent(new CustomEvent("mab:lang"));
-}
-
-// ─── Translations ────────────────────────────────────────────────────────────
+// ─── UI strings (American English — single language) ────────────────────────
 export const T = {
-  es: {
-    // Nav
-    nav_inicio: "Inicio",
-    nav_recetas: "Recetas",
-    nav_mesa: "Edén",
-    nav_devocion: "Devoción",
-    nav_perfil: "Perfil",
-    nav_protocolo: "Anti\ninflamación",
-    nav_mesa_unica: "Mesa Única",
+  // Nav
+  nav_inicio: "Home",
+  nav_recetas: "Recipes",
+  nav_mesa: "Eden",
+  nav_devocion: "Devotion",
+  nav_perfil: "Profile",
+  nav_protocolo: "Anti-\nInflammatory",
+  nav_mesa_unica: "Family Table",
 
-    // Login
-    login_badge: "Método Bíblico",
-    login_pwa_banner_title: "¡Bienvenida! App instalada con éxito",
-    login_pwa_banner_body:
-      "Ingresa con el mismo correo que usaste en el navegador para traer todos tus datos.",
-    login_loading: "Cargando...",
-    login_title: "Método Alimentación Bíblica",
-    login_subtitle: "La mesa que Dios creó, al alcance de tu cocina.",
-    login_email_placeholder: "tuemail@ejemplo.com",
-    login_remember: "Recordarme",
-    login_enter: "Entrar",
-    login_no_account: "¿Aún no tienes cuenta?",
-    login_create: "Crear cuenta",
-    login_have_account: "¿Ya eres parte de la familia?",
-    login_signin: "Entrar",
-    login_explore: "Explorar como visitante",
-    login_name_placeholder: "Tu nombre",
-    login_verse: '"Tu cuerpo es templo del Espíritu Santo."',
+  // Login
+  login_badge: "Biblical Method",
+  login_pwa_banner_title: "Welcome! App installed successfully",
+  login_pwa_banner_body:
+    "Sign in with the same email you used in the browser to bring over all your data.",
+  login_loading: "Loading...",
+  login_title: "The Biblical Nutrition Method",
+  login_subtitle: "The table God created, within reach of your kitchen.",
+  login_email_placeholder: "youremail@example.com",
+  login_remember: "Remember me",
+  login_enter: "Sign in",
+  login_no_account: "Don't have an account yet?",
+  login_create: "Create account",
+  login_have_account: "Already part of the family?",
+  login_signin: "Sign in",
+  login_explore: "Explore as a guest",
+  login_name_placeholder: "Your name",
+  login_verse: '"Your body is a temple of the Holy Spirit."',
 
-    // Dashboard
-    dash_greeting: "Hola,",
-    dash_subtitle: "Hoy es un nuevo día para cuidar el templo que Dios te dio.",
-    dash_daily: "Devocional del día",
-    dash_read_more: "Leer reflexión completa →",
-    dash_journey: "Jornada",
-    dash_day: "Día",
-    dash_day_seq: "día seguido",
-    dash_days_seq: "días seguidos",
-    dash_change_day: "Cambiar de día",
-    dash_change_day_title: "¿A qué día quieres ir?",
-    dash_change_day_hint: "Puedes retroceder o avanzar a cualquier día que ya hayas recorrido, a tu propio ritmo y en el orden que prefieras.",
-    dash_go: "Ir al",
-    dash_cancel: "Cancelar",
-    dash_hydration: "Hidratación",
-    dash_morning_ritual: "Bebidas naturales",
-    dash_sacred_juice: "Recetas de Jugos",
-    dash_juice_sub: "Más de 50 jugos naturales + el Jugo Sagrado del día.",
-    dash_juice_done: "Ver recetas →",
-    dash_juice_access: "Ver recetas →",
-    dash_recipes: "Recetas Bíblicas",
-    dash_fundamentals: "Fundamentos",
-    dash_eden_table: "Mesa del Edén",
-    dash_devotional: "Devocional",
-    dash_daily_reflection: "Reflexión diaria",
-    dash_progress: "Progreso",
-    dash_my_evolution: "Mi evolución",
-    dash_continue: "Continuar desde donde lo dejaste",
-    dash_see_all: "Ver todo",
+  // Dashboard
+  dash_greeting: "Hello,",
+  dash_subtitle: "Today is a new day to care for the temple God gave you.",
+  dash_daily: "Today's devotional",
+  dash_read_more: "Read the full reflection →",
+  dash_journey: "Journey",
+  dash_day: "Day",
+  dash_day_seq: "day streak",
+  dash_days_seq: "day streak",
+  dash_change_day: "Change day",
+  dash_change_day_title: "Which day would you like to go to?",
+  dash_change_day_hint:
+    "You can go back or move ahead to any day you've already reached, at your own pace and in the order you prefer.",
+  dash_go: "Go to",
+  dash_cancel: "Cancel",
+  dash_hydration: "Hydration",
+  dash_morning_ritual: "Natural drinks",
+  dash_sacred_juice: "Sacred Juices & Drinks",
+  dash_juice_sub: "50+ natural juices, plus today's Sacred Juice.",
+  dash_juice_done: "See recipes →",
+  dash_juice_access: "See recipes →",
+  dash_recipes: "Biblical Recipes",
+  dash_fundamentals: "Foundations",
+  dash_eden_table: "Eden's Table",
+  dash_devotional: "Devotional",
+  dash_daily_reflection: "Daily reflection",
+  dash_progress: "Progress",
+  dash_my_evolution: "My progress",
+  dash_continue: "Pick up where you left off",
+  dash_see_all: "See all",
 
-    // Recipes list
-    rec_subtitle: "La mesa del Edén",
-    rec_title: "Recetas Bíblicas",
-    rec_desc: "Comida viva, simple y llena de propósito. Inspirada en las Escrituras.",
-    rec_search: "Buscar receta...",
-    rec_all: "Todas",
-    rec_none: "Ninguna receta encontrada.",
-    rec_min: "min",
-    cat_main: "Platos Principales",
-    cat_salads: "Ensaladas y Acompañamientos",
-    cat_soups: "Sopas",
-    cat_herbs: "Hierbas y Condimentos",
-    cat_desserts: "Postres",
-    cat_anchor: "Recetas Ancla",
+  // Recipes list
+  rec_subtitle: "The table of Eden",
+  rec_title: "Biblical Recipes",
+  rec_desc: "Living, simple food full of purpose. Inspired by the Scriptures.",
+  rec_search: "Search recipes...",
+  rec_all: "All",
+  rec_none: "No recipes found.",
+  rec_min: "min",
+  cat_main: "Main Dishes",
+  cat_salads: "Salads & Sides",
+  cat_soups: "Soups",
+  cat_herbs: "Herbs & Seasonings",
+  cat_desserts: "Desserts",
+  cat_anchor: "Anchor Recipes",
 
-    // Recipe detail
-    rd_ingredients: "Ingredientes",
-    rd_steps: "Modo de preparación",
-    rd_tip: "Consejo de Beatriz",
-    rd_benefits: "Beneficios",
-    rd_back: "Volver",
-    rd_portions: "porciones",
-    rd_easy: "Fácil",
-    rd_medium: "Medio",
-    rd_advanced: "Avanzado",
+  // Recipe detail
+  rd_ingredients: "Ingredients",
+  rd_steps: "Instructions",
+  rd_tip: "Beatriz's Tip",
+  rd_benefits: "Benefits",
+  rd_back: "Back",
+  rd_portions: "servings",
+  rd_easy: "Easy",
+  rd_medium: "Medium",
+  rd_advanced: "Advanced",
 
-    // Devotional
-    dev_subtitle: "Comunión diaria",
-    dev_title: "Devocional del Día",
-    dev_reflection: "Reflexión",
-    dev_prayer_title: "Oración del día",
+  // Devotional
+  dev_subtitle: "Daily communion",
+  dev_title: "Today's Devotional",
+  dev_reflection: "Reflection",
+  dev_prayer_title: "Prayer of the day",
 
-    // Profile
-    prof_subtitle: "Templo del Espíritu",
-    prof_age: "Edad",
-    prof_weight: "Peso",
-    prof_water: "Agua",
-    prof_name_label: "Tu nombre",
-    prof_name_edit: "Editar nombre",
-    prof_name_placeholder: "Escribe tu nombre",
-    prof_goal_label: "Mi objetivo",
-    prof_goal_edit: "Editar objetivo",
-    prof_goal_add: "Añadir objetivo",
-    prof_goal_save: "Guardar",
-    prof_goal_placeholder: "Escribe tu objetivo de salud...",
-    prof_favorites: "Favoritas",
-    prof_fav_hint: "desliza ← para quitar",
-    prof_no_fav: "Aún no has marcado ninguna receta como favorita.",
-    prof_notifications: "Notificaciones",
-    prof_notifications_hint: "Recordatorios suaves durante el día",
-    prof_preferences: "Preferencias",
-    prof_preferences_hint: "Idioma y configuración",
-    prof_help: "Ayuda y soporte",
-    prof_help_hint: "Preguntas frecuentes y contacto",
-    prof_signout: "Salir",
+  // Profile
+  prof_subtitle: "Temple of the Spirit",
+  prof_age: "Age",
+  prof_weight: "Weight",
+  prof_water: "Water",
+  prof_name_label: "Your name",
+  prof_name_edit: "Edit name",
+  prof_name_placeholder: "Enter your name",
+  prof_goal_label: "My goal",
+  prof_goal_edit: "Edit goal",
+  prof_goal_add: "Add a goal",
+  prof_goal_save: "Save",
+  prof_goal_placeholder: "Write your health goal...",
+  prof_favorites: "Favorites",
+  prof_fav_hint: "swipe ← to remove",
+  prof_no_fav: "You haven't saved any favorite recipes yet.",
+  prof_notifications: "Notifications",
+  prof_notifications_hint: "Gentle reminders throughout the day",
+  prof_help: "Help & support",
+  prof_help_hint: "FAQ and contact",
+  prof_signout: "Sign out",
 
-    // Help & support modal
-    help_title: "Ayuda y soporte",
-    help_faq_label: "Preguntas frecuentes",
-    help_contact_label: "¿Necesitas hablar con nosotros?",
-    help_contact_body: "Escríbenos y te respondemos en pocos minutos. Estamos aquí para ayudarte.",
-    help_email_btn: "Escribir por correo",
-    help_email_subject: "Soporte — Método Alimentación Bíblica",
-    help_close: "Cerrar",
-    faq_access_q: "Compré pero no puedo acceder, ¿qué hago?",
-    faq_access_a:
-      "Ingresa con el mismo correo que usaste en la compra. Si aún no entra, escríbenos a metodoalimentacionbiblica@gmail.com y liberamos tu acceso en pocos minutos.",
-    faq_install_q: "¿Cómo instalo la app en mi celular?",
-    faq_install_a:
-      "Abre el menú de tu navegador y toca \"Agregar a la pantalla de inicio\". La app quedará como un ícono normal, sin ocupar espacio.",
-    faq_data_q: "¿Pierdo mis datos si cambio de celular?",
-    faq_data_a:
-      "No. Entra con el mismo correo en el nuevo dispositivo y tu progreso, favoritos y objetivos vuelven automáticamente.",
-    faq_refund_q: "¿Tengo garantía?",
-    faq_refund_a:
-      "Sí. Tienes garantía de devolución según las políticas de la plataforma de compra. Antes de pedirla, escríbenos a metodoalimentacionbiblica@gmail.com: casi siempre resolvemos el problema al instante.",
-    prof_verse:
-      '"Venid a mí todos los que estáis cansados y cargados, y yo os haré descansar." — Mateo 11:28',
+  // Help & support modal
+  help_title: "Help & support",
+  help_faq_label: "Frequently asked questions",
+  help_contact_label: "Need to talk to us?",
+  help_contact_body: "Write to us and we'll get back to you within minutes. We're here to help.",
+  help_email_btn: "Email us",
+  help_email_subject: "Support — The Biblical Nutrition Method",
+  help_close: "Close",
+  faq_access_q: "I purchased but can't get in — what do I do?",
+  faq_access_a:
+    "Sign in with the same email you used at checkout. If it still doesn't work, email us at metodoalimentacionbiblica@gmail.com and we'll unlock your access within minutes.",
+  faq_install_q: "How do I install the app on my phone?",
+  faq_install_a:
+    'Open your browser menu and tap "Add to Home Screen". The app will appear as a regular icon without taking up storage.',
+  faq_data_q: "Will I lose my data if I switch phones?",
+  faq_data_a:
+    "No. Sign in with the same email on your new device and your progress, favorites, and goals come back automatically.",
+  faq_refund_q: "Is there a guarantee?",
+  faq_refund_a:
+    "Yes. You have a money-back guarantee under the purchase platform's policies. Before requesting it, email us at metodoalimentacionbiblica@gmail.com — we can almost always fix the issue right away.",
+  prof_verse:
+    '"Come to me, all you who are weary and burdened, and I will give you rest." — Matthew 11:28',
 
-    // Preferences modal
-    pref_title: "Preferencias",
-    pref_lang: "Idioma",
-    pref_lang_es: "Español",
-    pref_lang_pt: "Português",
-    pref_close: "Cerrar",
+  // Notifications modal
+  notif_title: "Notifications",
+  notif_morning: "Morning reminder",
+  notif_morning_hint: "Reminds you of the sacred juice every morning",
+  notif_afternoon: "Hydration reminder",
+  notif_afternoon_hint: "Every 2 hours throughout the day",
+  notif_devotional: "Daily devotional",
+  notif_devotional_hint: "A reflection when you wake up",
+  notif_save: "Save",
 
-    // Notifications modal
-    notif_title: "Notificaciones",
-    notif_morning: "Recordatorio matutino",
-    notif_morning_hint: "Te recuerda el jugo sagrado cada mañana",
-    notif_afternoon: "Recordatorio de hidratación",
-    notif_afternoon_hint: "Cada 2 horas durante el día",
-    notif_devotional: "Devocional diario",
-    notif_devotional_hint: "Reflexión al despertar",
-    notif_save: "Guardar",
+  // Sacred Juice
+  suco_title: "Sacred Morning Juice",
+  suco_done: "✓ Done for today",
+  suco_mark: "Mark as done",
 
-    // Suco Sagrado
-    suco_title: "Jugo Sagrado de la Mañana",
-    suco_done: "✓ Ya lo tomé hoy",
-    suco_mark: "Marcar como tomado",
+  // Onboarding
+  onb_welcome: "Welcome",
+  onb_name_label: "What's your name?",
+  onb_name_placeholder: "Your name",
+  onb_next: "Continue",
+  onb_skip: "Skip for now",
 
-    // Onboarding
-    onb_welcome: "Bienvenida",
-    onb_name_label: "¿Cómo te llamas?",
-    onb_name_placeholder: "Tu nombre",
-    onb_next: "Continuar",
-    onb_skip: "Saltar por ahora",
+  // Foundations
+  fund_title: "Eden's Table",
+  fund_subtitle: "The foundations of Biblical Nutrition",
 
-    // Fundamentos
-    fund_title: "Mesa del Edén",
-    fund_subtitle: "Los fundamentos de la Alimentación Bíblica",
-
-    // Progresso
-    prog_title: "Progreso",
-    prog_subtitle: "Tu evolución en la jornada",
-  },
-
-  pt: {
-    nav_inicio: "Início",
-    nav_recetas: "Receitas",
-    nav_mesa: "Mesa",
-    nav_devocion: "Devoção",
-    nav_perfil: "Perfil",
-    nav_protocolo: "Anti-\nInflamação",
-    nav_mesa_unica: "Mesa Única",
-
-    login_badge: "Método Bíblico",
-    login_pwa_banner_title: "Bem-vindo! App instalado com sucesso",
-    login_pwa_banner_body:
-      "Entre com o mesmo email que usou no navegador para trazer todos os seus dados.",
-    login_loading: "Carregando...",
-    login_title: "Método Alimentação Bíblica",
-    login_subtitle: "A mesa que Deus criou, ao alcance da sua cozinha.",
-    login_email_placeholder: "seuemail@exemplo.com",
-    login_remember: "Lembrar-me",
-    login_enter: "Entrar",
-    login_no_account: "Ainda não tem conta?",
-    login_create: "Criar conta",
-    login_have_account: "Já é da família?",
-    login_signin: "Entrar",
-    login_explore: "Explorar como visitante",
-    login_name_placeholder: "Seu nome",
-    login_verse: '"Seu corpo é templo do Espírito Santo."',
-
-    dash_greeting: "Olá,",
-    dash_subtitle: "Hoje é um novo dia para cuidar do templo que Deus lhe deu.",
-    dash_daily: "Devocional do dia",
-    dash_read_more: "Ler reflexão completa →",
-    dash_journey: "Jornada",
-    dash_day: "Dia",
-    dash_day_seq: "dia seguido",
-    dash_days_seq: "dias seguidos",
-    dash_change_day: "Mudar de dia",
-    dash_change_day_title: "Para qual dia deseja ir?",
-    dash_change_day_hint: "Você pode retroceder ou avançar para qualquer dia que já percorreu, no seu próprio ritmo e na ordem que preferir.",
-    dash_go: "Ir para o",
-    dash_cancel: "Cancelar",
-    dash_hydration: "Hidratação",
-    dash_morning_ritual: "Bebidas naturais",
-    dash_sacred_juice: "Receitas de Sucos",
-    dash_juice_sub: "Mais de 50 sucos naturais + o Suco Sagrado do dia.",
-    dash_juice_done: "Ver receitas →",
-    dash_juice_access: "Ver receitas →",
-    dash_recipes: "Receitas Bíblicas",
-    dash_fundamentals: "Fundamentos",
-    dash_eden_table: "Mesa do Éden",
-    dash_devotional: "Devocional",
-    dash_daily_reflection: "Reflexão diária",
-    dash_progress: "Progresso",
-    dash_my_evolution: "Sua evolução",
-    dash_continue: "Continue de onde parou",
-    dash_see_all: "Ver tudo",
-
-    rec_subtitle: "A mesa do Éden",
-    rec_title: "Receitas Bíblicas",
-    rec_desc: "Comida viva, simples e cheia de propósito. Inspirada nas Escrituras.",
-    rec_search: "Buscar receita...",
-    rec_all: "Todas",
-    rec_none: "Nenhuma receita encontrada.",
-    rec_min: "min",
-    cat_main: "Pratos Principais",
-    cat_salads: "Saladas e Acompanhamentos",
-    cat_soups: "Sopas",
-    cat_herbs: "Ervas e Temperos",
-    cat_desserts: "Sobremesas",
-    cat_anchor: "Receitas Âncora",
-
-    rd_ingredients: "Ingredientes",
-    rd_steps: "Modo de preparo",
-    rd_tip: "Dica da Beatriz",
-    rd_benefits: "Benefícios",
-    rd_back: "Voltar",
-    rd_portions: "porções",
-    rd_easy: "Fácil",
-    rd_medium: "Médio",
-    rd_advanced: "Avançado",
-
-    dev_subtitle: "Comunhão diária",
-    dev_title: "Devocional do Dia",
-    dev_reflection: "Reflexão",
-    dev_prayer_title: "Oração do dia",
-
-    prof_subtitle: "Templo do Espírito",
-    prof_age: "Idade",
-    prof_weight: "Peso",
-    prof_water: "Água",
-    prof_name_label: "Seu nome",
-    prof_name_edit: "Editar nome",
-    prof_name_placeholder: "Escreva seu nome",
-    prof_goal_label: "Meu objetivo",
-    prof_goal_edit: "Editar objetivo",
-    prof_goal_add: "Adicionar objetivo",
-    prof_goal_save: "Salvar",
-    prof_goal_placeholder: "Escreva seu objetivo de saúde...",
-    prof_favorites: "Favoritos",
-    prof_fav_hint: "deslize ← para remover",
-    prof_no_fav: "Você ainda não favoritou nenhuma receita.",
-    prof_notifications: "Notificações",
-    prof_notifications_hint: "Lembretes gentis durante o dia",
-    prof_preferences: "Preferências",
-    prof_preferences_hint: "Idioma e configurações",
-    prof_help: "Ajuda e suporte",
-    prof_help_hint: "Perguntas frequentes e contato",
-    prof_signout: "Sair",
-
-    // Help & support modal
-    help_title: "Ajuda e suporte",
-    help_faq_label: "Perguntas frequentes",
-    help_contact_label: "Precisa falar com a gente?",
-    help_contact_body: "Escreva pra gente que respondemos em poucos minutos. Estamos aqui pra te ajudar.",
-    help_email_btn: "Escrever por e-mail",
-    help_email_subject: "Suporte — Método Alimentação Bíblica",
-    help_close: "Fechar",
-    faq_access_q: "Comprei mas não consigo acessar, e agora?",
-    faq_access_a:
-      "Entre com o mesmo e-mail que usou na compra. Se ainda não liberar, escreva pra gente em metodoalimentacionbiblica@gmail.com que liberamos seu acesso em poucos minutos.",
-    faq_install_q: "Como instalo o app no meu celular?",
-    faq_install_a:
-      "Abra o menu do seu navegador e toque em \"Adicionar à tela de início\". O app fica como um ícone normal, sem ocupar espaço.",
-    faq_data_q: "Perco meus dados se trocar de celular?",
-    faq_data_a:
-      "Não. Entre com o mesmo e-mail no aparelho novo e seu progresso, favoritos e objetivos voltam automaticamente.",
-    faq_refund_q: "Tenho garantia?",
-    faq_refund_a:
-      "Sim. Você tem garantia de reembolso conforme as políticas da plataforma de compra. Antes de pedir, fale com a gente em metodoalimentacionbiblica@gmail.com: quase sempre resolvemos o problema na hora.",
-    prof_verse:
-      '"Vinde a mim, todos os que estais cansados e sobrecarregados, e eu vos aliviarei." — Mateus 11:28',
-
-    pref_title: "Preferências",
-    pref_lang: "Idioma",
-    pref_lang_es: "Español",
-    pref_lang_pt: "Português",
-    pref_close: "Fechar",
-
-    notif_title: "Notificações",
-    notif_morning: "Lembrete matinal",
-    notif_morning_hint: "Te lembra do suco sagrado todas as manhãs",
-    notif_afternoon: "Lembrete de hidratação",
-    notif_afternoon_hint: "A cada 2 horas durante o dia",
-    notif_devotional: "Devocional diário",
-    notif_devotional_hint: "Reflexão ao acordar",
-    notif_save: "Salvar",
-
-    suco_title: "Suco Sagrado da Manhã",
-    suco_done: "✓ Já tomei hoje",
-    suco_mark: "Marcar como tomado",
-
-    onb_welcome: "Boas-vindas",
-    onb_name_label: "Como você se chama?",
-    onb_name_placeholder: "Seu nome",
-    onb_next: "Continuar",
-    onb_skip: "Pular por agora",
-
-    fund_title: "Mesa do Éden",
-    fund_subtitle: "Os fundamentos da Alimentação Bíblica",
-
-    prog_title: "Progresso",
-    prog_subtitle: "Sua evolução na jornada",
-  },
+  // Progress
+  prog_title: "Progress",
+  prog_subtitle: "Your journey progress",
 } as const;
 
-export type TKey = keyof typeof T.es;
+export type TKey = keyof typeof T;
+
+export const t = (key: TKey): string => T[key];

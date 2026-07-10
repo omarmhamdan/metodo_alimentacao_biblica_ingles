@@ -6,7 +6,7 @@ import { BrandIcon } from "./BrandIcon";
 /** Vertical sidebar nav for desktop and large-tablet landscape (≥1024px). */
 export function SideNav() {
   const loc = useLocation();
-  const { t, lang } = useLang();
+  const { t } = useLang();
 
   const items = [
     { to: "/dashboard", label: t("nav_inicio"), icon: Home },
@@ -27,10 +27,10 @@ export function SideNav() {
         <BrandIcon size={36} className="rounded-xl shadow-soft" />
         <div className="min-w-0">
           <p className="font-serif text-base leading-tight text-foreground truncate">
-            {lang === "es" ? "Método" : "Método"}
+            Biblical
           </p>
           <p className="text-[10px] uppercase tracking-[0.2em] text-muted-foreground truncate">
-            {lang === "es" ? "Alimentación Bíblica" : "Alimentação Bíblica"}
+            Nutrition Method
           </p>
         </div>
       </Link>
@@ -58,9 +58,7 @@ export function SideNav() {
 
       {/* Verse footer */}
       <p className="mt-auto px-2 font-serif italic text-[11px] leading-snug text-muted-foreground text-balance">
-        {lang === "es"
-          ? '"La mesa que Dios creó, al alcance de tu cocina."'
-          : '"A mesa que Deus criou, ao alcance da sua cozinha."'}
+        {'"The table God created, within reach of your kitchen."'}
       </p>
     </aside>
   );

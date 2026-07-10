@@ -4,60 +4,38 @@ import { LineChart, Line, ResponsiveContainer, XAxis, YAxis, Tooltip } from "rec
 import { motion } from "framer-motion";
 import { AppShell } from "@/components/AppShell";
 import { Ed } from "@/components/Editable";
-import { useDaily, useUser, useLang } from "@/lib/store";
+import { useDaily, useUser } from "@/lib/store";
 
 export const Route = createFileRoute("/progresso")({
   component: ProgressoPage,
-  // title set by AppShell bootstrap (per-language)
 });
 
 const content = {
-  es: {
-    badge: "Tu jornada",
-    title: "Progreso",
-    subtitle: "Cuidarte con gentileza es la forma más bíblica de florecer.",
-    statDay: "Día",
-    statSeq: "Racha",
-    statFav: "Favoritas",
-    weightTitle: "Peso",
-    registro: "registro",
-    registros: "registros",
-    weightPlaceholder: "Peso de hoy (kg)",
-    btnRegister: "Registrar",
-    energyTitle: "¿Cómo te sientes hoy?",
-    energySubtitle: "Energía · 1 = baja, 10 = vibrante",
-    btnEnergy: "Registrar cómo me siento",
-    verse: "El que comenzó en vosotros la buena obra, la perfeccionará.",
-    verseRef: "Filipenses 1:6",
-  },
-  pt: {
-    badge: "Sua jornada",
-    title: "Progresso",
-    subtitle: "Cuidar com gentileza é a forma mais bíblica de florescer.",
-    statDay: "Dia",
-    statSeq: "Sequência",
-    statFav: "Favoritos",
-    weightTitle: "Peso",
-    registro: "registro",
-    registros: "registros",
-    weightPlaceholder: "Peso de hoje (kg)",
-    btnRegister: "Registrar",
-    energyTitle: "Como você se sente hoje?",
-    energySubtitle: "Energia · 1 = baixa, 10 = vibrante",
-    btnEnergy: "Registrar como me sinto",
-    verse: "Aquele que começou a boa obra em vós há de completá-la.",
-    verseRef: "Filipenses 1:6",
-  },
+  badge: "Your journey",
+  title: "Progress",
+  subtitle: "Caring for yourself gently is the most biblical way to flourish.",
+  statDay: "Day",
+  statSeq: "Streak",
+  statFav: "Favorites",
+  weightTitle: "Weight",
+  registro: "entry",
+  registros: "entries",
+  weightPlaceholder: "Today's weight (lb)",
+  btnRegister: "Log",
+  energyTitle: "How do you feel today?",
+  energySubtitle: "Energy · 1 = low, 10 = vibrant",
+  btnEnergy: "Log how I feel",
+  verse: "He who began a good work in you will bring it to completion.",
+  verseRef: "Philippians 1:6",
 };
 
-const PPT = content.pt;
-const PES = content.es;
+const PPT = content;
+const PES = content;
 
 function ProgressoPage() {
   const { user } = useUser();
   const { daily, update } = useDaily();
-  const { lang } = useLang();
-  const c = content[lang];
+  const c = content;
   const [peso, setPeso] = useState<string>("");
   const [energia, setEnergia] = useState<number>(user?.energia ?? 5);
 
@@ -80,7 +58,7 @@ function ProgressoPage() {
   const pesoData =
     daily.pesoHistorico.length > 0
       ? daily.pesoHistorico
-      : [{ date: lang === "es" ? "inicio" : "início", peso: user?.pesoAtual ?? 70 }];
+      : [{ date: "start", peso: user?.pesoAtual ?? 70 }];
 
   return (
     <AppShell>

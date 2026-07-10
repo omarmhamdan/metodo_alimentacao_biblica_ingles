@@ -277,8 +277,8 @@ export async function setEntitlement(
   active: boolean,
 ): Promise<{ ok: boolean; error?: string }> {
   const e = norm(email);
-  if (!e) return { ok: false, error: "Email vazio." };
-  if (!supabase) return { ok: false, error: "Supabase não configurado." };
+  if (!e) return { ok: false, error: "Empty email." };
+  if (!supabase) return { ok: false, error: "Supabase not configured." };
   try {
     const { error } = await supabase
       .from("entitlements")

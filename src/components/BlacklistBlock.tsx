@@ -1,33 +1,21 @@
-// Bloqueio de acesso por reembolso do produto principal.
-// Mostrado quando o email do lead está na blacklist (pediu cancelamento/reembolso).
-// Tela vermelha de erro + botão pra finalizar a compra de novo.
+// Access block for a refund on the main product.
+// Shown when the lead's email is on the blacklist (requested cancellation/refund).
+// Red error screen + button to complete the purchase again.
 
 import { ShieldAlert, ArrowRight } from "lucide-react";
-import { useLang } from "@/lib/store";
 
-// Checkout do "Método Alimentación Bíblica" (produto principal).
+// Checkout for the main product.
 export const REBUY_CHECKOUT_URL = "https://pay.hotmart.com/E106250747Q?checkoutMode=10";
 
-const COPY = {
-  pt: {
-    badge: "Acesso bloqueado",
-    title: "Seu acesso foi bloqueado",
-    body: "Identificamos um pedido de reembolso feito por você. Por isso, o acesso ao material está bloqueado.",
-    cta_intro: "Quer liberar seu acesso novamente? Clique no botão abaixo e finalize sua compra.",
-    cta: "Finalizar compra e liberar acesso",
-  },
-  es: {
-    badge: "Acceso bloqueado",
-    title: "Tu acceso fue bloqueado",
-    body: "Identificamos una solicitud de reembolso hecha por ti. Por eso, el acceso al material está bloqueado.",
-    cta_intro: "¿Quieres recuperar tu acceso? Haz clic en el botón de abajo y finaliza tu compra.",
-    cta: "Finalizar compra y liberar acceso",
-  },
+const t = {
+  badge: "Access blocked",
+  title: "Your access has been blocked",
+  body: "We identified a refund request made by you. For that reason, access to the material is blocked.",
+  cta_intro: "Want to restore your access? Tap the button below and complete your purchase.",
+  cta: "Complete purchase and restore access",
 };
 
 export function BlacklistBlock() {
-  const { lang } = useLang();
-  const t = COPY[lang];
   return (
     <div className="mx-auto flex min-h-screen w-full max-w-md flex-col items-center justify-center px-6 py-12">
       <div className="w-full rounded-3xl border-2 border-red-500/40 bg-red-500/5 p-6 text-center shadow-card">

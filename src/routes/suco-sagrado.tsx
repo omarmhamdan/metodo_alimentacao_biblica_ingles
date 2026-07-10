@@ -8,83 +8,47 @@ import sucoImg from "@/assets/suco-sagrado.jpg";
 
 export const Route = createFileRoute("/suco-sagrado")({
   component: SucoSagrado,
-  // title set by AppShell bootstrap (per-language)
 });
 
 const content = {
-  es: {
-    badge: "Ritual matutino",
-    title: "Jugo Sagrado de la Mañana",
-    subtitle: "El primer gesto del día que aquieta el alma y despierta el cuerpo.",
-    verse: "Por la mañana oirás mi voz, oh Señor; por la mañana me presentaré ante Ti en oración.",
-    verseRef: "Salmos 5:3",
-    secIngredientes: "Ingredientes",
-    secRitual: "Ritual",
-    secBeneficios: "Beneficios",
-    ingredientes: [
-      "1 manzana verde",
-      "1 puñado de menta fresca",
-      "Jugo de 1 limón",
-      "1 cucharadita de miel cruda",
-      "1 rodaja fina de jengibre",
-      "300 ml de agua filtrada",
-    ],
-    passos: [
-      "Lava bien todos los ingredientes en silencio, agradeciendo por la cosecha.",
-      "Licúa todo por 30 segundos.",
-      "Cuela (opcional) y sirve inmediatamente, en un vaso de vidrio.",
-      "Bebe despacio, en ayunas, en oración.",
-    ],
-    beneficios: [
-      "Despierta el hígado",
-      "Reduce inflamación",
-      "Aumenta energía natural",
-      "Hidrata profundamente",
-    ],
-    btnDone: "Lo tomé hoy — Dios te bendiga",
-    btnMark: "Marcar como tomado hoy",
-  },
-  pt: {
-    badge: "Ritual matinal",
-    title: "Suco Sagrado da Manhã",
-    subtitle: "O primeiro gesto do dia que aquieta a alma e acorda o corpo.",
-    verse: "Pela manhã ouvirás a minha voz, ó Senhor; pela manhã apresentarei a Ti a minha oração.",
-    verseRef: "Salmos 5:3",
-    secIngredientes: "Ingredientes",
-    secRitual: "Ritual",
-    secBeneficios: "Benefícios",
-    ingredientes: [
-      "1 maçã verde",
-      "1 punhado de hortelã fresca",
-      "Suco de 1 limão",
-      "1 colher de chá de mel cru",
-      "1 fatia fina de gengibre",
-      "300 ml de água filtrada",
-    ],
-    passos: [
-      "Lave bem todos os ingredientes em silêncio, agradecendo pela colheita.",
-      "Bata tudo no liquidificador por 30 segundos.",
-      "Coe (opcional) e sirva imediatamente, em um copo de vidro.",
-      "Beba devagar, em jejum, em oração.",
-    ],
-    beneficios: [
-      "Desperta o fígado",
-      "Reduz inflamação",
-      "Aumenta energia natural",
-      "Hidrata profundamente",
-    ],
-    btnDone: "Tomei hoje — Deus te abençoe",
-    btnMark: "Marcar como tomado hoje",
-  },
+  badge: "Morning ritual",
+  title: "Sacred Morning Juice",
+  subtitle: "The first gesture of the day that stills the soul and wakes the body.",
+  verse: "In the morning You hear my voice, O Lord; in the morning I lay my prayers before You.",
+  verseRef: "Psalm 5:3",
+  secIngredientes: "Ingredients",
+  secRitual: "Ritual",
+  secBeneficios: "Benefits",
+  ingredientes: [
+    "1 green apple",
+    "1 handful of fresh mint",
+    "Juice of 1 lemon",
+    "1 teaspoon raw honey",
+    "1 thin slice of ginger",
+    "300 ml (1¼ cups) filtered water",
+  ],
+  passos: [
+    "Wash all the ingredients in silence, giving thanks for the harvest.",
+    "Blend everything for 30 seconds.",
+    "Strain (optional) and serve immediately, in a glass.",
+    "Drink slowly, on an empty stomach, in prayer.",
+  ],
+  beneficios: [
+    "Wakes up the liver",
+    "Reduces inflammation",
+    "Boosts natural energy",
+    "Hydrates deeply",
+  ],
+  btnDone: "I had it today — God bless you",
+  btnMark: "Mark as done today",
 };
 
-const SPT = content.pt;
-const SES = content.es;
+const SPT = content;
+const SES = content;
 
 function SucoSagrado() {
   const { daily, update } = useDaily();
-  const { lang } = useLang();
-  const c = content[lang];
+  const c = content;
 
   return (
     <AppShell>

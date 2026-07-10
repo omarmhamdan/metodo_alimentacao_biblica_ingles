@@ -73,21 +73,21 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1, viewport-fit=cover" },
       { name: "theme-color", content: "#8B7355" },
-      // title is set by the bootstrap script (per-language)
+      { title: "The Biblical Nutrition Method" },
       {
         name: "description",
         content:
-          "App devocional culinario con recetas bíblicas, hidratación y reconexión con Dios por la alimentación.",
+          "A devotional cooking app with biblical recipes, hydration, and reconnection with God through food.",
       },
       // PWA / Add to Home Screen support
       { name: "apple-mobile-web-app-capable", content: "yes" },
       { name: "mobile-web-app-capable", content: "yes" },
       { name: "apple-mobile-web-app-status-bar-style", content: "default" },
-      // apple-mobile-web-app-title and application-name are set by the inline
-      // bootstrap script in RootShell (so iOS reads them before React mounts).
+      { name: "apple-mobile-web-app-title", content: "The Biblical Nutrition Method" },
+      { name: "application-name", content: "The Biblical Nutrition Method" },
       // Open Graph
-      { property: "og:title", content: "Método Alimentación Bíblica" },
-      { property: "og:description", content: "La mesa que Dios creó, al alcance de tu cocina." },
+      { property: "og:title", content: "The Biblical Nutrition Method" },
+      { property: "og:description", content: "The table God created, within reach of your kitchen." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
     ],
@@ -110,31 +110,11 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
   errorComponent: ErrorComponent,
 });
 
-// Inline bootstrap that fires before React mounts. iOS Safari reads
-// apple-mobile-web-app-title at page load time (it ignores later JS updates),
-// so we MUST set it synchronously here based on the user's stored language.
+// Inline bootstrap that fires before React mounts. Pre-warms the IndexedDB
+// image cache as early as possible so recipe lists don't briefly flash stock
+// photos before swapping to user uploads.
 const BOOTSTRAP_PWA_META = `
 (function(){
-  try {
-    var lang = localStorage.getItem('mab:lang');
-    if (lang !== 'pt' && lang !== 'es') {
-      lang = 'es'; // first visit defaults to Spanish (primary audience)
-    }
-    var title = lang === 'pt' ? 'Método Alimentação Bíblica' : 'Método Alimentación Bíblica';
-    document.documentElement.lang = lang;
-    document.title = title;
-    function setMeta(name, content) {
-      var m = document.querySelector('meta[name="' + name + '"]');
-      if (!m) { m = document.createElement('meta'); m.name = name; document.head.appendChild(m); }
-      m.content = content;
-    }
-    setMeta('apple-mobile-web-app-title', title);
-    setMeta('application-name', title);
-    var link = document.querySelector('link[rel="manifest"]');
-    if (!link) { link = document.createElement('link'); link.rel = 'manifest'; document.head.appendChild(link); }
-    link.href = '/manifest-' + lang + '.json';
-  } catch (e) {}
-
   // Pre-warm the IndexedDB image cache as early as possible so recipe lists
   // don't briefly flash stock photos before swapping to user uploads.
   try {
@@ -161,9 +141,7 @@ const BOOTSTRAP_PWA_META = `
 
 function RootShell({ children }: { children: React.ReactNode }) {
   return (
-    // lang is set client-side by the bootstrap script based on the user's
-    // language; the SSR default differs intentionally, so suppress the warning.
-    <html lang="en" suppressHydrationWarning>
+    <html lang="en">
       <head>
         <HeadContent />
         <script dangerouslySetInnerHTML={{ __html: BOOTSTRAP_PWA_META }} />

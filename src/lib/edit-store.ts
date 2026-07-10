@@ -10,11 +10,9 @@
 import { useEffect, useState } from "react";
 import { supabase } from "./supabase";
 import { isAdminLoggedIn } from "./admin-store";
-import type { Lang } from "./i18n";
 
 export interface TextOverride {
-  pt?: string;
-  es?: string;
+  text?: string;
 }
 
 const LS_KEY = "mab:text_overrides";
@@ -46,11 +44,11 @@ export async function initTextOverrides(): Promise<void> {
   window.dispatchEvent(new CustomEvent("mab:text"));
   if (!supabase) return;
   try {
-    const { data, error } = await supabase.from("content_text").select("key, pt, es");
+    const { data, error } = await supabase.from("content_text").select("key, text");
     if (error || !data) return;
     const cloud: Record<string, TextOverride> = {};
-    for (const row of data as { key: string; pt: string | null; es: string | null }[]) {
-      cloud[row.key] = { pt: row.pt ?? undefined, es: row.es ?? undefined };
+    for (const row of data as { key: string; text: string | null }[]) {
+      cloud[row.key] = { text: row.text ?? undefined };
     }
     _map = { ..._map, ...cloud };
     writeLocal(_map);
@@ -64,14 +62,14 @@ export function getOverride(key: string): TextOverride | undefined {
   return _map[key];
 }
 
-/** Resolve the display string for a key+lang, falling back to the code default. */
-export function resolveText(key: string, lang: Lang, fallback: string): string {
+/** Resolve the display string for a key, falling back to the code default. */
+export function resolveText(key: string, fallback: string): string {
   const ov = _map[key];
-  const v = ov?.[lang];
+  const v = ov?.text;
   return v != null && v.trim() !== "" ? v : fallback;
 }
 
-/** Save an override (both langs). Persists to cloud when admin+Supabase, else local. */
+/** Save an override. Persists to cloud when admin+Supabase, else local. */
 export async function saveTextOverride(key: string, value: TextOverride): Promise<void> {
   _map[key] = { ..._map[key], ...value };
   writeLocal(_map);
@@ -80,8 +78,7 @@ export async function saveTextOverride(key: string, value: TextOverride): Promis
   try {
     await supabase.from("content_text").upsert({
       key,
-      pt: _map[key].pt ?? null,
-      es: _map[key].es ?? null,
+      text: _map[key].text ?? null,
     });
   } catch {
     /* keep local copy */
@@ -128,13 +125,13 @@ export function useEditMode(): boolean {
 }
 
 /** Reactive resolved text for a key. */
-export function useText(key: string, lang: Lang, fallback: string): string {
-  const [val, setVal] = useState<string>(() => resolveText(key, lang, fallback));
+export function useText(key: string, fallback: string): string {
+  const [val, setVal] = useState<string>(() => resolveText(key, fallback));
   useEffect(() => {
-    const fn = () => setVal(resolveText(key, lang, fallback));
+    const fn = () => setVal(resolveText(key, fallback));
     fn();
     window.addEventListener("mab:text", fn);
     return () => window.removeEventListener("mab:text", fn);
-  }, [key, lang, fallback]);
+  }, [key, fallback]);
   return val;
 }

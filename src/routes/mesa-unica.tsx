@@ -20,22 +20,21 @@ import {
   Clock,
 } from "lucide-react";
 import { AppShell } from "@/components/AppShell";
-import { useLang, useStoredImageMap } from "@/lib/store";
+import { useStoredImageMap } from "@/lib/store";
 import { mesaContent, type Categoria, type MesaContent } from "@/lib/mesa-unica";
 import { bonusFallbacks } from "@/lib/bonus-images";
 import { Ed, EditImage } from "@/components/Editable";
 import { Locked } from "@/components/Locked";
 
-const PT = mesaContent.pt;
-const ES = mesaContent.es;
+const PT = mesaContent;
+const ES = mesaContent;
 
 export const Route = createFileRoute("/mesa-unica")({
   component: MesaUnica,
 });
 
 function MesaUnica() {
-  const { lang } = useLang();
-  const c = mesaContent[lang];
+  const c = mesaContent;
   const [cat, setCat] = useState<string | null>(null);
   const categoria = cat ? c.categorias.find((x) => x.id === cat) : null;
 
@@ -46,7 +45,7 @@ function MesaUnica() {
           {categoria ? (
             <CategoryDetail key={categoria.id} cat={categoria} c={c} onBack={() => setCat(null)} />
           ) : (
-            <Landing key="landing" c={c} onPick={setCat} lang={lang} />
+            <Landing key="landing" c={c} onPick={setCat} />
           )}
         </AnimatePresence>
       </Locked>
@@ -58,11 +57,9 @@ function MesaUnica() {
 function Landing({
   c,
   onPick,
-  lang,
 }: {
   c: MesaContent;
   onPick: (id: string) => void;
-  lang: "pt" | "es";
 }) {
   const img = useStoredImageMap(bonusFallbacks);
   return (
@@ -190,7 +187,7 @@ function Landing({
               imageId={`mesa-domingo-${i + 1}`}
               image={img[`mesa-domingo-${i + 1}`]}
               title={p.titulo}
-              kicker={`${lang === "es" ? "Plato" : "Prato"} ${i + 1}`}
+              kicker={`Dish ${i + 1}`}
             >
               <Ed
                 as="p"
@@ -262,7 +259,7 @@ function Landing({
           />
         </div>
         <div className="space-y-2.5">
-          <GuideCard icon={Sparkles} title={lang === "es" ? "Lee esto primero" : "Leia primeiro"}>
+          <GuideCard icon={Sparkles} title="Read this first">
             <Abertura c={c} />
           </GuideCard>
           <GuideCard icon={Lightbulb} title={c.secLogica}>
@@ -278,7 +275,7 @@ function Landing({
             <Bonus c={c} />
           </GuideCard>
           <GuideCard icon={BookHeart} title={c.secFinal}>
-            <Final c={c} lang={lang} />
+            <Final c={c} />
           </GuideCard>
         </div>
         <div className="h-6" />
@@ -840,7 +837,7 @@ function Bonus({ c }: { c: MesaContent }) {
   );
 }
 
-function Final({ c, lang }: { c: MesaContent; lang: "pt" | "es" }) {
+function Final({ c }: { c: MesaContent }) {
   return (
     <>
       <div className="rounded-3xl bg-gradient-devotional p-5">
@@ -866,7 +863,7 @@ function Final({ c, lang }: { c: MesaContent; lang: "pt" | "es" }) {
         to="/receitas"
         className="mt-4 block w-full rounded-2xl bg-gradient-primary px-5 py-4 text-center text-sm font-medium text-primary-foreground shadow-soft transition-all active:scale-[0.98]"
       >
-        {lang === "es" ? "Ir a las recetas del Método →" : "Ir às receitas do Método →"}
+        Go to the Method's recipes →
       </Link>
     </>
   );

@@ -1,769 +1,445 @@
-// Biblioteca de sucos — 50 receitas naturais, bilíngue (PT/ES), SEM foto.
-// Organizadas por objetivo. Usadas na rota /sucos (lista + filtros).
-// O "Suco Sagrado" continua sendo o ritual destaque (rota /suco-sagrado).
+// Juice library — 50 natural recipes, English-only, NO photos.
+// Organized by goal. Used on the /sucos route (list + filters).
+// The "Sacred Juice" remains the featured ritual (route /suco-sagrado).
 
 export type SucoCat = "desinflamar" | "energia" | "sono" | "detox" | "imunidade";
 
 export interface Suco {
   id: string;
   cat: SucoCat;
-  nome: { pt: string; es: string };
-  beneficio: { pt: string; es: string };
-  ingredientes: { pt: string[]; es: string[] };
-  preparo: { pt: string[]; es: string[] };
+  nome: string;
+  beneficio: string;
+  ingredientes: string[];
+  preparo: string[];
 }
 
-export const sucoCats: { id: SucoCat; pt: string; es: string; emoji: string }[] = [
-  { id: "desinflamar", pt: "Desinflamar", es: "Desinflamar", emoji: "🌿" },
-  { id: "energia", pt: "Energia", es: "Energía", emoji: "☀️" },
-  { id: "sono", pt: "Sono & Calma", es: "Sueño y Calma", emoji: "🌙" },
-  { id: "detox", pt: "Detox & Fígado", es: "Detox e Hígado", emoji: "💧" },
-  { id: "imunidade", pt: "Imunidade", es: "Inmunidad", emoji: "🛡️" },
+export const sucoCats: { id: SucoCat; label: string; emoji: string }[] = [
+  { id: "desinflamar", label: "De-Bloat", emoji: "🌿" },
+  { id: "energia", label: "Energy", emoji: "☀️" },
+  { id: "sono", label: "Sleep & Calm", emoji: "🌙" },
+  { id: "detox", label: "Detox & Liver", emoji: "💧" },
+  { id: "imunidade", label: "Immunity", emoji: "🛡️" },
 ];
 
-// Passos padrão reaproveitados (liquidificador / infusão).
-const BATER_PT = [
-  "Bata todos os ingredientes com 200 ml de água gelada até ficar homogêneo.",
-  "Coe se preferir e sirva imediatamente, de preferência em jejum.",
+// Standard reusable steps (blender / infusion).
+const BLEND = [
+  "Blend all the ingredients with 200 ml (¾ cup) of cold water until smooth.",
+  "Strain if you prefer and serve immediately, ideally on an empty stomach.",
 ];
-const BATER_ES = [
-  "Licúa todos los ingredientes con 200 ml de agua fría hasta que quede homogéneo.",
-  "Cuela si prefieres y sirve de inmediato, preferiblemente en ayunas.",
-];
-const CHA_PT = [
-  "Prepare a infusão com água quente e deixe amornar por 5 minutos.",
-  "Misture o mel e o limão.",
-  "Beba morno, devagar, antes de dormir.",
-];
-const CHA_ES = [
-  "Prepara la infusión con agua caliente y deja entibiar 5 minutos.",
-  "Mezcla la miel y el limón.",
-  "Bebe tibio, despacio, antes de dormir.",
+const TEA = [
+  "Steep in hot water and let cool slightly for 5 minutes.",
+  "Stir in the honey and lemon.",
+  "Drink warm, slowly, before bed.",
 ];
 
 export const sucos: Suco[] = [
-  // ───────────────────────── DESINFLAMAR ─────────────────────────
+  // ───────────────────────── DE-BLOAT ─────────────────────────
   {
     id: "verde-do-jordao",
     cat: "desinflamar",
-    nome: { pt: "Verde do Jordão", es: "Verde del Jordán" },
-    beneficio: {
-      pt: "Reduz o inchaço e acalma o intestino logo na primeira semana.",
-      es: "Reduce la hinchazón y calma el intestino desde la primera semana.",
-    },
-    ingredientes: {
-      pt: ["1 folha de couve", "1 fatia de abacaxi", "1 rodela de gengibre", "Suco de 1 limão", "Hortelã a gosto"],
-      es: ["1 hoja de col rizada", "1 rodaja de piña", "1 rodaja de jengibre", "Jugo de 1 limón", "Hierbabuena al gusto"],
-    },
-    preparo: { pt: BATER_PT, es: BATER_ES },
+    nome: "Jordan Green",
+    beneficio: "Reduces bloating and calms the gut within the first week.",
+    ingredientes: ["1 kale leaf", "1 slice of pineapple", "1 slice of fresh ginger", "Juice of 1 lemon", "Mint to taste"],
+    preparo: BLEND,
   },
   {
     id: "dourado-anti-inflamatorio",
     cat: "desinflamar",
-    nome: { pt: "Dourado Anti-Inflamatório", es: "Dorado Antiinflamatorio" },
-    beneficio: {
-      pt: "Cúrcuma e gengibre baixam a inflamação do corpo inteiro.",
-      es: "Cúrcuma y jengibre bajan la inflamación de todo el cuerpo.",
-    },
-    ingredientes: {
-      pt: ["1 cenoura", "Suco de 2 laranjas", "1 c. de chá de cúrcuma", "1 rodela de gengibre", "1 pitada de pimenta-do-reino"],
-      es: ["1 zanahoria", "Jugo de 2 naranjas", "1 cdta de cúrcuma", "1 rodaja de jengibre", "1 pizca de pimienta negra"],
-    },
-    preparo: { pt: BATER_PT, es: BATER_ES },
+    nome: "Golden Anti-Inflammatory",
+    beneficio: "Turmeric and ginger lower inflammation throughout the whole body.",
+    ingredientes: ["1 carrot", "Juice of 2 oranges", "1 teaspoon turmeric", "1 slice of fresh ginger", "1 pinch of black pepper"],
+    preparo: BLEND,
   },
   {
     id: "abacaxi-hortela",
     cat: "desinflamar",
-    nome: { pt: "Abacaxi com Hortelã", es: "Piña con Hierbabuena" },
-    beneficio: {
-      pt: "A bromelina do abacaxi ajuda a desinchar e digerir.",
-      es: "La bromelina de la piña ayuda a desinflamar y digerir.",
-    },
-    ingredientes: {
-      pt: ["2 fatias de abacaxi", "Hortelã a gosto", "1 rodela de gengibre", "200 ml de água de coco"],
-      es: ["2 rodajas de piña", "Hierbabuena al gusto", "1 rodaja de jengibre", "200 ml de agua de coco"],
-    },
-    preparo: { pt: BATER_PT, es: BATER_ES },
+    nome: "Pineapple Mint",
+    beneficio: "The bromelain in pineapple helps de-bloat and digest.",
+    ingredientes: ["2 slices of pineapple", "Mint to taste", "1 slice of fresh ginger", "200 ml (¾ cup) coconut water"],
+    preparo: BLEND,
   },
   {
     id: "curcuma-limao",
     cat: "desinflamar",
-    nome: { pt: "Cúrcuma & Limão", es: "Cúrcuma y Limón" },
-    beneficio: {
-      pt: "Shot matinal que acorda o fígado e combate a inflamação.",
-      es: "Shot matutino que despierta el hígado y combate la inflamación.",
-    },
-    ingredientes: {
-      pt: ["Suco de 1 limão", "1 c. de chá de cúrcuma", "1 c. de chá de mel", "1 pitada de pimenta-do-reino", "200 ml de água morna"],
-      es: ["Jugo de 1 limón", "1 cdta de cúrcuma", "1 cdta de miel", "1 pizca de pimienta negra", "200 ml de agua tibia"],
-    },
-    preparo: {
-      pt: ["Misture tudo na água morna até dissolver.", "Beba em jejum, de uma vez."],
-      es: ["Mezcla todo en el agua tibia hasta disolver.", "Bebe en ayunas, de una vez."],
-    },
+    nome: "Turmeric & Lemon",
+    beneficio: "A morning shot that wakes up the liver and fights inflammation.",
+    ingredientes: ["Juice of 1 lemon", "1 teaspoon turmeric", "1 teaspoon honey", "1 pinch of black pepper", "200 ml (¾ cup) warm water"],
+    preparo: ["Stir everything into the warm water until dissolved.", "Drink on an empty stomach, all at once."],
   },
   {
     id: "pepino-refrescante",
     cat: "desinflamar",
-    nome: { pt: "Pepino Refrescante", es: "Pepino Refrescante" },
-    beneficio: {
-      pt: "Hidrata fundo e reduz a retenção de líquido.",
-      es: "Hidrata profundo y reduce la retención de líquido.",
-    },
-    ingredientes: {
-      pt: ["1/2 pepino", "Suco de 1 limão", "Hortelã a gosto", "1 maçã verde"],
-      es: ["1/2 pepino", "Jugo de 1 limón", "Hierbabuena al gusto", "1 manzana verde"],
-    },
-    preparo: { pt: BATER_PT, es: BATER_ES },
+    nome: "Cooling Cucumber",
+    beneficio: "Deeply hydrates and reduces water retention.",
+    ingredientes: ["½ cucumber", "Juice of 1 lemon", "Mint to taste", "1 green apple"],
+    preparo: BLEND,
   },
   {
     id: "gengibre-maca",
     cat: "desinflamar",
-    nome: { pt: "Gengibre & Maçã", es: "Jengibre y Manzana" },
-    beneficio: {
-      pt: "Aquece, desincha e regula a digestão.",
-      es: "Calienta, desinflama y regula la digestión.",
-    },
-    ingredientes: {
-      pt: ["1 maçã", "1 rodela de gengibre", "Suco de 1/2 limão", "Canela a gosto"],
-      es: ["1 manzana", "1 rodaja de jengibre", "Jugo de 1/2 limón", "Canela al gusto"],
-    },
-    preparo: { pt: BATER_PT, es: BATER_ES },
+    nome: "Ginger & Apple",
+    beneficio: "Warms, de-bloats, and regulates digestion.",
+    ingredientes: ["1 apple", "1 slice of fresh ginger", "Juice of ½ lemon", "Cinnamon to taste"],
+    preparo: BLEND,
   },
   {
     id: "beterraba-profunda",
     cat: "desinflamar",
-    nome: { pt: "Beterraba Profunda", es: "Remolacha Profunda" },
-    beneficio: {
-      pt: "Antioxidante poderoso que melhora a circulação.",
-      es: "Antioxidante poderoso que mejora la circulación.",
-    },
-    ingredientes: {
-      pt: ["1/2 beterraba", "Suco de 2 laranjas", "1 rodela de gengibre"],
-      es: ["1/2 remolacha", "Jugo de 2 naranjas", "1 rodaja de jengibre"],
-    },
-    preparo: { pt: BATER_PT, es: BATER_ES },
+    nome: "Deep Beet",
+    beneficio: "A powerful antioxidant that improves circulation.",
+    ingredientes: ["½ beet", "Juice of 2 oranges", "1 slice of fresh ginger"],
+    preparo: BLEND,
   },
   {
     id: "cenoura-laranja",
     cat: "desinflamar",
-    nome: { pt: "Cenoura & Laranja", es: "Zanahoria y Naranja" },
-    beneficio: {
-      pt: "Betacaroteno e vitamina C para a pele e a imunidade.",
-      es: "Betacaroteno y vitamina C para la piel y la inmunidad.",
-    },
-    ingredientes: {
-      pt: ["1 cenoura", "Suco de 2 laranjas", "1 pitada de cúrcuma"],
-      es: ["1 zanahoria", "Jugo de 2 naranjas", "1 pizca de cúrcuma"],
-    },
-    preparo: { pt: BATER_PT, es: BATER_ES },
+    nome: "Carrot & Orange",
+    beneficio: "Beta-carotene and vitamin C for skin and immunity.",
+    ingredientes: ["1 carrot", "Juice of 2 oranges", "1 pinch of turmeric"],
+    preparo: BLEND,
   },
   {
     id: "couve-suave",
     cat: "desinflamar",
-    nome: { pt: "Couve Suave", es: "Col Suave" },
-    beneficio: {
-      pt: "Clorofila e fibra que alimentam o intestino bom.",
-      es: "Clorofila y fibra que alimentan el intestino sano.",
-    },
-    ingredientes: {
-      pt: ["1 folha de couve", "1 maçã", "Suco de 1 limão", "200 ml de água"],
-      es: ["1 hoja de col rizada", "1 manzana", "Jugo de 1 limón", "200 ml de agua"],
-    },
-    preparo: { pt: BATER_PT, es: BATER_ES },
+    nome: "Gentle Kale",
+    beneficio: "Chlorophyll and fiber that feed the good gut bacteria.",
+    ingredientes: ["1 kale leaf", "1 apple", "Juice of 1 lemon", "200 ml (¾ cup) water"],
+    preparo: BLEND,
   },
   {
     id: "melancia-gengibre",
     cat: "desinflamar",
-    nome: { pt: "Melancia & Gengibre", es: "Sandía y Jengibre" },
-    beneficio: {
-      pt: "Diurético natural que desincha sem peso.",
-      es: "Diurético natural que desinflama sin pesadez.",
-    },
-    ingredientes: {
-      pt: ["2 fatias de melancia", "1 rodela de gengibre", "Hortelã a gosto"],
-      es: ["2 rodajas de sandía", "1 rodaja de jengibre", "Hierbabuena al gusto"],
-    },
-    preparo: { pt: BATER_PT, es: BATER_ES },
+    nome: "Watermelon & Ginger",
+    beneficio: "A natural diuretic that de-bloats without heaviness.",
+    ingredientes: ["2 slices of watermelon", "1 slice of fresh ginger", "Mint to taste"],
+    preparo: BLEND,
   },
 
-  // ───────────────────────── ENERGIA ─────────────────────────
+  // ───────────────────────── ENERGY ─────────────────────────
   {
     id: "sol-da-manha",
     cat: "energia",
-    nome: { pt: "Sol da Manhã", es: "Sol de la Mañana" },
-    beneficio: {
-      pt: "Energia limpa para começar o dia sem café.",
-      es: "Energía limpia para empezar el día sin café.",
-    },
-    ingredientes: {
-      pt: ["Suco de 2 laranjas", "1 cenoura", "1 maçã", "1 rodela de gengibre"],
-      es: ["Jugo de 2 naranjas", "1 zanahoria", "1 manzana", "1 rodaja de jengibre"],
-    },
-    preparo: { pt: BATER_PT, es: BATER_ES },
+    nome: "Morning Sun",
+    beneficio: "Clean energy to start the day without coffee.",
+    ingredientes: ["Juice of 2 oranges", "1 carrot", "1 apple", "1 slice of fresh ginger"],
+    preparo: BLEND,
   },
   {
     id: "verde-vital",
     cat: "energia",
-    nome: { pt: "Verde Vital", es: "Verde Vital" },
-    beneficio: {
-      pt: "Ferro e potássio que sustentam a energia o dia todo.",
-      es: "Hierro y potasio que sostienen la energía todo el día.",
-    },
-    ingredientes: {
-      pt: ["1 punhado de espinafre", "1 banana", "1 maçã", "200 ml de água de coco"],
-      es: ["1 puñado de espinaca", "1 banano", "1 manzana", "200 ml de agua de coco"],
-    },
-    preparo: { pt: BATER_PT, es: BATER_ES },
+    nome: "Vital Green",
+    beneficio: "Iron and potassium that sustain your energy all day.",
+    ingredientes: ["1 handful of spinach", "1 banana", "1 apple", "200 ml (¾ cup) coconut water"],
+    preparo: BLEND,
   },
   {
     id: "banana-aveia",
     cat: "energia",
-    nome: { pt: "Banana & Aveia", es: "Banano y Avena" },
-    beneficio: {
-      pt: "Saciedade longa e energia estável, sem pico de açúcar.",
-      es: "Saciedad larga y energía estable, sin pico de azúcar.",
-    },
-    ingredientes: {
-      pt: ["1 banana", "2 c. de sopa de aveia", "200 ml de leite vegetal", "Canela a gosto"],
-      es: ["1 banano", "2 cdas de avena", "200 ml de leche vegetal", "Canela al gusto"],
-    },
-    preparo: {
-      pt: ["Bata tudo até virar um creme liso.", "Sirva na hora, polvilhando canela."],
-      es: ["Licúa todo hasta una crema lisa.", "Sirve al momento, espolvoreando canela."],
-    },
+    nome: "Banana & Oats",
+    beneficio: "Long-lasting fullness and steady energy, no sugar spike.",
+    ingredientes: ["1 banana", "2 tablespoons oats", "200 ml (¾ cup) plant milk", "Cinnamon to taste"],
+    preparo: ["Blend everything into a smooth cream.", "Serve right away, dusted with cinnamon."],
   },
   {
     id: "beterraba-energetica",
     cat: "energia",
-    nome: { pt: "Beterraba Energética", es: "Remolacha Energética" },
-    beneficio: {
-      pt: "Aumenta o fôlego e a disposição física.",
-      es: "Aumenta el aliento y la disposición física.",
-    },
-    ingredientes: {
-      pt: ["1/2 beterraba", "1 maçã", "Suco de 1 laranja"],
-      es: ["1/2 remolacha", "1 manzana", "Jugo de 1 naranja"],
-    },
-    preparo: { pt: BATER_PT, es: BATER_ES },
+    nome: "Energizing Beet",
+    beneficio: "Boosts stamina and physical drive.",
+    ingredientes: ["½ beet", "1 apple", "Juice of 1 orange"],
+    preparo: BLEND,
   },
   {
     id: "abacaxi-tropical",
     cat: "energia",
-    nome: { pt: "Abacaxi Tropical", es: "Piña Tropical" },
-    beneficio: {
-      pt: "Refrescante e cheio de vitamina C para o ânimo.",
-      es: "Refrescante y lleno de vitamina C para el ánimo.",
-    },
-    ingredientes: {
-      pt: ["2 fatias de abacaxi", "Suco de 1 laranja", "Hortelã a gosto"],
-      es: ["2 rodajas de piña", "Jugo de 1 naranja", "Hierbabuena al gusto"],
-    },
-    preparo: { pt: BATER_PT, es: BATER_ES },
+    nome: "Tropical Pineapple",
+    beneficio: "Refreshing and full of vitamin C to lift your spirits.",
+    ingredientes: ["2 slices of pineapple", "Juice of 1 orange", "Mint to taste"],
+    preparo: BLEND,
   },
   {
     id: "maca-canela",
     cat: "energia",
-    nome: { pt: "Maçã & Canela", es: "Manzana y Canela" },
-    beneficio: {
-      pt: "Estabiliza o açúcar do sangue e dá energia calma.",
-      es: "Estabiliza el azúcar en sangre y da energía calma.",
-    },
-    ingredientes: {
-      pt: ["2 maçãs", "1 c. de chá de canela", "Suco de 1/2 limão", "200 ml de água"],
-      es: ["2 manzanas", "1 cdta de canela", "Jugo de 1/2 limón", "200 ml de agua"],
-    },
-    preparo: { pt: BATER_PT, es: BATER_ES },
+    nome: "Apple & Cinnamon",
+    beneficio: "Steadies blood sugar and gives calm, even energy.",
+    ingredientes: ["2 apples", "1 teaspoon cinnamon", "Juice of ½ lemon", "200 ml (¾ cup) water"],
+    preparo: BLEND,
   },
   {
     id: "manga-dourada",
     cat: "energia",
-    nome: { pt: "Manga Dourada", es: "Mango Dorado" },
-    beneficio: {
-      pt: "Doce natural que recarrega depois do exercício.",
-      es: "Dulce natural que recarga después del ejercicio.",
-    },
-    ingredientes: {
-      pt: ["1/2 manga", "Suco de 1 laranja", "1 pitada de cúrcuma"],
-      es: ["1/2 mango", "Jugo de 1 naranja", "1 pizca de cúrcuma"],
-    },
-    preparo: { pt: BATER_PT, es: BATER_ES },
+    nome: "Golden Mango",
+    beneficio: "Natural sweetness that recharges you after exercise.",
+    ingredientes: ["½ mango", "Juice of 1 orange", "1 pinch of turmeric"],
+    preparo: BLEND,
   },
   {
     id: "uva-limao",
     cat: "energia",
-    nome: { pt: "Uva & Limão", es: "Uva y Limón" },
-    beneficio: {
-      pt: "Antioxidantes que renovam a energia das células.",
-      es: "Antioxidantes que renuevan la energía de las células.",
-    },
-    ingredientes: {
-      pt: ["1 punhado de uvas roxas", "Suco de 1 limão", "200 ml de água"],
-      es: ["1 puñado de uvas moradas", "Jugo de 1 limón", "200 ml de agua"],
-    },
-    preparo: { pt: BATER_PT, es: BATER_ES },
+    nome: "Grape & Lemon",
+    beneficio: "Antioxidants that renew your cells' energy.",
+    ingredientes: ["1 handful of purple grapes", "Juice of 1 lemon", "200 ml (¾ cup) water"],
+    preparo: BLEND,
   },
   {
     id: "cenoura-power",
     cat: "energia",
-    nome: { pt: "Cenoura Power", es: "Zanahoria Power" },
-    beneficio: {
-      pt: "Vitamina A e energia para o foco da manhã.",
-      es: "Vitamina A y energía para el enfoque de la mañana.",
-    },
-    ingredientes: {
-      pt: ["2 cenouras", "1 maçã", "1 rodela de gengibre", "Suco de 1/2 limão"],
-      es: ["2 zanahorias", "1 manzana", "1 rodaja de jengibre", "Jugo de 1/2 limón"],
-    },
-    preparo: { pt: BATER_PT, es: BATER_ES },
+    nome: "Carrot Power",
+    beneficio: "Vitamin A and energy for morning focus.",
+    ingredientes: ["2 carrots", "1 apple", "1 slice of fresh ginger", "Juice of ½ lemon"],
+    preparo: BLEND,
   },
   {
     id: "verde-despertar",
     cat: "energia",
-    nome: { pt: "Verde Despertar", es: "Verde Despertar" },
-    beneficio: {
-      pt: "Substitui o café com energia leve e clara.",
-      es: "Sustituye el café con energía ligera y clara.",
-    },
-    ingredientes: {
-      pt: ["1 maçã verde", "1 punhado de espinafre", "Suco de 1 limão", "1 rodela de gengibre"],
-      es: ["1 manzana verde", "1 puñado de espinaca", "Jugo de 1 limón", "1 rodaja de jengibre"],
-    },
-    preparo: { pt: BATER_PT, es: BATER_ES },
+    nome: "Green Awakening",
+    beneficio: "Replaces coffee with light, clear energy.",
+    ingredientes: ["1 green apple", "1 handful of spinach", "Juice of 1 lemon", "1 slice of fresh ginger"],
+    preparo: BLEND,
   },
 
-  // ───────────────────────── SONO & CALMA ─────────────────────────
+  // ───────────────────────── SLEEP & CALM ─────────────────────────
   {
     id: "calmaria-da-noite",
     cat: "sono",
-    nome: { pt: "Calmaria da Noite", es: "Calma de la Noche" },
-    beneficio: {
-      pt: "Relaxa o corpo e prepara para um sono profundo.",
-      es: "Relaja el cuerpo y prepara para un sueño profundo.",
-    },
-    ingredientes: {
-      pt: ["1 maçã", "Algumas folhas de alface", "Hortelã a gosto", "200 ml de água"],
-      es: ["1 manzana", "Unas hojas de lechuga", "Hierbabuena al gusto", "200 ml de agua"],
-    },
-    preparo: { pt: BATER_PT, es: BATER_ES },
+    nome: "Evening Calm",
+    beneficio: "Relaxes the body and prepares you for deep sleep.",
+    ingredientes: ["1 apple", "A few lettuce leaves", "Mint to taste", "200 ml (¾ cup) water"],
+    preparo: BLEND,
   },
   {
     id: "camomila-mel",
     cat: "sono",
-    nome: { pt: "Camomila & Mel", es: "Manzanilla y Miel" },
-    beneficio: {
-      pt: "Infusão clássica que acalma a mente antes de dormir.",
-      es: "Infusión clásica que calma la mente antes de dormir.",
-    },
-    ingredientes: {
-      pt: ["1 sachê de camomila", "1 c. de chá de mel", "Suco de 1/2 limão", "250 ml de água quente"],
-      es: ["1 bolsita de manzanilla", "1 cdta de miel", "Jugo de 1/2 limón", "250 ml de agua caliente"],
-    },
-    preparo: { pt: CHA_PT, es: CHA_ES },
+    nome: "Chamomile & Honey",
+    beneficio: "The classic infusion that quiets the mind before bed.",
+    ingredientes: ["1 chamomile tea bag", "1 teaspoon honey", "Juice of ½ lemon", "250 ml (1 cup) hot water"],
+    preparo: TEA,
   },
   {
     id: "maracuja-sereno",
     cat: "sono",
-    nome: { pt: "Maracujá Sereno", es: "Maracuyá Sereno" },
-    beneficio: {
-      pt: "Calmante natural que reduz a ansiedade da noite.",
-      es: "Calmante natural que reduce la ansiedad de la noche.",
-    },
-    ingredientes: {
-      pt: ["Polpa de 1 maracujá", "1 c. de chá de mel", "250 ml de água"],
-      es: ["Pulpa de 1 maracuyá", "1 cdta de miel", "250 ml de agua"],
-    },
-    preparo: { pt: BATER_PT, es: BATER_ES },
+    nome: "Serene Passion Fruit",
+    beneficio: "A natural calmer that eases nighttime anxiety.",
+    ingredientes: ["Pulp of 1 passion fruit", "1 teaspoon honey", "250 ml (1 cup) water"],
+    preparo: BLEND,
   },
   {
     id: "banana-maca-noturna",
     cat: "sono",
-    nome: { pt: "Banana & Maçã Noturna", es: "Banano y Manzana Nocturna" },
-    beneficio: {
-      pt: "Magnésio e triptofano que ajudam a relaxar.",
-      es: "Magnesio y triptófano que ayudan a relajar.",
-    },
-    ingredientes: {
-      pt: ["1 banana", "1 maçã", "Canela a gosto", "200 ml de leite vegetal"],
-      es: ["1 banano", "1 manzana", "Canela al gusto", "200 ml de leche vegetal"],
-    },
-    preparo: { pt: BATER_PT, es: BATER_ES },
+    nome: "Nighttime Banana & Apple",
+    beneficio: "Magnesium and tryptophan that help you unwind.",
+    ingredientes: ["1 banana", "1 apple", "Cinnamon to taste", "200 ml (¾ cup) plant milk"],
+    preparo: BLEND,
   },
   {
     id: "alface-limao",
     cat: "sono",
-    nome: { pt: "Alface & Limão", es: "Lechuga y Limón" },
-    beneficio: {
-      pt: "A alface tem efeito calmante leve e natural.",
-      es: "La lechuga tiene un efecto calmante leve y natural.",
-    },
-    ingredientes: {
-      pt: ["Algumas folhas de alface", "Suco de 1 limão", "1 maçã", "200 ml de água"],
-      es: ["Unas hojas de lechuga", "Jugo de 1 limón", "1 manzana", "200 ml de agua"],
-    },
-    preparo: { pt: BATER_PT, es: BATER_ES },
+    nome: "Lettuce & Lemon",
+    beneficio: "Lettuce has a gentle, natural calming effect.",
+    ingredientes: ["A few lettuce leaves", "Juice of 1 lemon", "1 apple", "200 ml (¾ cup) water"],
+    preparo: BLEND,
   },
   {
     id: "cereja-tranquila",
     cat: "sono",
-    nome: { pt: "Cereja Tranquila", es: "Cereza Tranquila" },
-    beneficio: {
-      pt: "Fonte natural de melatonina para o sono.",
-      es: "Fuente natural de melatonina para el sueño.",
-    },
-    ingredientes: {
-      pt: ["1 punhado de cerejas sem caroço", "Suco de 1/2 limão", "200 ml de água"],
-      es: ["1 puñado de cerezas sin hueso", "Jugo de 1/2 limón", "200 ml de agua"],
-    },
-    preparo: { pt: BATER_PT, es: BATER_ES },
+    nome: "Tranquil Cherry",
+    beneficio: "A natural source of melatonin for sleep.",
+    ingredientes: ["1 handful of pitted cherries", "Juice of ½ lemon", "200 ml (¾ cup) water"],
+    preparo: BLEND,
   },
   {
     id: "erva-doce-calmante",
     cat: "sono",
-    nome: { pt: "Erva-Doce Calmante", es: "Hinojo Calmante" },
-    beneficio: {
-      pt: "Acalma o estômago e o corpo no fim do dia.",
-      es: "Calma el estómago y el cuerpo al final del día.",
-    },
-    ingredientes: {
-      pt: ["1 c. de sopa de erva-doce", "1 c. de chá de mel", "250 ml de água quente"],
-      es: ["1 cda de hinojo", "1 cdta de miel", "250 ml de agua caliente"],
-    },
-    preparo: { pt: CHA_PT, es: CHA_ES },
+    nome: "Calming Fennel",
+    beneficio: "Settles the stomach and the body at day's end.",
+    ingredientes: ["1 tablespoon fennel seeds", "1 teaspoon honey", "250 ml (1 cup) hot water"],
+    preparo: TEA,
   },
   {
     id: "pera-suave",
     cat: "sono",
-    nome: { pt: "Pera Suave", es: "Pera Suave" },
-    beneficio: {
-      pt: "Doce leve que não pesa antes de dormir.",
-      es: "Dulce ligero que no pesa antes de dormir.",
-    },
-    ingredientes: {
-      pt: ["1 pera", "Algumas folhas de alface", "200 ml de água", "Hortelã a gosto"],
-      es: ["1 pera", "Unas hojas de lechuga", "200 ml de agua", "Hierbabuena al gusto"],
-    },
-    preparo: { pt: BATER_PT, es: BATER_ES },
+    nome: "Gentle Pear",
+    beneficio: "Lightly sweet, and won't sit heavy before bed.",
+    ingredientes: ["1 pear", "A few lettuce leaves", "200 ml (¾ cup) water", "Mint to taste"],
+    preparo: BLEND,
   },
   {
     id: "mel-hortela-noite",
     cat: "sono",
-    nome: { pt: "Mel & Hortelã", es: "Miel y Hierbabuena" },
-    beneficio: {
-      pt: "Bebida morna que relaxa a garganta e a mente.",
-      es: "Bebida tibia que relaja la garganta y la mente.",
-    },
-    ingredientes: {
-      pt: ["1 c. de chá de mel", "Hortelã fresca", "Suco de 1/2 limão", "250 ml de água morna"],
-      es: ["1 cdta de miel", "Hierbabuena fresca", "Jugo de 1/2 limón", "250 ml de agua tibia"],
-    },
-    preparo: { pt: CHA_PT, es: CHA_ES },
+    nome: "Honey & Mint",
+    beneficio: "A warm drink that soothes the throat and the mind.",
+    ingredientes: ["1 teaspoon honey", "Fresh mint", "Juice of ½ lemon", "250 ml (1 cup) warm water"],
+    preparo: TEA,
   },
   {
     id: "lavanda-doce",
     cat: "sono",
-    nome: { pt: "Lavanda Doce", es: "Lavanda Dulce" },
-    beneficio: {
-      pt: "Aroma e infusão que induzem o relaxamento.",
-      es: "Aroma e infusión que inducen la relajación.",
-    },
-    ingredientes: {
-      pt: ["1 c. de chá de lavanda culinária", "1 c. de chá de mel", "250 ml de água quente"],
-      es: ["1 cdta de lavanda culinaria", "1 cdta de miel", "250 ml de agua caliente"],
-    },
-    preparo: { pt: CHA_PT, es: CHA_ES },
+    nome: "Sweet Lavender",
+    beneficio: "An aroma and infusion that invite relaxation.",
+    ingredientes: ["1 teaspoon culinary lavender", "1 teaspoon honey", "250 ml (1 cup) hot water"],
+    preparo: TEA,
   },
 
-  // ───────────────────────── DETOX & FÍGADO ─────────────────────────
+  // ───────────────────────── DETOX & LIVER ─────────────────────────
   {
     id: "detox-verde",
     cat: "detox",
-    nome: { pt: "Detox Verde", es: "Detox Verde" },
-    beneficio: {
-      pt: "Limpa o organismo e dá leveza pela manhã.",
-      es: "Limpia el organismo y da ligereza por la mañana.",
-    },
-    ingredientes: {
-      pt: ["1 folha de couve", "1/2 pepino", "Suco de 1 limão", "1 rodela de gengibre", "Salsinha a gosto"],
-      es: ["1 hoja de col rizada", "1/2 pepino", "Jugo de 1 limón", "1 rodaja de jengibre", "Perejil al gusto"],
-    },
-    preparo: { pt: BATER_PT, es: BATER_ES },
+    nome: "Green Detox",
+    beneficio: "Cleanses the system and brings morning lightness.",
+    ingredientes: ["1 kale leaf", "½ cucumber", "Juice of 1 lemon", "1 slice of fresh ginger", "Parsley to taste"],
+    preparo: BLEND,
   },
   {
     id: "limao-salsinha",
     cat: "detox",
-    nome: { pt: "Limão & Salsinha", es: "Limón y Perejil" },
-    beneficio: {
-      pt: "Diurético potente que ajuda os rins a limpar.",
-      es: "Diurético potente que ayuda a los riñones a limpiar.",
-    },
-    ingredientes: {
-      pt: ["Suco de 1 limão", "1 punhado de salsinha", "1 rodela de gengibre", "200 ml de água"],
-      es: ["Jugo de 1 limón", "1 puñado de perejil", "1 rodaja de jengibre", "200 ml de agua"],
-    },
-    preparo: { pt: BATER_PT, es: BATER_ES },
+    nome: "Lemon & Parsley",
+    beneficio: "A potent diuretic that helps the kidneys cleanse.",
+    ingredientes: ["Juice of 1 lemon", "1 handful of parsley", "1 slice of fresh ginger", "200 ml (¾ cup) water"],
+    preparo: BLEND,
   },
   {
     id: "beterraba-purificadora",
     cat: "detox",
-    nome: { pt: "Beterraba Purificadora", es: "Remolacha Purificadora" },
-    beneficio: {
-      pt: "Apoia o fígado e renova o sangue.",
-      es: "Apoya el hígado y renueva la sangre.",
-    },
-    ingredientes: {
-      pt: ["1/2 beterraba", "1 cenoura", "Suco de 1 limão", "1 rodela de gengibre"],
-      es: ["1/2 remolacha", "1 zanahoria", "Jugo de 1 limón", "1 rodaja de jengibre"],
-    },
-    preparo: { pt: BATER_PT, es: BATER_ES },
+    nome: "Purifying Beet",
+    beneficio: "Supports the liver and renews the blood.",
+    ingredientes: ["½ beet", "1 carrot", "Juice of 1 lemon", "1 slice of fresh ginger"],
+    preparo: BLEND,
   },
   {
     id: "clorofila-pura",
     cat: "detox",
-    nome: { pt: "Clorofila Pura", es: "Clorofila Pura" },
-    beneficio: {
-      pt: "Verde concentrado que oxigena e desintoxica.",
-      es: "Verde concentrado que oxigena y desintoxica.",
-    },
-    ingredientes: {
-      pt: ["1 folha de couve", "1 punhado de espinafre", "1/2 pepino", "Suco de 1 limão"],
-      es: ["1 hoja de col rizada", "1 puñado de espinaca", "1/2 pepino", "Jugo de 1 limón"],
-    },
-    preparo: { pt: BATER_PT, es: BATER_ES },
+    nome: "Pure Chlorophyll",
+    beneficio: "Concentrated greens that oxygenate and detoxify.",
+    ingredientes: ["1 kale leaf", "1 handful of spinach", "½ cucumber", "Juice of 1 lemon"],
+    preparo: BLEND,
   },
   {
     id: "maca-verde-detox",
     cat: "detox",
-    nome: { pt: "Maçã Verde Detox", es: "Manzana Verde Detox" },
-    beneficio: {
-      pt: "Refresca e elimina o excesso de toxinas.",
-      es: "Refresca y elimina el exceso de toxinas.",
-    },
-    ingredientes: {
-      pt: ["1 maçã verde", "1/2 pepino", "Hortelã a gosto", "Suco de 1 limão"],
-      es: ["1 manzana verde", "1/2 pepino", "Hierbabuena al gusto", "Jugo de 1 limón"],
-    },
-    preparo: { pt: BATER_PT, es: BATER_ES },
+    nome: "Green Apple Detox",
+    beneficio: "Refreshes and flushes out excess toxins.",
+    ingredientes: ["1 green apple", "½ cucumber", "Mint to taste", "Juice of 1 lemon"],
+    preparo: BLEND,
   },
   {
     id: "gengibre-curcuma-detox",
     cat: "detox",
-    nome: { pt: "Gengibre & Cúrcuma Detox", es: "Jengibre y Cúrcuma Detox" },
-    beneficio: {
-      pt: "Shot quente que ativa o metabolismo e limpa.",
-      es: "Shot caliente que activa el metabolismo y limpia.",
-    },
-    ingredientes: {
-      pt: ["1 rodela de gengibre", "1 c. de chá de cúrcuma", "Suco de 1 limão", "200 ml de água morna"],
-      es: ["1 rodaja de jengibre", "1 cdta de cúrcuma", "Jugo de 1 limón", "200 ml de agua tibia"],
-    },
-    preparo: {
-      pt: ["Misture tudo na água morna.", "Beba em jejum, de uma vez."],
-      es: ["Mezcla todo en el agua tibia.", "Bebe en ayunas, de una vez."],
-    },
+    nome: "Ginger & Turmeric Detox",
+    beneficio: "A warm shot that fires up the metabolism and cleanses.",
+    ingredientes: ["1 slice of fresh ginger", "1 teaspoon turmeric", "Juice of 1 lemon", "200 ml (¾ cup) warm water"],
+    preparo: ["Stir everything into the warm water.", "Drink on an empty stomach, all at once."],
   },
   {
     id: "abacaxi-hortela-detox",
     cat: "detox",
-    nome: { pt: "Abacaxi & Hortelã Detox", es: "Piña y Hierbabuena Detox" },
-    beneficio: {
-      pt: "Desincha e ajuda a eliminar o que sobra.",
-      es: "Desinflama y ayuda a eliminar lo que sobra.",
-    },
-    ingredientes: {
-      pt: ["2 fatias de abacaxi", "Hortelã a gosto", "1/2 pepino", "200 ml de água"],
-      es: ["2 rodajas de piña", "Hierbabuena al gusto", "1/2 pepino", "200 ml de agua"],
-    },
-    preparo: { pt: BATER_PT, es: BATER_ES },
+    nome: "Pineapple & Mint Detox",
+    beneficio: "De-bloats and helps flush out what your body doesn't need.",
+    ingredientes: ["2 slices of pineapple", "Mint to taste", "½ cucumber", "200 ml (¾ cup) water"],
+    preparo: BLEND,
   },
   {
     id: "limpeza-do-jejum",
     cat: "detox",
-    nome: { pt: "Limpeza do Jejum", es: "Limpieza del Ayuno" },
-    beneficio: {
-      pt: "Primeiro gole do dia que desperta o sistema digestivo.",
-      es: "Primer sorbo del día que despierta el sistema digestivo.",
-    },
-    ingredientes: {
-      pt: ["Suco de 1 limão", "1 rodela de gengibre", "1 pitada de pimenta-caiena", "250 ml de água morna"],
-      es: ["Jugo de 1 limón", "1 rodaja de jengibre", "1 pizca de pimienta de cayena", "250 ml de agua tibia"],
-    },
-    preparo: {
-      pt: ["Misture tudo na água morna.", "Beba em jejum, 20 min antes do café da manhã."],
-      es: ["Mezcla todo en el agua tibia.", "Bebe en ayunas, 20 min antes del desayuno."],
-    },
+    nome: "Morning Cleanse",
+    beneficio: "The first sip of the day that wakes up your digestive system.",
+    ingredientes: ["Juice of 1 lemon", "1 slice of fresh ginger", "1 pinch of cayenne pepper", "250 ml (1 cup) warm water"],
+    preparo: ["Stir everything into the warm water.", "Drink on an empty stomach, 20 minutes before breakfast."],
   },
   {
     id: "couve-abacaxi",
     cat: "detox",
-    nome: { pt: "Couve & Abacaxi", es: "Col y Piña" },
-    beneficio: {
-      pt: "Clássico verde que limpa e desincha ao mesmo tempo.",
-      es: "Clásico verde que limpia y desinflama a la vez.",
-    },
-    ingredientes: {
-      pt: ["1 folha de couve", "2 fatias de abacaxi", "Suco de 1 limão", "1 rodela de gengibre"],
-      es: ["1 hoja de col rizada", "2 rodajas de piña", "Jugo de 1 limón", "1 rodaja de jengibre"],
-    },
-    preparo: { pt: BATER_PT, es: BATER_ES },
+    nome: "Kale & Pineapple",
+    beneficio: "The green classic that cleanses and de-bloats at once.",
+    ingredientes: ["1 kale leaf", "2 slices of pineapple", "Juice of 1 lemon", "1 slice of fresh ginger"],
+    preparo: BLEND,
   },
   {
     id: "aipo-verde",
     cat: "detox",
-    nome: { pt: "Aipo Verde", es: "Apio Verde" },
-    beneficio: {
-      pt: "Hidrata, alcaliniza e reduz a retenção.",
-      es: "Hidrata, alcaliniza y reduce la retención.",
-    },
-    ingredientes: {
-      pt: ["2 talos de aipo", "1 maçã verde", "Suco de 1 limão", "1/2 pepino"],
-      es: ["2 tallos de apio", "1 manzana verde", "Jugo de 1 limón", "1/2 pepino"],
-    },
-    preparo: { pt: BATER_PT, es: BATER_ES },
+    nome: "Green Celery",
+    beneficio: "Hydrates, alkalizes, and reduces water retention.",
+    ingredientes: ["2 celery stalks", "1 green apple", "Juice of 1 lemon", "½ cucumber"],
+    preparo: BLEND,
   },
 
-  // ───────────────────────── IMUNIDADE ─────────────────────────
+  // ───────────────────────── IMMUNITY ─────────────────────────
   {
     id: "escudo-de-citricos",
     cat: "imunidade",
-    nome: { pt: "Escudo de Cítricos", es: "Escudo de Cítricos" },
-    beneficio: {
-      pt: "Bomba de vitamina C para blindar o corpo.",
-      es: "Bomba de vitamina C para blindar el cuerpo.",
-    },
-    ingredientes: {
-      pt: ["Suco de 1 laranja", "Suco de 1 limão", "1 punhado de acerola", "1 c. de chá de mel"],
-      es: ["Jugo de 1 naranja", "Jugo de 1 limón", "1 puñado de acerola", "1 cdta de miel"],
-    },
-    preparo: { pt: BATER_PT, es: BATER_ES },
+    nome: "Citrus Shield",
+    beneficio: "A vitamin C bomb to armor the body.",
+    ingredientes: ["Juice of 1 orange", "Juice of 1 lemon", "1 handful of acerola cherries", "1 teaspoon honey"],
+    preparo: BLEND,
   },
   {
     id: "acerola-laranja",
     cat: "imunidade",
-    nome: { pt: "Acerola & Laranja", es: "Acerola y Naranja" },
-    beneficio: {
-      pt: "Uma das maiores fontes de vitamina C da natureza.",
-      es: "Una de las mayores fuentes de vitamina C de la naturaleza.",
-    },
-    ingredientes: {
-      pt: ["1 punhado de acerolas", "Suco de 2 laranjas", "1 c. de chá de mel"],
-      es: ["1 puñado de acerolas", "Jugo de 2 naranjas", "1 cdta de miel"],
-    },
-    preparo: { pt: BATER_PT, es: BATER_ES },
+    nome: "Acerola & Orange",
+    beneficio: "One of nature's richest sources of vitamin C.",
+    ingredientes: ["1 handful of acerola cherries", "Juice of 2 oranges", "1 teaspoon honey"],
+    preparo: BLEND,
   },
   {
     id: "gengibre-mel-imune",
     cat: "imunidade",
-    nome: { pt: "Gengibre & Mel", es: "Jengibre y Miel" },
-    beneficio: {
-      pt: "Aquece e protege a garganta nos dias frios.",
-      es: "Calienta y protege la garganta en días fríos.",
-    },
-    ingredientes: {
-      pt: ["1 rodela de gengibre", "1 c. de chá de mel", "Suco de 1 limão", "250 ml de água morna"],
-      es: ["1 rodaja de jengibre", "1 cdta de miel", "Jugo de 1 limón", "250 ml de agua tibia"],
-    },
-    preparo: { pt: CHA_PT, es: CHA_ES },
+    nome: "Ginger & Honey",
+    beneficio: "Warms and protects the throat on cold days.",
+    ingredientes: ["1 slice of fresh ginger", "1 teaspoon honey", "Juice of 1 lemon", "250 ml (1 cup) warm water"],
+    preparo: TEA,
   },
   {
     id: "laranja-curcuma-imune",
     cat: "imunidade",
-    nome: { pt: "Laranja & Cúrcuma Imune", es: "Naranja y Cúrcuma Inmune" },
-    beneficio: {
-      pt: "Dupla anti-inflamatória que fortalece as defesas.",
-      es: "Dúo antiinflamatorio que fortalece las defensas.",
-    },
-    ingredientes: {
-      pt: ["Suco de 2 laranjas", "1 c. de chá de cúrcuma", "1 c. de chá de mel", "1 pitada de pimenta-do-reino"],
-      es: ["Jugo de 2 naranjas", "1 cdta de cúrcuma", "1 cdta de miel", "1 pizca de pimienta negra"],
-    },
-    preparo: { pt: BATER_PT, es: BATER_ES },
+    nome: "Immune Orange & Turmeric",
+    beneficio: "An anti-inflammatory duo that strengthens your defenses.",
+    ingredientes: ["Juice of 2 oranges", "1 teaspoon turmeric", "1 teaspoon honey", "1 pinch of black pepper"],
+    preparo: BLEND,
   },
   {
     id: "limao-alho",
     cat: "imunidade",
-    nome: { pt: "Limão & Alho Protetor", es: "Limón y Ajo Protector" },
-    beneficio: {
-      pt: "Antibiótico natural forte para os primeiros sinais de gripe.",
-      es: "Antibiótico natural fuerte para los primeros signos de gripe.",
-    },
-    ingredientes: {
-      pt: ["Suco de 1 limão", "1 dente de alho pequeno", "1 c. de chá de mel", "250 ml de água morna"],
-      es: ["Jugo de 1 limón", "1 diente de ajo pequeño", "1 cdta de miel", "250 ml de agua tibia"],
-    },
-    preparo: {
-      pt: ["Amasse o alho e misture tudo na água morna.", "Deixe descansar 2 min e beba."],
-      es: ["Machaca el ajo y mezcla todo en el agua tibia.", "Deja reposar 2 min y bebe."],
-    },
+    nome: "Protective Lemon & Garlic",
+    beneficio: "A strong natural antibiotic for the first signs of a cold.",
+    ingredientes: ["Juice of 1 lemon", "1 small garlic clove", "1 teaspoon honey", "250 ml (1 cup) warm water"],
+    preparo: ["Crush the garlic and stir everything into the warm water.", "Let rest 2 minutes and drink."],
   },
   {
     id: "morango-acerola",
     cat: "imunidade",
-    nome: { pt: "Morango & Acerola", es: "Fresa y Acerola" },
-    beneficio: {
-      pt: "Antioxidantes e vitamina C num só copo.",
-      es: "Antioxidantes y vitamina C en un solo vaso.",
-    },
-    ingredientes: {
-      pt: ["1 punhado de morangos", "1 punhado de acerolas", "Suco de 1 laranja"],
-      es: ["1 puñado de fresas", "1 puñado de acerolas", "Jugo de 1 naranja"],
-    },
-    preparo: { pt: BATER_PT, es: BATER_ES },
+    nome: "Strawberry & Acerola",
+    beneficio: "Antioxidants and vitamin C in a single glass.",
+    ingredientes: ["1 handful of strawberries", "1 handful of acerola cherries", "Juice of 1 orange"],
+    preparo: BLEND,
   },
   {
     id: "goiaba-vitamina",
     cat: "imunidade",
-    nome: { pt: "Goiaba Vitaminada", es: "Guayaba Vitaminada" },
-    beneficio: {
-      pt: "A goiaba tem ainda mais vitamina C que a laranja.",
-      es: "La guayaba tiene aún más vitamina C que la naranja.",
-    },
-    ingredientes: {
-      pt: ["1 goiaba", "Suco de 1 laranja", "Suco de 1/2 limão"],
-      es: ["1 guayaba", "Jugo de 1 naranja", "Jugo de 1/2 limón"],
-    },
-    preparo: { pt: BATER_PT, es: BATER_ES },
+    nome: "Vitamin Guava",
+    beneficio: "Guava has even more vitamin C than oranges.",
+    ingredientes: ["1 guava", "Juice of 1 orange", "Juice of ½ lemon"],
+    preparo: BLEND,
   },
   {
     id: "roma-protetora",
     cat: "imunidade",
-    nome: { pt: "Romã Protetora", es: "Granada Protectora" },
-    beneficio: {
-      pt: "Fruta bíblica rica em antioxidantes que defendem o corpo.",
-      es: "Fruta bíblica rica en antioxidantes que defienden el cuerpo.",
-    },
-    ingredientes: {
-      pt: ["Sementes de 1 romã", "Suco de 1 laranja", "Suco de 1/2 limão"],
-      es: ["Semillas de 1 granada", "Jugo de 1 naranja", "Jugo de 1/2 limón"],
-    },
-    preparo: { pt: BATER_PT, es: BATER_ES },
+    nome: "Protective Pomegranate",
+    beneficio: "A biblical fruit rich in antioxidants that defend the body.",
+    ingredientes: ["Seeds of 1 pomegranate", "Juice of 1 orange", "Juice of ½ lemon"],
+    preparo: BLEND,
   },
   {
     id: "kiwi-laranja",
     cat: "imunidade",
-    nome: { pt: "Kiwi & Laranja", es: "Kiwi y Naranja" },
-    beneficio: {
-      pt: "Vitamina C dupla que estimula as defesas.",
-      es: "Vitamina C doble que estimula las defensas.",
-    },
-    ingredientes: {
-      pt: ["1 kiwi", "Suco de 2 laranjas", "1 c. de chá de mel"],
-      es: ["1 kiwi", "Jugo de 2 naranjas", "1 cdta de miel"],
-    },
-    preparo: { pt: BATER_PT, es: BATER_ES },
+    nome: "Kiwi & Orange",
+    beneficio: "Double vitamin C that boosts your defenses.",
+    ingredientes: ["1 kiwi", "Juice of 2 oranges", "1 teaspoon honey"],
+    preparo: BLEND,
   },
   {
     id: "caju-mel",
     cat: "imunidade",
-    nome: { pt: "Caju & Mel", es: "Marañón y Miel" },
-    beneficio: {
-      pt: "O suco de caju é riquíssimo em vitamina C.",
-      es: "El jugo de marañón es riquísimo en vitamina C.",
-    },
-    ingredientes: {
-      pt: ["2 cajus (a fruta)", "Suco de 1 laranja", "1 c. de chá de mel", "200 ml de água"],
-      es: ["2 marañones (la fruta)", "Jugo de 1 naranja", "1 cdta de miel", "200 ml de agua"],
-    },
-    preparo: { pt: BATER_PT, es: BATER_ES },
+    nome: "Cashew Fruit & Honey",
+    beneficio: "Cashew fruit juice is extremely rich in vitamin C.",
+    ingredientes: ["2 cashew fruits", "Juice of 1 orange", "1 teaspoon honey", "200 ml (¾ cup) water"],
+    preparo: BLEND,
   },
 ];

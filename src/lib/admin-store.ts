@@ -137,7 +137,7 @@ export function getUserSnapshot(): UserSnapshot | null {
   try {
     const user = JSON.parse(localStorage.getItem("mab:user") ?? "null");
     const daily = JSON.parse(localStorage.getItem("mab:daily") ?? "null");
-    const lang = localStorage.getItem("mab:lang") ?? "es";
+    const lang = localStorage.getItem("mab:lang") ?? "en";
     if (!user) return null;
     return {
       nome: user.nome ?? "—",

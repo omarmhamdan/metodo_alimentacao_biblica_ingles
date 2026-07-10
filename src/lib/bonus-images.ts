@@ -19,38 +19,38 @@ export interface BonusSlot {
   fallback: string;
 }
 
-const G_PROTO = "Anti-Inflamação 7 Dias";
-const G_MESA = "Guia Mesa Única";
+const G_PROTO = "Anti-Inflammatory 7 Days";
+const G_MESA = "The Family Table Guide";
 
 export const bonusSlots: BonusSlot[] = [
-  // ── Anti-Inflamação 7 Dias ──
-  { id: "protocolo-hero", label: "Capa (hero)", group: G_PROTO, fallback: heroMesa },
-  { id: "protocolo-agua", label: "Água do Jordão", group: G_PROTO, fallback: suco },
-  { id: "protocolo-dia-1", label: "Dia 1 — O Preparo", group: G_PROTO, fallback: suco },
-  { id: "protocolo-dia-2", label: "Dia 2 — A Limpeza Começa", group: G_PROTO, fallback: sopa },
-  { id: "protocolo-dia-3", label: "Dia 3 — O Pico da Drenagem", group: G_PROTO, fallback: salada },
-  { id: "protocolo-dia-4", label: "Dia 4 — A Estabilização", group: G_PROTO, fallback: lentilhas },
-  { id: "protocolo-dia-5", label: "Dia 5 — A Leveza Instalada", group: G_PROTO, fallback: peixe },
-  { id: "protocolo-dia-6", label: "Dia 6 — Vida Nova", group: G_PROTO, fallback: pao },
-  { id: "protocolo-dia-7", label: "Dia 7 — A Renovação", group: G_PROTO, fallback: figos },
+  // ── Anti-Inflammatory 7 Days ──
+  { id: "protocolo-hero", label: "Cover (hero)", group: G_PROTO, fallback: heroMesa },
+  { id: "protocolo-agua", label: "Jordan Water", group: G_PROTO, fallback: suco },
+  { id: "protocolo-dia-1", label: "Day 1 — The Preparation", group: G_PROTO, fallback: suco },
+  { id: "protocolo-dia-2", label: "Day 2 — The Cleansing Begins", group: G_PROTO, fallback: sopa },
+  { id: "protocolo-dia-3", label: "Day 3 — The Peak of Drainage", group: G_PROTO, fallback: salada },
+  { id: "protocolo-dia-4", label: "Day 4 — The Stabilization", group: G_PROTO, fallback: lentilhas },
+  { id: "protocolo-dia-5", label: "Day 5 — Lightness Settles In", group: G_PROTO, fallback: peixe },
+  { id: "protocolo-dia-6", label: "Day 6 — New Life", group: G_PROTO, fallback: pao },
+  { id: "protocolo-dia-7", label: "Day 7 — The Renewal", group: G_PROTO, fallback: figos },
 
-  // ── Guia Mesa Única ──
-  { id: "mesa-hero", label: "Capa (hero)", group: G_MESA, fallback: heroMesa },
+  // ── The Family Table Guide ──
+  { id: "mesa-hero", label: "Cover (hero)", group: G_MESA, fallback: heroMesa },
   {
     id: "mesa-cat-lentilhas",
-    label: "Categoria · Lentilhas e grãos",
+    label: "Category · Lentils & grains",
     group: G_MESA,
     fallback: lentilhas,
   },
-  { id: "mesa-cat-peixes", label: "Categoria · Peixes", group: G_MESA, fallback: peixe },
-  { id: "mesa-cat-legumes", label: "Categoria · Legumes", group: G_MESA, fallback: salada },
-  { id: "mesa-cat-paes", label: "Categoria · Pães", group: G_MESA, fallback: pao },
-  { id: "mesa-cat-sobremesas", label: "Categoria · Sobremesas", group: G_MESA, fallback: figos },
-  { id: "mesa-domingo-1", label: "Domingo · Cordeiro/pernil", group: G_MESA, fallback: lentilhas },
-  { id: "mesa-domingo-2", label: "Domingo · Frango dourado", group: G_MESA, fallback: sopa },
-  { id: "mesa-domingo-3", label: "Domingo · Tábua de pães", group: G_MESA, fallback: pao },
-  { id: "mesa-domingo-4", label: "Domingo · Peixe inteiro", group: G_MESA, fallback: peixe },
-  { id: "mesa-domingo-5", label: "Domingo · Figos, mel e nozes", group: G_MESA, fallback: figos },
+  { id: "mesa-cat-peixes", label: "Category · Fish", group: G_MESA, fallback: peixe },
+  { id: "mesa-cat-legumes", label: "Category · Vegetables", group: G_MESA, fallback: salada },
+  { id: "mesa-cat-paes", label: "Category · Breads", group: G_MESA, fallback: pao },
+  { id: "mesa-cat-sobremesas", label: "Category · Desserts", group: G_MESA, fallback: figos },
+  { id: "mesa-domingo-1", label: "Sunday · Lamb/roast", group: G_MESA, fallback: lentilhas },
+  { id: "mesa-domingo-2", label: "Sunday · Golden chicken", group: G_MESA, fallback: sopa },
+  { id: "mesa-domingo-3", label: "Sunday · Bread board", group: G_MESA, fallback: pao },
+  { id: "mesa-domingo-4", label: "Sunday · Whole fish", group: G_MESA, fallback: peixe },
+  { id: "mesa-domingo-5", label: "Sunday · Figs, honey & walnuts", group: G_MESA, fallback: figos },
 ];
 
 /** Map id → fallback asset, for useStoredImageMap. */

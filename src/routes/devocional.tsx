@@ -3,16 +3,14 @@ import { motion } from "framer-motion";
 import { Sparkles } from "lucide-react";
 import { AppShell } from "@/components/AppShell";
 import { EdI18n } from "@/components/Editable";
-import { versiculoDoDia, useLang } from "@/lib/store";
+import { versiculoDoDia } from "@/lib/store";
 
 export const Route = createFileRoute("/devocional")({
   component: DevocionalPage,
-  // title set by AppShell bootstrap (per-language)
 });
 
 function DevocionalPage() {
-  const { lang } = useLang();
-  const v = versiculoDoDia(lang);
+  const v = versiculoDoDia();
 
   return (
     <AppShell>

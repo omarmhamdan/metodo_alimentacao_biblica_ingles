@@ -17,15 +17,13 @@ import { motion, AnimatePresence, type PanInfo } from "framer-motion";
 import { AppShell } from "@/components/AppShell";
 import { EdI18n } from "@/components/Editable";
 import { useDaily, useUser, useLang, useRecipes } from "@/lib/store";
-import { categoriaES } from "@/lib/recipes";
 import { RecipePhoto } from "@/components/RecipePhoto";
 
 export const Route = createFileRoute("/perfil")({
   component: PerfilPage,
-  // title set by AppShell bootstrap (per-language)
 });
 
-type Modal = "preferences" | "edit_goal" | "edit_name" | "help" | null;
+type Modal = "edit_goal" | "edit_name" | "help" | null;
 
 const SUPPORT_EMAIL = "metodoalimentacionbiblica@gmail.com";
 
@@ -33,9 +31,9 @@ function PerfilPage() {
   const { user, save } = useUser();
   const { daily, toggleFavorito } = useDaily();
   const navigate = useNavigate();
-  const { t, lang, setLang } = useLang();
+  const { t } = useLang();
   const allRecipes = useRecipes();
-  const nome = user?.nome ?? (lang === "es" ? "Visitante" : "Visitante");
+  const nome = user?.nome ?? "Guest";
   const favRecipes = allRecipes.filter((r) => (daily.favoritos ?? []).includes(r.id));
   const [modal, setModal] = useState<Modal>(null);
   const [goalDraft, setGoalDraft] = useState("");
@@ -145,7 +143,7 @@ function PerfilPage() {
                 id={r.id}
                 titulo={r.titulo}
                 imagem={r.imagem}
-                categoria={lang === "es" ? (categoriaES[r.categoria] ?? r.categoria) : r.categoria}
+                categoria={r.categoria}
                 onRemove={() => toggleFavorito(r.id)}
               />
             ))}
@@ -154,12 +152,6 @@ function PerfilPage() {
       </section>
 
       <section className="mx-6 mb-4 divide-y divide-border rounded-3xl bg-card shadow-card">
-        <Row
-          icon={Settings}
-          label={t("prof_preferences")}
-          hint={t("prof_preferences_hint")}
-          onClick={() => setModal("preferences")}
-        />
         <Row
           icon={HelpCircle}
           label={t("prof_help")}
@@ -204,45 +196,6 @@ function PerfilPage() {
               style={{ marginBottom: kbInset }}
               onClick={(e) => e.stopPropagation()}
             >
-              {modal === "preferences" && (
-                <>
-                  <div className="mb-5 flex items-center justify-between">
-                    <h2 className="font-serif text-xl text-foreground">{t("pref_title")}</h2>
-                    <button
-                      onClick={() => setModal(null)}
-                      className="flex h-8 w-8 items-center justify-center rounded-full bg-secondary text-muted-foreground"
-                    >
-                      <X className="h-4 w-4" />
-                    </button>
-                  </div>
-                  <p className="mb-3 text-xs uppercase tracking-widest text-muted-foreground">
-                    {t("pref_lang")}
-                  </p>
-                  <div className="grid grid-cols-2 gap-3">
-                    <LangBtn
-                      flag="🇨🇴"
-                      code="es"
-                      label={t("pref_lang_es")}
-                      active={lang === "es"}
-                      onClick={() => setLang("es")}
-                    />
-                    <LangBtn
-                      flag="🇧🇷"
-                      code="pt"
-                      label={t("pref_lang_pt")}
-                      active={lang === "pt"}
-                      onClick={() => setLang("pt")}
-                    />
-                  </div>
-                  <button
-                    onClick={() => setModal(null)}
-                    className="mt-6 w-full rounded-2xl bg-gradient-primary py-3 text-sm font-medium text-primary-foreground"
-                  >
-                    {t("pref_close")}
-                  </button>
-                </>
-              )}
-
               {modal === "edit_goal" && (
                 <>
                   <div className="mb-5 flex items-center justify-between">
@@ -521,34 +474,6 @@ function Row({
         <span className="block text-xs text-muted-foreground">{hint}</span>
       </span>
       <span className="text-muted-foreground">›</span>
-    </button>
-  );
-}
-
-function LangBtn({
-  flag,
-  label,
-  active,
-  onClick,
-}: {
-  flag: string;
-  code: string;
-  label: string;
-  active: boolean;
-  onClick: () => void;
-}) {
-  return (
-    <button
-      onClick={onClick}
-      className={`flex items-center gap-3 rounded-2xl border-2 p-4 transition-all ${
-        active ? "border-olive bg-highlight" : "border-border bg-card"
-      }`}
-    >
-      <span className="text-2xl">{flag}</span>
-      <span className={`text-sm font-medium ${active ? "text-earth" : "text-foreground"}`}>
-        {label}
-      </span>
-      {active && <span className="ml-auto text-olive">✓</span>}
     </button>
   );
 }

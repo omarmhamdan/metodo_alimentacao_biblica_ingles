@@ -3,37 +3,16 @@ import { useEffect, useMemo, useState } from "react";
 import { Search, Heart, Clock } from "lucide-react";
 import { AppShell } from "@/components/AppShell";
 import { EditImage, EdI18n } from "@/components/Editable";
-import { categorias, categoriaES, dificuldadeES, type Categoria } from "@/lib/recipes";
+import { categorias, type Categoria } from "@/lib/recipes";
 import { useDaily, useLang, useRecipes } from "@/lib/store";
 
 export const Route = createFileRoute("/receitas/")({
   component: ReceitasPage,
-  // title set by AppShell bootstrap (per-language)
 });
-
-// Category label map per language
-const CAT_ES: Record<Categoria, string> = {
-  "Café da Manhã": "Desayunos",
-  "Pratos Principais": "Platos Principales",
-  "Saladas e Acompanhamentos": "Ensaladas",
-  Sopas: "Sopas",
-  "Ervas e Temperos": "Hierbas",
-  Sobremesas: "Postres",
-  "Receitas Âncora": "Recetas Ancla",
-};
-const CAT_PT: Record<Categoria, string> = {
-  "Café da Manhã": "Café da Manhã",
-  "Pratos Principais": "Pratos Principais",
-  "Saladas e Acompanhamentos": "Saladas",
-  Sopas: "Sopas",
-  "Ervas e Temperos": "Ervas",
-  Sobremesas: "Sobremesas",
-  "Receitas Âncora": "Receitas Âncora",
-};
 
 function ReceitasPage() {
   const { daily, toggleFavorito } = useDaily();
-  const { t, lang } = useLang();
+  const { t } = useLang();
   const recipes = useRecipes();
   const [q, setQ] = useState("");
   // Restore last-used category filter so returning from a recipe keeps the selection
@@ -47,7 +26,6 @@ function ReceitasPage() {
   useEffect(() => {
     if (typeof window !== "undefined") sessionStorage.setItem("mab:rec_filter", cat);
   }, [cat]);
-  const catMap = lang === "es" ? CAT_ES : CAT_PT;
   const allLabel = t("rec_all");
 
   const filtered = useMemo(() => {
@@ -56,8 +34,7 @@ function ReceitasPage() {
       const matchQ = q.trim() === "" || r.titulo.toLowerCase().includes(q.toLowerCase());
       return matchCat && matchQ;
     });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [q, cat, lang, recipes]);
+  }, [q, cat, recipes]);
 
   return (
     <AppShell>
@@ -90,7 +67,7 @@ function ReceitasPage() {
           {([allLabel, ...categorias] as const).map((c, i) => {
             const rawCat = i === 0 ? "Todas" : categorias[i - 1];
             const active = rawCat === cat;
-            const displayLabel = i === 0 ? allLabel : catMap[rawCat as Categoria];
+            const displayLabel = i === 0 ? allLabel : (rawCat as Categoria);
             return (
               <button
                 key={String(c)}
@@ -129,7 +106,7 @@ function ReceitasPage() {
                 </div>
                 <div className="p-3">
                   <p className="text-[9.5px] uppercase tracking-[0.15em] text-muted-foreground">
-                    {catMap[r.categoria] ?? r.categoria}
+                    {r.categoria}
                   </p>
                   <h3 className="mt-0.5 font-serif text-[15px] leading-tight text-foreground">
                     {r.titulo}
@@ -140,17 +117,13 @@ function ReceitasPage() {
                       {r.tempo} {t("rec_min")}
                     </span>
                     <span>·</span>
-                    <span>
-                      {lang === "es"
-                        ? (dificuldadeES[r.dificuldade] ?? r.dificuldade)
-                        : r.dificuldade}
-                    </span>
+                    <span>{r.dificuldade}</span>
                   </div>
                 </div>
               </Link>
               <button
                 onClick={() => toggleFavorito(r.id)}
-                aria-label="Favoritar"
+                aria-label="Favorite"
                 className={`absolute right-2 top-2 flex h-8 w-8 items-center justify-center rounded-full backdrop-blur transition-colors ${
                   isFav ? "bg-terracotta text-cream" : "bg-cream/80 text-earth hover:bg-cream"
                 }`}

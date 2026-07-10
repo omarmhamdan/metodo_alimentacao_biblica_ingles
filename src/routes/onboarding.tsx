@@ -2,106 +2,58 @@ import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { ArrowRight, ArrowLeft } from "lucide-react";
-import { useUser, useLang } from "@/lib/store";
+import { useUser } from "@/lib/store";
 
 export const Route = createFileRoute("/onboarding")({
   component: OnboardingPage,
-  // title set by AppShell bootstrap (per-language)
 });
 
 const content = {
-  es: {
-    stepLabel: (s: number, t: number) => `Paso ${s} de ${t}`,
-    skip: "Omitir",
-    back: "Atrás",
-    next: "Continuar",
-    finish: "Comenzar mi jornada",
-    verses: [
-      { t: "Todo tiene su tiempo determinado.", r: "Eclesiastés 3:1" },
-      { t: "Gustad y ved que el Señor es bueno.", r: "Salmos 34:8" },
-      { t: "El Señor es mi pastor, nada me faltará.", r: "Salmos 23:1" },
-      { t: "No solo de pan vivirá el hombre.", r: "Mateo 4:4" },
-      { t: "Buscad primero el reino de Dios.", r: "Mateo 6:33" },
-      { t: "Todo lo puedo en Cristo que me fortalece.", r: "Filipenses 4:13" },
-    ],
-    steps: [
-      { title: "¿Cómo podemos llamarte?", subtitle: "Vamos a preparar una mesa solo para ti." },
-      {
-        title: "Cuéntanos un poco sobre ti",
-        subtitle: "Tu información queda guardada solo contigo.",
-      },
-      { title: "¿Cuál es tu objetivo?", subtitle: "Elige lo que más resuena con tu corazón." },
-      { title: "¿Cuánta agua tomas?", subtitle: "Vamos a definir una meta suave para tu día." },
-      { title: "¿Alguna restricción alimentaria?", subtitle: "Opcional. Puedes editarlo después." },
-    ],
-    objetivos: [
-      "Adelgazar",
-      "Desinflamar",
-      "Mejorar energía",
-      "Reconectarme con la alimentación natural",
-      "Alimentación bíblica en familia",
-    ],
-    namePlaceholder: "Tu nombre",
-    agePlaceholder: "Edad",
-    ageSuffix: "años",
-    weightPlaceholder: "Peso",
-    weightSuffix: "kg",
-    waterLabel: "Meta diaria",
-    energyLabel: "Nivel de energía hoy",
-    restrictionPlaceholder: "Ej: intolerancia a la lactosa, sin gluten...",
-    finishVerse: { t: "Todo lo puedo en Cristo que me fortalece.", r: "Filipenses 4:13" },
-  },
-  pt: {
-    stepLabel: (s: number, t: number) => `Passo ${s} de ${t}`,
-    skip: "Pular",
-    back: "Voltar",
-    next: "Continuar",
-    finish: "Começar minha jornada",
-    verses: [
-      { t: "Tudo tem o seu tempo determinado.", r: "Eclesiastes 3:1" },
-      { t: "Provai e vede que o Senhor é bom.", r: "Salmos 34:8" },
-      { t: "O Senhor é o meu pastor, nada me faltará.", r: "Salmos 23:1" },
-      { t: "Não só de pão viverá o homem.", r: "Mateus 4:4" },
-      { t: "Buscai primeiro o reino de Deus.", r: "Mateus 6:33" },
-      { t: "Tudo posso naquele que me fortalece.", r: "Filipenses 4:13" },
-    ],
-    steps: [
-      { title: "Como podemos te chamar?", subtitle: "Vamos preparar uma mesa só sua." },
-      {
-        title: "Conte um pouco sobre você",
-        subtitle: "Suas informações ficam guardadas com você.",
-      },
-      { title: "Qual o seu objetivo?", subtitle: "Escolha o que mais ressoa com seu coração." },
-      {
-        title: "Quanta água você bebe?",
-        subtitle: "Vamos definir uma meta gentil para o seu dia.",
-      },
-      { title: "Alguma restrição alimentar?", subtitle: "Opcional. Você poderá editar depois." },
-    ],
-    objetivos: [
-      "Emagrecer",
-      "Desinflamar",
-      "Melhorar energia",
-      "Reconectar-se com alimentação natural",
-      "Alimentação bíblica em família",
-    ],
-    namePlaceholder: "Seu nome",
-    agePlaceholder: "Idade",
-    ageSuffix: "anos",
-    weightPlaceholder: "Peso",
-    weightSuffix: "kg",
-    waterLabel: "Meta diária",
-    energyLabel: "Nível de energia hoje",
-    restrictionPlaceholder: "Ex: intolerância à lactose, sem glúten...",
-    finishVerse: { t: "Tudo posso naquele que me fortalece.", r: "Filipenses 4:13" },
-  },
+  stepLabel: (s: number, t: number) => `Step ${s} of ${t}`,
+  skip: "Skip",
+  back: "Back",
+  next: "Continue",
+  finish: "Start my journey",
+  verses: [
+    { t: "There is a time for everything.", r: "Ecclesiastes 3:1" },
+    { t: "Taste and see that the Lord is good.", r: "Psalm 34:8" },
+    { t: "The Lord is my shepherd; I shall not want.", r: "Psalm 23:1" },
+    { t: "Man shall not live by bread alone.", r: "Matthew 4:4" },
+    { t: "Seek first the kingdom of God.", r: "Matthew 6:33" },
+    { t: "I can do all things through Christ who strengthens me.", r: "Philippians 4:13" },
+  ],
+  steps: [
+    { title: "What should we call you?", subtitle: "Let's set a table just for you." },
+    {
+      title: "Tell us a little about yourself",
+      subtitle: "Your information stays with you alone.",
+    },
+    { title: "What's your goal?", subtitle: "Choose what resonates most with your heart." },
+    { title: "How much water do you drink?", subtitle: "Let's set a gentle goal for your day." },
+    { title: "Any dietary restrictions?", subtitle: "Optional. You can edit it later." },
+  ],
+  objetivos: [
+    "Lose weight",
+    "Reduce inflammation",
+    "Improve energy",
+    "Reconnect with natural eating",
+    "Biblical eating as a family",
+  ],
+  namePlaceholder: "Your name",
+  agePlaceholder: "Age",
+  ageSuffix: "years",
+  weightPlaceholder: "Weight",
+  weightSuffix: "lb",
+  waterLabel: "Daily goal",
+  energyLabel: "Energy level today",
+  restrictionPlaceholder: "E.g., lactose intolerance, gluten-free...",
+  finishVerse: { t: "I can do all things through Christ who strengthens me.", r: "Philippians 4:13" },
 };
 
 function OnboardingPage() {
   const { user, save } = useUser();
   const navigate = useNavigate();
-  const { lang } = useLang();
-  const c = content[lang] ?? content.es;
+  const c = content;
 
   const [step, setStep] = useState(0);
   const [nome, setNome] = useState(user?.nome ?? "");
@@ -124,7 +76,7 @@ function OnboardingPage() {
   const finish = () => {
     save({
       ...(user ?? { nome }),
-      nome: nome || user?.nome || (lang === "es" ? "Amada" : "Amada"),
+      nome: nome || user?.nome || "friend",
       idade: Number(idade) || undefined,
       pesoAtual: Number(peso) || undefined,
       objetivo,

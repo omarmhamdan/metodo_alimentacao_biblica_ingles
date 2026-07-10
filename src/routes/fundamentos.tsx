@@ -2,114 +2,63 @@ import { createFileRoute } from "@tanstack/react-router";
 import { motion } from "framer-motion";
 import { AppShell } from "@/components/AppShell";
 import { Ed } from "@/components/Editable";
-import { useLang } from "@/lib/store";
 
 export const Route = createFileRoute("/fundamentos")({
   component: FundamentosPage,
-  // title set by AppShell bootstrap (per-language)
 });
 
 const sessoesContent = {
-  pt: {
-    subtitle: "Fundamentos",
-    title: "A Mesa do Éden",
-    desc: "Pequenos capítulos para reaprender a comer com fé e propósito.",
-    chapterLabel: "Capítulo",
-    quote: '"Provai e vede que o Senhor é bom."',
-    quoteRef: "Salmos 34:8",
-    items: [
-      {
-        titulo: "O problema nunca foi o seu peso",
-        versiculo: "Salmos 139:14",
-        texto:
-          "Por décadas você foi ensinada a culpar o número da balança. Mas o ponto de partida não é o peso — é a desconexão. Voltar à mesa que Deus criou é voltar para casa.",
-      },
-      {
-        titulo: "Inflamação silenciosa",
-        versiculo: "1 Coríntios 6:19",
-        texto:
-          "O excesso de açúcar, ultraprocessados e óleos refinados acendem um fogo invisível no corpo. Esse fogo se chama inflamação — e ela é a raiz por trás do cansaço, da retenção e do peso que não sai.",
-      },
-      {
-        titulo: "A resposta de Daniel",
-        versiculo: "Daniel 1:12",
-        texto:
-          "Daniel pediu apenas dez dias com vegetais e água. Ao final, ele e seus companheiros estavam mais fortes e mais belos. O método começa aqui: na coragem de comer simples.",
-      },
-      {
-        titulo: "O que a Bíblia descreve, a ciência confirma",
-        versiculo: "Provérbios 24:13",
-        texto:
-          "Azeite, peixe, ervas, leguminosas, frutas frescas e mel cru. A dieta mediterrânea bíblica é hoje uma das mais estudadas — e está nas Escrituras há milênios.",
-      },
-      {
-        titulo: "Como usar este método",
-        versiculo: "Eclesiastes 3:1",
-        texto:
-          "Sem pressa, sem perfeição. Substitua aos poucos. Tome o Suco Sagrado pela manhã. Beba água com presença. Cozinhe orando. Repita.",
-      },
-      {
-        titulo: "A mesa do Éden",
-        versiculo: "Gênesis 1:29",
-        texto:
-          "'Eis que vos tenho dado toda erva que dá semente, e toda árvore frutífera; ser-vos-á para mantimento.' A mesa original é viva, colorida, fragrante. Ela já é sua.",
-      },
-    ],
-  },
-  es: {
-    subtitle: "Fundamentos",
-    title: "La Mesa del Edén",
-    desc: "Pequeños capítulos para reaprender a comer con fe y propósito.",
-    chapterLabel: "Capítulo",
-    quote: '"Gustad y ved que el Señor es bueno."',
-    quoteRef: "Salmos 34:8",
-    items: [
-      {
-        titulo: "El problema nunca fue tu peso",
-        versiculo: "Salmos 139:14",
-        texto:
-          "Por décadas te enseñaron a culpar al número de la balanza. Pero el punto de partida no es el peso — es la desconexión. Volver a la mesa que Dios creó es volver a casa.",
-      },
-      {
-        titulo: "Inflamación silenciosa",
-        versiculo: "1 Corintios 6:19",
-        texto:
-          "El exceso de azúcar, ultraprocesados y aceites refinados encienden un fuego invisible en el cuerpo. Ese fuego se llama inflamación — y es la raíz detrás del cansancio, la retención y el peso que no se va.",
-      },
-      {
-        titulo: "La respuesta de Daniel",
-        versiculo: "Daniel 1:12",
-        texto:
-          "Daniel pidió solo diez días con vegetales y agua. Al final, él y sus compañeros estaban más fuertes y más sanos. El método empieza aquí: en el coraje de comer simple.",
-      },
-      {
-        titulo: "Lo que la Biblia describe, la ciencia confirma",
-        versiculo: "Proverbios 24:13",
-        texto:
-          "Aceite de oliva, pescado, hierbas, legumbres, frutas frescas y miel cruda. La dieta mediterránea bíblica es hoy una de las más estudiadas — y está en las Escrituras desde hace milenios.",
-      },
-      {
-        titulo: "Cómo usar este método",
-        versiculo: "Eclesiastés 3:1",
-        texto:
-          "Sin prisa, sin perfección. Sustituye poco a poco. Toma el Jugo Sagrado por la mañana. Bebe agua con presencia. Cocina orando. Repite.",
-      },
-      {
-        titulo: "La mesa del Edén",
-        versiculo: "Génesis 1:29",
-        texto:
-          "'He aquí que os he dado toda planta que da semilla, y todo árbol que da fruto; os serán para comer.' La mesa original es viva, colorida, fragante. Ya es tuya.",
-      },
-    ],
-  },
+  subtitle: "Foundations",
+  title: "The Table of Eden",
+  desc: "Short chapters to relearn how to eat with faith and purpose.",
+  chapterLabel: "Chapter",
+  quote: '"Taste and see that the Lord is good."',
+  quoteRef: "Psalm 34:8",
+  items: [
+    {
+      titulo: "The problem was never your weight",
+      versiculo: "Psalm 139:14",
+      texto:
+        "For decades you were taught to blame the number on the scale. But the starting point isn't your weight — it's disconnection. Returning to the table God created is coming home.",
+    },
+    {
+      titulo: "Silent inflammation",
+      versiculo: "1 Corinthians 6:19",
+      texto:
+        "Excess sugar, ultra-processed foods, and refined oils light an invisible fire in the body. That fire is called inflammation — and it's the root behind fatigue, fluid retention, and weight that won't budge.",
+    },
+    {
+      titulo: "Daniel's answer",
+      versiculo: "Daniel 1:12",
+      texto:
+        "Daniel asked for just ten days on vegetables and water. In the end, he and his companions were stronger and healthier. The method begins here: in the courage to eat simply.",
+    },
+    {
+      titulo: "What the Bible describes, science confirms",
+      versiculo: "Proverbs 24:13",
+      texto:
+        "Olive oil, fish, herbs, legumes, fresh fruit, and raw honey. The biblical Mediterranean diet is one of the most studied today — and it's been in the Scriptures for millennia.",
+    },
+    {
+      titulo: "How to use this method",
+      versiculo: "Ecclesiastes 3:1",
+      texto:
+        "No hurry, no perfection. Substitute little by little. Drink the Sacred Juice in the morning. Drink water with presence. Cook while praying. Repeat.",
+    },
+    {
+      titulo: "The table of Eden",
+      versiculo: "Genesis 1:29",
+      texto:
+        "'Behold, I have given you every plant yielding seed and every fruit tree; it shall be your food.' The original table is living, colorful, fragrant. It's already yours.",
+    },
+  ],
 };
 
-const FPT = sessoesContent.pt;
-const FES = sessoesContent.es;
+const FPT = sessoesContent;
+const FES = sessoesContent;
 
 function FundamentosPage() {
-  const { lang } = useLang();
-  const c = sessoesContent[lang] ?? sessoesContent.es;
+  const c = sessoesContent;
 
   return (
     <AppShell>

@@ -3,7 +3,6 @@
 
 import { useState } from "react";
 import { Lock, Check, ArrowRight, RotateCcw } from "lucide-react";
-import { useLang } from "@/lib/store";
 import {
   useEntitlement,
   restoreByEmail,
@@ -18,82 +17,42 @@ interface Pitch {
   cta: string;
 }
 
-const PITCH: Record<Produto, { pt: Pitch; es: Pitch }> = {
+const PITCH: Record<Produto, Pitch> = {
   "anti-inflamacao": {
-    pt: {
-      titulo: "Protocolo Anti-Inflamação de 7 Dias",
-      subtitulo: "O protocolo bíblico de 7 dias para desinchar, ganhar energia e destravar o corpo.",
-      bullets: [
-        "Cardápio dia a dia, do despertar à ceia",
-        "Água do Jordão + Ritual de Drenagem (bônus secreto)",
-        "Ciência de cada dia, lista de compras e guia de alimentos",
-        "Acesso vitalício, no seu ritmo",
-      ],
-      cta: "Liberar acesso",
-    },
-    es: {
-      titulo: "Protocolo Antiinflamación de 7 Días",
-      subtitulo: "El protocolo bíblico de 7 días para desinflamar, ganar energía y soltar el cuerpo.",
-      bullets: [
-        "Menú día a día, del despertar a la cena",
-        "Agua del Jordán + Ritual de Drenaje (bono secreto)",
-        "Ciencia de cada día, lista de compras y guía de alimentos",
-        "Acceso de por vida, a tu ritmo",
-      ],
-      cta: "Liberar acceso",
-    },
+    titulo: "7-Day Anti-Inflammatory Protocol",
+    subtitulo: "The biblical 7-day protocol to de-bloat, gain energy, and get your body unstuck.",
+    bullets: [
+      "Day-by-day menu, from waking to dinner",
+      "Jordan Water + Drainage Ritual (secret bonus)",
+      "The science of each day, a shopping list, and a food guide",
+      "Lifetime access, at your own pace",
+    ],
+    cta: "Unlock access",
   },
   "mesa-unica": {
-    pt: {
-      titulo: "Guia Mesa Única",
-      subtitulo: "Como a família inteira come bem sem desconfiar — uma só panela, zero brigas.",
-      bullets: [
-        "Receitas completas por categoria, com versão da família",
-        "Truques de sabor e textura que enganam o paladar",
-        "Mesa de Domingo + estratégias para as crianças",
-        "Acesso vitalício, no seu ritmo",
-      ],
-      cta: "Liberar acesso",
-    },
-    es: {
-      titulo: "Guía Mesa Única",
-      subtitulo: "Cómo toda la familia come bien sin sospechar — una sola olla, cero peleas.",
-      bullets: [
-        "Recetas completas por categoría, con versión de la familia",
-        "Trucos de sabor y textura que engañan al paladar",
-        "Mesa de Domingo + estrategias para los niños",
-        "Acceso de por vida, a tu ritmo",
-      ],
-      cta: "Liberar acceso",
-    },
+    titulo: "The Family Table Guide",
+    subtitulo: "How the whole family eats well without suspecting — one pot, zero fights.",
+    bullets: [
+      "Complete recipes by category, with a family version",
+      "Flavor and texture tricks that fool the palate",
+      "Sunday Table + strategies for the kids",
+      "Lifetime access, at your own pace",
+    ],
+    cta: "Unlock access",
   },
 };
 
 const COPY = {
-  pt: {
-    locked: "Conteúdo bloqueado",
-    haveBought: "Já comprei",
-    restoreHint: "Digite o email usado na compra para liberar neste aparelho.",
-    emailPh: "seu@email.com",
-    restore: "Restaurar acesso",
-    notFound: "Não encontramos uma compra ativa nesse email. Verifique ou aguarde alguns minutos após o pagamento.",
-    found: "Acesso liberado! 🎉",
-    foundOther: "Esse email tem acesso a {p}, mas não a este. Se acha que é engano, fale com o suporte abaixo.",
-    soon: "Checkout em breve. Fale com o suporte para liberar.",
-    support: "Não funcionou? Mande um email para metodoalimentacionbiblica@gmail.com que liberamos seu acesso em poucos minutos.",
-  },
-  es: {
-    locked: "Contenido bloqueado",
-    haveBought: "Ya compré",
-    restoreHint: "Escribe el email usado en la compra para liberar en este dispositivo.",
-    emailPh: "tu@email.com",
-    restore: "Restaurar acceso",
-    notFound: "No encontramos una compra activa con ese email. Verifica o espera unos minutos tras el pago.",
-    found: "¡Acceso liberado! 🎉",
-    foundOther: "Ese email tiene acceso a {p}, pero no a este. Si crees que es un error, contacta al soporte abajo.",
-    soon: "Checkout próximamente. Habla con soporte para liberar.",
-    support: "¿No funcionó? Escribe a metodoalimentacionbiblica@gmail.com y liberamos tu acceso en pocos minutos.",
-  },
+  locked: "Locked content",
+  haveBought: "I already bought it",
+  restoreHint: "Enter the email you used at checkout to unlock it on this device.",
+  emailPh: "you@email.com",
+  restore: "Restore access",
+  notFound: "We couldn't find an active purchase with that email. Double-check it or wait a few minutes after payment.",
+  found: "Access unlocked! 🎉",
+  foundOther: "That email has access to {p}, but not to this one. If you think it's a mistake, contact support below.",
+  soon: "Checkout coming soon. Contact support to unlock.",
+  support: "Didn't work? Email metodoalimentacionbiblica@gmail.com and we'll unlock your access within minutes.",
 };
 
 export function Locked({ product, children }: { product: Produto; children: React.ReactNode }) {
@@ -103,13 +62,12 @@ export function Locked({ product, children }: { product: Produto; children: Reac
 }
 
 function Paywall({ product }: { product: Produto }) {
-  const { lang } = useLang();
-  const p = PITCH[product][lang];
-  const t = COPY[lang];
+  const p = PITCH[product];
+  const t = COPY;
   const [showRestore, setShowRestore] = useState(false);
   const [email, setEmail] = useState("");
   const [busy, setBusy] = useState(false);
-  // Store the message KIND (not the resolved string) so it follows language changes.
+  // Store the message KIND (not the resolved string).
   const [msg, setMsg] = useState<{
     ok: boolean;
     kind: "found" | "foundOther" | "notFound" | "soon";
@@ -195,7 +153,7 @@ function Paywall({ product }: { product: Produto }) {
             >
               <p>
                 {msg.kind === "foundOther" && msg.otherProduct
-                  ? t.foundOther.replace("{p}", PITCH[msg.otherProduct][lang].titulo)
+                  ? t.foundOther.replace("{p}", PITCH[msg.otherProduct].titulo)
                   : t[msg.kind]}
               </p>
               {!msg.ok && (

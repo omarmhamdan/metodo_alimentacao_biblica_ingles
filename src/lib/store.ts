@@ -1,6 +1,6 @@
-import { useEffect, useState, useMemo } from "react";
-import { getLang, setLang as setLangStorage, type Lang, T } from "./i18n";
-import { getRecipesLang, type Receita } from "./recipes";
+import { useEffect, useState } from "react";
+import { t } from "./i18n";
+import { getRecipesMerged, type Receita } from "./recipes";
 import { initImages, isImagesReady, getCachedImages } from "./image-store";
 import { upsertProfile, upsertDaily } from "./sync";
 import { clearEntitlements } from "./entitlements";
@@ -205,24 +205,9 @@ export function useDaily() {
   return { daily, update, toggleFavorito };
 }
 
-// ── Language hook ─────────────────────────────────────────────────────────────
+// ── Translation hook (single-language app; kept for call-site compatibility) ──
 export function useLang() {
-  const [lang, setLangState] = useState<Lang>(getLang);
-
-  useEffect(() => {
-    const sync = () => setLangState(getLang());
-    window.addEventListener("mab:lang", sync);
-    return () => window.removeEventListener("mab:lang", sync);
-  }, []);
-
-  const setLang = (l: Lang) => {
-    setLangStorage(l);
-    setLangState(l);
-  };
-
-  const t = (key: keyof typeof T.es): string => T[lang][key] as string;
-
-  return { lang, setLang, t };
+  return { t };
 }
 
 /** Resolve a set of image ids → URL, falling back to bundled stock assets.
@@ -269,24 +254,18 @@ export function useImagesReady(): boolean {
   return ready;
 }
 
-// ── Recipes hook (reactive to lang + admin overrides + IDB images) ───────────
+// ── Recipes hook (reactive to admin overrides + IDB images) ──────────────────
 export function useRecipes(): Receita[] {
-  const { lang } = useLang();
-  const [list, setList] = useState<Receita[]>(() => getRecipesLang(lang));
+  const [list, setList] = useState<Receita[]>(() => getRecipesMerged());
 
   // Load IDB images into cache on first mount, then rebuild
   useEffect(() => {
-    initImages().then(() => setList(getRecipesLang(getLang())));
+    initImages().then(() => setList(getRecipesMerged()));
   }, []);
-
-  // Re-compute when language changes
-  useEffect(() => {
-    setList(getRecipesLang(lang));
-  }, [lang]);
 
   // Re-compute when admin saves text overrides or uploads/deletes images
   useEffect(() => {
-    const fn = () => setList(getRecipesLang(getLang()));
+    const fn = () => setList(getRecipesMerged());
     window.addEventListener("mab:overrides", fn);
     window.addEventListener("mab:images", fn);
     return () => {
@@ -298,5 +277,5 @@ export function useRecipes(): Receita[] {
   return list;
 }
 
-// Devocional do dia (dataset único bilíngue) — ver src/lib/devocional.ts
+// Devotional of the day — see src/lib/devocional.ts
 export { versiculoDoDia, devocionais, type Devocional } from "./devocional";
