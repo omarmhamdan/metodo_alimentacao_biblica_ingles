@@ -20,6 +20,7 @@ export type HotmartEnv = {
   SUPABASE_URL?: string;
   SUPABASE_SERVICE_ROLE_KEY?: string;
   HOTMART_PRODUCT_MAP?: string;
+  HOTMART_MAIN_PRODUCT_ID?: string;
   BREVO_API_KEY?: string;
 };
 
@@ -38,12 +39,13 @@ const EMAIL_SUBJECT = "Your access to The Biblical Nutrition Method";
 // Brevo's `scheduledAt`. Brevo holds and delivers it — no extra infra needed.
 const SEND_DELAY_MS = 3 * 60 * 1000;
 
-// Events that unlock the bonus, and events that lock it back.
-// Known Hotmart product IDs → our upsell keys. HOTMART_PRODUCT_MAP env can extend/override.
-const DEFAULT_PRODUCT_MAP: Record<string, Produto> = {
-  "7909761": "anti-inflamacao", // Protocolo Antiinflamación de 7 Días
-  "7909787": "mesa-unica", // Guía Mesa Única
-};
+// Hotmart product IDs → our upsell keys, for THIS (English) funnel only.
+// Empty by default: the same Hotmart account also sells the Spanish products,
+// and its webhook fires for ALL of them — mapping foreign ids here would let a
+// Spanish purchase trigger English entitlements/emails. Add the ENGLISH upsell
+// ids via the HOTMART_PRODUCT_MAP env var once those products exist, e.g.
+//   {"<english-anti-inflammatory-id>":"anti-inflamacao","<english-family-table-id>":"mesa-unica"}
+const DEFAULT_PRODUCT_MAP: Record<string, Produto> = {};
 
 const GRANT_EVENTS = new Set(["PURCHASE_APPROVED", "PURCHASE_COMPLETE"]);
 const REVOKE_EVENTS = new Set([
@@ -92,10 +94,9 @@ function mapProduct(product: unknown, env: HotmartEnv): Produto | null {
   const hit = map[String(p.id)] ?? map[String(p.ucode)];
   if (hit === "mesa-unica" || hit === "anti-inflamacao") return hit;
 
-  // 2) Name heuristic fallback.
-  const name = String(p.name ?? "").toLowerCase();
-  if (name.includes("mesa")) return "mesa-unica";
-  if (name.includes("inflam")) return "anti-inflamacao";
+  // No name-heuristic fallback on purpose: matching by name (e.g. "mesa"/"inflam")
+  // would also catch the Spanish products sharing the same Hotmart account, whose
+  // webhooks reach this worker. Upsells must be matched by explicit English id.
   return null;
 }
 
@@ -520,6 +521,23 @@ export async function handleHotmartWebhook(request: Request, env: HotmartEnv): P
   const product = mapProduct(data.product, env);
   const grant = GRANT_EVENTS.has(event);
   const revoke = REVOKE_EVENTS.has(event);
+
+  // ── Funnel scope guard ───────────────────────────────────────────────────────
+  // The same Hotmart account also sells the Spanish products, and its webhook
+  // fires for EVERY product. Only act on THIS funnel's products — the English
+  // main product (HOTMART_MAIN_PRODUCT_ID, default 8103890) or a mapped English
+  // upsell. Anything else (e.g. a Spanish-checkout purchase) is ignored: no
+  // email, no blacklist, no entitlement. This is what stops the duplicate email.
+  const mainProductId = env.HOTMART_MAIN_PRODUCT_ID || "8103890";
+  const isMainProduct = base.product_id === mainProductId;
+  if (!product && !isMainProduct) {
+    await logWebhook(env, {
+      ...base,
+      result: "skipped",
+      detail: "foreign product — not this funnel",
+    });
+    return json({ ok: true, skipped: "foreign product" });
+  }
 
   // ── MAIN product (not one of the two upsells) ────────────────────────────────
   // Refund/chargeback/protest/cancel → blacklist the buyer (blocks ALL app access).
