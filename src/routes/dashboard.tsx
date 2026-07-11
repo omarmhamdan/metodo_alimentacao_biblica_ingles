@@ -12,6 +12,7 @@ import {
   Minus,
   RotateCcw,
   X,
+  User,
 } from "lucide-react";
 import { AppShell } from "@/components/AppShell";
 import { RecipePhoto } from "@/components/RecipePhoto";
@@ -32,7 +33,7 @@ function Dashboard() {
   const [dayPicker, setDayPicker] = useState(false);
   const recipes = useRecipes();
   const verso = versiculoDoDia();
-  const nome = user?.nome ?? "friend";
+  const nome = user?.nome?.trim() ?? "";
   const aguaMeta = user?.aguaMeta ?? 2000;
   const aguaPct = Math.min(100, (daily.aguaMl / aguaMeta) * 100);
   const ultima = daily.ultimaReceita
@@ -52,7 +53,7 @@ function Dashboard() {
               {weekday}
             </p>
             <h1 className="mt-1 font-serif text-[26px] leading-tight text-foreground text-balance">
-              <Ed k="i18n.dash_greeting" pt={T.dash_greeting} es={T.dash_greeting} /> {nome}{" "}
+              <Ed k="i18n.dash_greeting" pt={T.dash_greeting} es={T.dash_greeting} />{nome ? `, ${nome}` : ""}{" "}
               <span className="text-sage">🌿</span>
             </h1>
             <Ed
@@ -67,7 +68,7 @@ function Dashboard() {
             to="/perfil"
             className="ml-3 flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-gradient-primary font-serif text-lg text-primary-foreground shadow-soft"
           >
-            {nome.charAt(0).toUpperCase()}
+            {nome ? nome.charAt(0).toUpperCase() : <User className="h-5 w-5" />}
           </Link>
         </div>
       </header>

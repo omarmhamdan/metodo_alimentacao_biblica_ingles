@@ -29,7 +29,7 @@ export const T = {
   login_verse: '"Your body is a temple of the Holy Spirit."',
 
   // Dashboard
-  dash_greeting: "Hello,",
+  dash_greeting: "Hello",
   dash_subtitle: "Today is a new day to care for the temple God gave you.",
   dash_daily: "Today's devotional",
   dash_read_more: "Read the full reflection →",

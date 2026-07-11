@@ -9,7 +9,6 @@ import {
   Download,
   Trash2,
   ChefHat,
-  Globe,
   Lock,
   Eye,
   EyeOff,
@@ -494,21 +493,6 @@ function AdminPage() {
                     color="text-cyan-400"
                   />
                 </div>
-
-                <div className="grid gap-4 sm:grid-cols-2">
-                  <Stat
-                    icon={Globe}
-                    label="Usuários em ES"
-                    value={String(cloudStats.byLang.es ?? 0)}
-                    color="text-blue-400"
-                  />
-                  <Stat
-                    icon={Globe}
-                    label="Usuários em PT"
-                    value={String(cloudStats.byLang.pt ?? 0)}
-                    color="text-amber-400"
-                  />
-                </div>
               </>
             )}
 
@@ -516,7 +500,6 @@ function AdminPage() {
             <div className="rounded-2xl border border-stone-700 bg-stone-900 p-5">
               <h3 className="mb-3 text-sm font-semibold text-stone-200">Este dispositivo</h3>
               <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
-                <MiniStat label="Idioma" value={user?.lang?.toUpperCase() ?? "—"} />
                 <MiniStat label="Favoritas" value={String(user?.favoritos?.length ?? 0)} />
                 <MiniStat
                   label="Água hoje"
@@ -713,25 +696,9 @@ function AdminPage() {
               <Field
                 label="Nome do app"
                 value={overrides.global.appName ?? ""}
-                placeholder="Método Alimentación Bíblica"
+                placeholder="The Biblical Nutrition Method"
                 onChange={(v) =>
                   setOverrides({ ...overrides, global: { ...overrides.global, appName: v } })
-                }
-              />
-              <Field
-                label="Tagline (ES)"
-                value={overrides.global.tagline_es ?? ""}
-                placeholder="La mesa que Dios creó, al alcance de tu cocina."
-                onChange={(v) =>
-                  setOverrides({ ...overrides, global: { ...overrides.global, tagline_es: v } })
-                }
-              />
-              <Field
-                label="Tagline (PT)"
-                value={overrides.global.tagline_pt ?? ""}
-                placeholder="A mesa que Deus criou, ao alcance da sua cozinha."
-                onChange={(v) =>
-                  setOverrides({ ...overrides, global: { ...overrides.global, tagline_pt: v } })
                 }
               />
             </div>
@@ -822,7 +789,6 @@ function AdminPage() {
                   {user.nome} · {user.email}
                 </p>
                 <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
-                  <InfoPill label="Idioma" value={user.lang.toUpperCase()} />
                   <InfoPill label="Dia na jornada" value={String(user.jornadaDia)} />
                   <InfoPill label="Sequência" value={String(user.sequencia)} />
                   <InfoPill label="Água hoje" value={`${(user.aguaMl / 1000).toFixed(1)}L`} />
@@ -1521,9 +1487,6 @@ function CloudUserRow({
           >
             {u.onboarded ? "Onboarded" : "Pendente"}
           </span>
-          <span className="rounded-full bg-stone-800 px-2 py-0.5 text-[10px] text-stone-400">
-            {(u.lang ?? "es").toUpperCase()}
-          </span>
         </div>
         <button
           onClick={() => setOpen((v) => !v)}
@@ -1624,11 +1587,11 @@ function CloudUserRow({
 }
 
 function downloadEmailsCsv(users: AdminUserRow[]) {
-  const header = "email,nome,onboarded,lang,created_at\n";
+  const header = "email,nome,onboarded,created_at\n";
   const rows = users
     .map(
       (u) =>
-        `"${u.email}","${(u.nome ?? "").replace(/"/g, '""')}",${u.onboarded},${u.lang ?? "es"},${u.created_at}`,
+        `"${u.email}","${(u.nome ?? "").replace(/"/g, '""')}",${u.onboarded},${u.created_at}`,
     )
     .join("\n");
   const blob = new Blob([header + rows], { type: "text/csv;charset=utf-8" });
